@@ -70,15 +70,17 @@ export default function ReportIssuePage() {
         </div>
       </div>
       {submited && (
-        <Modal>
-          <p className="text-lg">Issues submitted successfully!</p>
-          <div className="flex items-center justify-between mt-3">
-            <p>Click OK to proceed</p>
-            <button className="button" onClick={handleModal}>
-              Okay
-            </button>
-          </div>
-        </Modal>
+        <div className="flex items-center justify-center">
+          <Modal>
+            <p className="text-lg">Issues submitted successfully!</p>
+            <div className="flex items-center justify-between mt-3">
+              <p>Click OK to proceed</p>
+              <button className="button" onClick={handleModal}>
+                Okay
+              </button>
+            </div>
+          </Modal>
+        </div>
       )}
     </>
   );
