@@ -55,6 +55,14 @@ export default function ReportIssueContextProvider({ children }) {
 
   function handleModal(){
     setSubmited(false)
+     setFormData({
+      office: "",
+      service: "",
+      type: "",
+      urgency: 3,
+      description: "",
+      attachments: [],
+    });
     navigate('/landing')
 
   }

@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
-export default function Header({ toggleSidebar, isMobile, showSidebar }) {
+export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssueSubmenu, showIssueSubmenu  }) {
   return (
     <>
       <header className="bg-gray-200 shadow p-2 flex flex-row h-20 items-center justify-between sticky top-0 z-50">
@@ -22,8 +22,8 @@ export default function Header({ toggleSidebar, isMobile, showSidebar }) {
 
       {isMobile && showSidebar && (
         <div
-          className="fixed inset-0 mt-20 w-38 h-52 bg-gray-300 z-55 md:hidden"
-          onClick={toggleSidebar}
+          className={`fixed inset-0 mt-20 w-38 ${showIssueSubmenu && `h-70`} h-52 bg-gray-300 z-55 md:hidden`}
+          
         >
           <nav className="flex-1 p-1">
             <ul className="space-y-1">
@@ -40,16 +40,45 @@ export default function Header({ toggleSidebar, isMobile, showSidebar }) {
                 </NavLink>
               </li>
               <li>
-                <NavLink
-                  to="/landing/viewIssues"
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-2 rounded  hover:bg-gray-200 ${
-                      isActive ? "bg-gray-300" : ""
-                    }`
-                  }
-                >
-                  View Issues
-                </NavLink>
+                <div className="flex flex-col">
+                  <button
+                    onClick={toggleIssueSubmenu}
+                    className={`flex items-center justify-between gap-2 px-3 py-2 rounded hover:bg-gray-200 ${
+                      location.pathname.includes("/landing/viewIssues")
+                        ? "bg-gray-300"
+                        : ""
+                    }`}
+                  >
+                    <span className=" a-view-issues px-0 py-2 rounded hover:bg-gray-200">
+                      View Issues
+                    </span>
+                    <span>{showIssueSubmenu ? "🔽" : "▶️"}</span>
+                  </button>
+                  {showIssueSubmenu && (
+                    <div className="ml-4 mt-1 space-y-1">
+                      <NavLink
+                        to="/landing/resolved"
+                        className={({ isActive }) =>
+                          `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        Resolved
+                      </NavLink>
+                      <NavLink
+                        to="/landing/unresolved"
+                        className={({ isActive }) =>
+                          `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        Unresolved
+                      </NavLink>
+                    </div>
+                  )}
+                </div>
               </li>
               <li>
                 <NavLink

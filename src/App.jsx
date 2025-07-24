@@ -8,6 +8,7 @@ import LandingPage from "./pages/LandingPage";
 import ReportIssuePage from "./components/issues/ReportIssue";
 import ViewIssues from "./components/ViewIssues";
 import UpdateTopUp from "./components/UpdateTopUp";
+import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +39,10 @@ function App() {
         {
           path: "resolveTopUp",
           element:<UpdateTopUp/>
+        },
+        {
+          path: "unresolved",
+          element: <UnresolvedIssues/>
         }
       ],
     },

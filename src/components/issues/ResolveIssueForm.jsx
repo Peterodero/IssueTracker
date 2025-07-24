@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-export default function ResolveIssueForm() {
+export default function ResolveIssueForm({handleCancelIssue}) {
   const { issueId } = useParams();
   const navigate = useNavigate();
   const [resolution, setResolution] = useState({
@@ -108,7 +108,7 @@ export default function ResolveIssueForm() {
         <div className="flex justify-end space-x-4 pt-4">
           <button
             type="button"
-            onClick={() => navigate(-1)}
+            onClick={handleCancelIssue}
             className="px-4 py-2 border border-gray-300 rounded-md"
           >
             Cancel
