@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { IssueContext } from "../store/issue-context";
+import { IssueContext } from "../../store/issue-context";
 
 export default function UnresolvedIssues({handleResolveIssue}) {
   const { defaultData } = useContext(IssueContext);

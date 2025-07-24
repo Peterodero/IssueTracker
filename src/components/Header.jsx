@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 export default function Header({ toggleSidebar, isMobile, showSidebar }) {
   return (
     <>
-      <header className="bg-gray-200 shadow p-3 flex flex-row  items-center justify-between sticky top-0 z-50">
+      <header className="bg-gray-200 shadow p-2 flex flex-row h-20 items-center justify-between sticky top-0 z-50">
         <button
           className="md:hidden bg-blue-500 text-white px-1 rounded shadow-lg"
           onClick={toggleSidebar}
@@ -22,10 +22,10 @@ export default function Header({ toggleSidebar, isMobile, showSidebar }) {
 
       {isMobile && showSidebar && (
         <div
-          className="fixed inset-0 mt-22 w-38 h-52 bg-gray-300 z-45 md:hidden"
+          className="fixed inset-0 mt-20 w-38 h-52 bg-gray-300 z-55 md:hidden"
           onClick={toggleSidebar}
         >
-          <nav className="flex-1 p-2">
+          <nav className="flex-1 p-1">
             <ul className="space-y-1">
               <li>
                 <NavLink

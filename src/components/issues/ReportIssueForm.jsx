@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { IssueContext } from "../store/issue-context";
-import { userOffices, serviceMap, issueTypes } from "../data/model";
+import { IssueContext } from "../../store/issue-context";
+import { userOffices, serviceMap, issueTypes } from "../../data/model";
 
 export default function ReportIssueForm() {
   const issueCtx = useContext(IssueContext);

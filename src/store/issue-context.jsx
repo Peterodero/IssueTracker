@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const IssueContext = createContext({
@@ -10,6 +11,8 @@ export const IssueContext = createContext({
     attachments: [],
   },
   defaultData: [],
+  handleModal: ()=> {},
+  submited: "",
   handleChange: () => {},
   handleClearForm: () => {},
   handleSubmitForm: () => {},
@@ -26,6 +29,9 @@ export default function ReportIssueContextProvider({ children }) {
   });
 
   const [defaultData, setDefaultData] = useState([]);
+  const [submited, setSubmited] = useState(false);
+
+  const navigate = useNavigate();
 
   function handleChange(event) {
     setFormData((prevState) => {
@@ -47,10 +53,18 @@ export default function ReportIssueContextProvider({ children }) {
     });
   }
 
+  function handleModal(){
+    setSubmited(false)
+    navigate('/landing')
+
+  }
+
   function handleSubmitForm(event) {
     event.preventDefault();
     setDefaultData((prevState) => [formData, ...prevState]);
     console.log(defaultData);
+    //API
+     setSubmited(true)
   }
 
   const ctxValue = {
@@ -58,7 +72,9 @@ export default function ReportIssueContextProvider({ children }) {
     handleChange: handleChange,
     handleClearForm: handleClearForm,
     handleSubmitForm: handleSubmitForm,
-    defaultData: defaultData
+    defaultData: defaultData,
+    handleModal: handleModal,
+    submited: submited
   };
 
   return (

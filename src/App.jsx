@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import LandingPage from "./pages/LandingPage";
-import ReportIssuePage from "./components/ReportIssue";
+import ReportIssuePage from "./components/issues/ReportIssue";
 import ViewIssues from "./components/ViewIssues";
 import UpdateTopUp from "./components/UpdateTopUp";
 

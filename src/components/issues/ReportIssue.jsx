@@ -1,11 +1,13 @@
 import { useContext } from "react";
+import { IssueContext } from "../../store/issue-context";
+import Modal from "../UI/Modal";
 import ReportIssueForm from "./ReportIssueForm";
-import { IssueContext } from "../store/issue-context";
 
 export default function ReportIssuePage() {
-  const { formData } = useContext(IssueContext);
+  const { formData, submited, handleModal } = useContext(IssueContext);
 
   return (
+    <>
     <div className="max-w-4xl mx-auto p-6 rounded-lg shadow md:ml-5 bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 md:w-5xl">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-auto">
         <div className="bg-blue-500 p-6 text-white">
@@ -67,5 +69,13 @@ export default function ReportIssuePage() {
         <ReportIssueForm />
       </div>
     </div>
+    {submited && <Modal>
+      <p className="text-lg">Issues submitted successfully!</p>
+      <div className="flex items-center justify-between mt-3">
+         <p>Click OK to proceed</p>
+         <button className='button' onClick={handleModal}>Okay</button>
+      </div>
+      </Modal>}
+    </>
   );
 }
