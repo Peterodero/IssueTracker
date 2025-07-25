@@ -20,9 +20,9 @@ export default function UnresolvedIssues() {
 
   return (
     <>
-      <div className="md:ml-10 p-4 w-4xl overflow-scroll">
+      <div className=" max-w-5xl mx-auto overflow-scroll  md:ml-10 p-4">
         <div className=" rounded-lg ">
-          <table className="w-full rounded">
+          <table className="w-full ">
             <thead>
               <tr className="border-b border-gray-200 bg-blue-200">
                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
