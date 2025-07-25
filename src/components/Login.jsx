@@ -82,7 +82,7 @@ export default function Login() {
           </button>
         </div>
       </form>
-      {/* {!isError && (
+      {isError && (
         <ErrorBlock
           title="Failed to login."
           message={
@@ -90,7 +90,7 @@ export default function Login() {
             "Failed to login.Check your details and log in again!"
           }
         />
-      )} */}
+      )}
     </div>
   );
 }

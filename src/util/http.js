@@ -1,8 +1,8 @@
-const url = ""
+const url = "https://issue-tracker-jywg.onrender.com/api/"
 
 export async function authenticateUser(data) {
     try {
-         const response = await fetch(url, {
+        const response = await fetch(url + "auth/login/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -15,7 +15,8 @@ export async function authenticateUser(data) {
         throw new Error(errorData.message || 'Login failed');
       }
 
-      
+      console.log(response)
+
 
     } catch (error) {
         console.error('Login error:', error);

@@ -20,7 +20,7 @@ export default function UnresolvedIssues() {
 
   return (
     <>
-      <div className=" max-w-5xl mx-auto overflow-scroll  md:ml-10 p-4">
+      <div className=" max-w-5xl md:w-4xl mx-auto overflow-scroll  md:ml-10 p-4">
         <div className=" rounded-lg ">
           <table className="w-full ">
             <thead>
