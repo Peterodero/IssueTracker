@@ -16,54 +16,78 @@ export default function UnresolvedIssues() {
     navigate(1);
     setOpenModal(false);
   }
+  let number = 0;
 
   return (
     <>
-      <div className="grid md:grid-cols-3 gap-6 mt-3 p-5 rounded-lg bg-gray-50">
-        {defaultData.map((data) => (
-          <div
-            key={data.description}
-            className="flex flex-col bg-white shadow-lg rounded-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300"
-          >
-            <div className="p-5 flex-1">
-              <div className="flex flex-col space-y-2 mb-4 border-b pb-3">
-                <h3 className="text-lg text-gray-800">
-                  <span className="text-blue-600 font-bold">Office:</span>{" "}
-                  {data.office}
-                </h3>
-                <h4 className="text-md  text-gray-700">
-                  <span className="text-blue-600 font-bold">Service:</span>{" "}
-                  {data.service}
-                </h4>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-start">
-                  <span className="text-blue-600 font-medium min-w-[90px]">
-                    Type:
-                  </span>
-                  <p className="text-gray-700">{data.type}</p>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-blue-600 font-medium min-w-[90px]">
-                    Description:
-                  </span>
-                  <p className="text-gray-700">{data.description}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="px-5 py-3 bg-gray-50 border-t border-gray-200 flex justify-end">
-              <button
-                onClick={handleResolveIssue}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-              >
-                Resolve Issue
-              </button>
-            </div>
-          </div>
-        ))}
+      <div className="md:ml-10 p-4 w-4xl overflow-scroll">
+        <div className=" rounded-lg ">
+          <table className="w-full rounded">
+            <thead>
+              <tr className="border-b border-gray-200 bg-blue-200">
+                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
+                  #
+                </th>
+                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
+                  Office
+                </th>
+                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                  Service
+                </th>
+                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
+                  By 
+                </th>
+                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                  Issue
+                </th>
+                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-gray-200">
+              {defaultData.map((data) => {
+                number = number + 1;
+                return (
+                  <tr
+                    key={data.description}
+                    className="hover:bg-orange-200 transition-colors"
+                  >
+                    <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                      <span
+                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
+                         number % 2 ===  0
+                            ? "bg-purple-200 text-yellow-800"
+        
+                            : "bg-orange-100 text-gray-800"
+                        }`}
+                      >
+                        {number}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-sm font-semibold text-gray-800">
+                      {data.office}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-gray-600 sm:table-cell">
+                      {data.service}
+                    </td>
+                    <td className="py-3 px-4 text-sm font-bold text-gray-900">
+                      <p>Peter</p>
+                    </td>
+                    <td className="py-3 px-4 text-sm font-bold text-gray-900">
+                      {data.type}
+                    </td>
+                    <td className="py-3 px-4 text-sm font-bold text-gray-900">
+                      <p>Resolved</p>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
+
       {openModal && (
         <div className="flex items-center justify-center">
           <Modal>

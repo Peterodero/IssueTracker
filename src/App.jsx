@@ -3,12 +3,13 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import Login from "./components/Login";
 import LandingPage from "./pages/LandingPage";
 import ReportIssuePage from "./components/issues/ReportIssue";
 import ViewIssues from "./components/ViewIssues";
 import UpdateTopUp from "./components/UpdateTopUp";
 import UnresolvedIssues from "./components/issues/UnresolvedIssues";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,7 +19,7 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <LoginPage />,
     },
     {
       path: "/landing",
@@ -34,24 +35,26 @@ function App() {
         },
         {
           path: "viewIssues",
-          element: <ViewIssues/>
+          element: <ViewIssues />,
         },
         {
           path: "resolveTopUp",
-          element:<UpdateTopUp/>
+          element: <UpdateTopUp />,
         },
         {
           path: "unresolved",
-          element: <UnresolvedIssues/>
-        }
+          element: <UnresolvedIssues />,
+        },
       ],
     },
   ]);
 
-  return (
-    
-      <RouterProvider router={router} />
+  const queryClient = new QueryClient();
 
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 
