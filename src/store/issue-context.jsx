@@ -1,5 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  getOffices,
+  getServices,
+  listAllIssues,
+  reportIssue,
+} from "../util/http";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const IssueContext = createContext({
@@ -10,12 +16,17 @@ export const IssueContext = createContext({
     description: "",
     attachments: [],
   },
-  defaultData: [],
-  handleModal: ()=> {},
+  handleModal: () => {},
   submited: "",
   handleChange: () => {},
   handleClearForm: () => {},
-  handleSubmitForm: () => {},
+  handleSubmitIssueForm: () => {},
+  fetchOffices: () => {},
+  fetchServices: () => {},
+  fetchIssues: () => {},
+  officeList: [],
+  serviceList: [],
+  issuesList: [],
 });
 
 export default function ReportIssueContextProvider({ children }) {
@@ -23,23 +34,64 @@ export default function ReportIssueContextProvider({ children }) {
     office: "",
     service: "",
     type: "",
-    urgency: 3,
     description: "",
-    attachments: [],
   });
 
-  const [defaultData, setDefaultData] = useState([]);
   const [submited, setSubmited] = useState(false);
+
+  const [officeList, setOfficeList] = useState([]);
+  const [serviceList, setServiceList] = useState([]);
+  const [issuesList, setIssuesList] = useState([]);
 
   const navigate = useNavigate();
 
+  const fetchOffices = useCallback(async () => {
+    const offices = await getOffices();
+    setOfficeList(offices);
+    console.log(offices);
+  }, []);
+
+  const fetchServices = useCallback(async () => {
+    const services = await getServices();
+    setServiceList(services);
+    console.log(services);
+  }, []);
+
+  const fetchIssues = useCallback(async () => {
+    const issues = await listAllIssues();
+    setIssuesList(issues);
+     console.log(issues);
+  }, []);
+
   function handleChange(event) {
-    setFormData((prevState) => {
-      return {
-        ...prevState,
-        [event.target.name]: event.target.value,
-      };
-    });
+    const { name, value } = event.target;
+
+    if (name === "office") {
+      const selectedOffice = officeList.find((office) => office.name === value);
+
+      console.log(selectedOffice.id);
+
+      setFormData((prevState) => {
+        return {
+          ...prevState,
+          office: selectedOffice?.id || "",
+          officeName: value,
+        };
+      });
+    } else if (name === "service") {
+      const selectedService = serviceList.find(
+        (service) => service.name === value
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        service: selectedService?.id || "",
+        serviceName: value,
+      }));
+    } else {
+      // Handle other fields normally
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   }
 
   function handleClearForm() {
@@ -47,42 +99,45 @@ export default function ReportIssueContextProvider({ children }) {
       office: "",
       service: "",
       type: "",
-      urgency: 3,
       description: "",
       attachments: [],
     });
   }
 
-  function handleModal(){
-    setSubmited(false)
-     setFormData({
+  function handleModal() {
+    setSubmited(false);
+    setFormData({
       office: "",
       service: "",
       type: "",
-      urgency: 3,
       description: "",
+      status: "unsolved",
       attachments: [],
     });
-    navigate('/landing')
-
+    navigate("/landing");
   }
 
-  function handleSubmitForm(event) {
+  function handleSubmitIssueForm(event) {
     event.preventDefault();
-    setDefaultData((prevState) => [formData, ...prevState]);
-    console.log(defaultData);
-    //API
-     setSubmited(true)
+
+    reportIssue(formData);
+
+    setSubmited(true);
   }
 
   const ctxValue = {
     formData: formData,
     handleChange: handleChange,
     handleClearForm: handleClearForm,
-    handleSubmitForm: handleSubmitForm,
-    defaultData: defaultData,
+    handleSubmitIssueForm: handleSubmitIssueForm,
     handleModal: handleModal,
-    submited: submited
+    submited: submited,
+    fetchOffices: fetchOffices,
+    fetchServices: fetchServices,
+    fetchIssues: fetchIssues,
+    officeList: officeList,
+    serviceList: serviceList,
+    issuesList: issuesList,
   };
 
   return (

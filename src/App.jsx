@@ -10,6 +10,9 @@ import UpdateTopUp from "./components/UpdateTopUp";
 import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./pages/LoginPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import CreateOffices from "./components/admin/CreateOffices";
+import CreateServices from "./components/admin/CreateServices";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,28 +25,42 @@ function App() {
       element: <LoginPage />,
     },
     {
+      path: "/create-offices",
+      element: <CreateOffices/>
+    },
+    {
+      path: "/create-services",
+      element: <CreateServices/>
+    },
+    {
       path: "/landing",
-      element: <LandingPage />,
+      element: <ProtectedRoute />,
       children: [
         {
-          index: true,
-          element: <Navigate to="reportIssue" />,
-        },
-        {
-          path: "reportIssue",
-          element: <ReportIssuePage />,
-        },
-        {
-          path: "viewIssues",
-          element: <ViewIssues />,
-        },
-        {
-          path: "resolveTopUp",
-          element: <UpdateTopUp />,
-        },
-        {
-          path: "unresolved",
-          element: <UnresolvedIssues />,
+          path: "/landing",
+          element: <LandingPage />,
+          children: [
+            {
+              index: true,
+              element: <Navigate to="reportIssue" />,
+            },
+            {
+              path: "reportIssue",
+              element: <ReportIssuePage />,
+            },
+            {
+              path: "viewIssues",
+              element: <ViewIssues />,
+            },
+            {
+              path: "resolveTopUp",
+              element: <UpdateTopUp />,
+            },
+            {
+              path: "unresolved",
+              element: <UnresolvedIssues />,
+            },
+          ],
         },
       ],
     },

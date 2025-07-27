@@ -1,13 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import Modal from "../UI/Modal";
 import ResolveIssueForm from "./ResolveIssueForm";
 import { useNavigate } from "react-router-dom";
 
 export default function UnresolvedIssues() {
-  const { defaultData } = useContext(IssueContext);
+  const { fetchIssues, issuesList } = useContext(IssueContext);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchIssues();
+  }, [fetchIssues]);
 
   function handleResolveIssue() {
     setOpenModal(true);
@@ -35,50 +39,107 @@ export default function UnresolvedIssues() {
                   Service
                 </th>
                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
-                  By 
+                  By
                 </th>
-                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Issue
                 </th>
-                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Action
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-gray-200">
-              {defaultData.map((data) => {
-                number = number + 1;
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {issuesList.map((issue, index) => {
+                const officeName = issue.office?.name || "No office assigned";
+                const officeLocation = issue.office?.location || "";
+                const serviceName =
+                  issue.service?.name || "No service specified";
+                const serviceDesc = issue.service?.description || "";
+                const reporterName = issue.reporter?.username || "Unknown";
+                const reporterPhone = issue.reporter?.phone_number || "";
+
                 return (
                   <tr
-                    key={data.description}
-                    className="hover:bg-orange-200 transition-colors"
+                    key={issue.id}
+                    className="hover:bg-gray-50 transition-colors"
                   >
-                    <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                    {/* Index Number */}
+                    <td className="py-4 px-4 text-sm font-medium text-gray-900">
                       <span
                         className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
-                         number % 2 ===  0
-                            ? "bg-purple-200 text-yellow-800"
-        
-                            : "bg-orange-100 text-gray-800"
+                          index % 2 === 0
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {number}
+                        {index + 1}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm font-semibold text-gray-800">
-                      {data.office}
+
+                    {/* Office */}
+                    <td className="py-4 px-4 text-sm text-gray-700">
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{officeName}</span>
+                        {officeLocation && (
+                          <span className="text-xs text-gray-500">
+                            {officeLocation}
+                          </span>
+                        )}
+                      </div>
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600 sm:table-cell">
-                      {data.service}
+
+                    {/* Service */}
+                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
+                      <div className="flex flex-col">
+                        <span>{serviceName}</span>
+                        {serviceDesc && (
+                          <span className="text-xs text-gray-500 truncate max-w-xs">
+                            {serviceDesc}
+                          </span>
+                        )}
+                      </div>
                     </td>
-                    <td className="py-3 px-4 text-sm font-bold text-gray-900">
-                      <p>Peter</p>
+
+                    {/* Reporter */}
+                    <td className="py-4 px-4 text-sm text-gray-700">
+                      <div className="flex flex-col">
+                        <span>{reporterName}</span>
+                        {reporterPhone && (
+                          <span className="text-xs text-gray-500">
+                            {reporterPhone}
+                          </span>
+                        )}
+                      </div>
                     </td>
-                    <td className="py-3 px-4 text-sm font-bold text-gray-900">
-                      {data.type}
+
+                    {/* Issue Details */}
+                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-gray-900">
+                          {issue.type || "No type specified"}
+                        </span>
+                        <span className="text-gray-600">
+                          {issue.description || "No description"}
+                        </span>
+                        {issue.attachments && (
+                          <span className="text-xs text-blue-500 mt-1">
+                            Has attachments
+                          </span>
+                        )}
+                      </div>
                     </td>
-                    <td className="py-3 px-4 text-sm font-bold text-gray-900">
-                      <p>Resolved</p>
+
+                    {/* Action */}
+                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => setOpenModal(true)}
+                          className="px-3 py-1 bg-green-100 text-green-800 rounded-md text-xs font-medium hover:bg-green-200"
+                        >
+                          Resolve
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );

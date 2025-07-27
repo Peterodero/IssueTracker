@@ -7,13 +7,24 @@ import ErrorBlock from "./UI/ErrorBlock";
 
 export default function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(true);
+  // const [loginError, setLoginError] = useState("");
 
   const navigate = useNavigate();
 
-  const { mutate, isError, isPending, error } = useMutation({
+  const { mutate, isError, isPending, error, } = useMutation({
     mutationFn: authenticateUser,
-    onSuccess: () => {
-      navigate("/landing");
+    onSuccess: (data) => {
+      sessionStorage.setItem('accessToken', data.access);
+      sessionStorage.setItem('refreshToken', data.refresh);
+      // sessionStorage.setItem("userName", data.name);
+      sessionStorage.setItem("role", data.role);
+
+      navigate('/landing')
+    },
+
+      onError: (error) => {
+      // setLoginError("Wrong credentials. Try creating an account.");
+      console.error("Failed to sign in:", error);
     },
   });
 
@@ -85,10 +96,11 @@ export default function Login() {
       {isError && (
         <ErrorBlock
           title="Failed to login."
-          message={
-            error.info?.message ||
-            "Failed to login.Check your details and log in again!"
-          }
+          message=
+           {
+            error?.detail || 
+            "Failed to login.Check your details and try again!"
+           }
         />
       )}
     </div>

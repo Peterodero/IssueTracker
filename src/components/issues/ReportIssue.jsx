@@ -1,10 +1,20 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { IssueContext } from "../../store/issue-context";
 import Modal from "../UI/Modal";
 import ReportIssueForm from "./ReportIssueForm";
 
 export default function ReportIssuePage() {
-  const { formData, submited, handleModal } = useContext(IssueContext);
+  const { formData, submited, handleModal, fetchOffices, fetchServices } = useContext(IssueContext);
+
+  useEffect(()=>{
+    fetchOffices()
+  }, [fetchOffices])
+
+  useEffect(() => {
+  if (formData.office) {
+    fetchServices(formData.office);
+  }
+}, [formData.office,fetchServices]);
 
   return (
     <>

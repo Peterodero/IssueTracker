@@ -1,7 +1,16 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssueSubmenu, showIssueSubmenu  }) {
+
+  const navigate = useNavigate();
+
+  function handleLogout(){
+    sessionStorage.removeItem("accessToken")
+    navigate('/login')
+  }
+
+  // let name = sessionStorage.getItem('userName')
   return (
     <>
       <header className="bg-gray-200 shadow p-2 flex flex-row h-20 items-center justify-between sticky top-0 z-50">
@@ -15,8 +24,8 @@ export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssu
           <h2 className=" text-2xl p-3 font-semibold">Welcome Peter</h2>
         </div>
 
-        <button className="flex bg-red mr-2">
-          <Link to="/login">Logout</Link>
+        <button className="flex bg-red mr-2" onClick={handleLogout}>
+          <Link to="">Logout</Link>
         </button>
       </header>
 
