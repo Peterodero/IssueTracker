@@ -60,7 +60,6 @@ export default function ReportIssueContextProvider({ children }) {
   const fetchIssues = useCallback(async () => {
     const issues = await listAllIssues();
     setIssuesList(issues);
-     console.log(issues);
   }, []);
 
   function handleChange(event) {

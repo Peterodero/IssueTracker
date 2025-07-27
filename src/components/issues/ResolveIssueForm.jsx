@@ -1,31 +1,37 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { resolveIssue } from "../../util/http";
 
-export default function ResolveIssueForm({handleCancelIssue}) {
+export default function ResolveIssueForm({handleCancelIssue, selectedIssue, onResolutionComplete}) {
   const { issueId } = useParams();
   const navigate = useNavigate();
   const [resolution, setResolution] = useState({
     status: "resolved",
     resolutionDetails: "",
-    timeSpent: "",
-    attachments: [],
   });
+    const [error, setError] = useState(null);
 
-  const currentIssue = {
-    id: issueId,
-    title: "Login failures on Mzigo platform",
-    description: "Users unable to login since morning update",
-    office: "Naekana",
-    service: "Mzigo",
-    reportedBy: "John Doe",
-    reportedAt: "2023-06-15T09:30:00Z",
-  };
+  // const currentIssue = {
+  //   id: issueId,
+  //   title: "Login failures on Mzigo platform",
+  //   description: "Users unable to login since morning update",
+  //   office: "Naekana",
+  //   service: "Mzigo",
+  //   reportedBy: "jane doe",
+  //   reportedAt: "2023-06-15T09:30:00Z",
+  // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+      try {
+      await resolveIssue(selectedIssue.id, resolution);
+      onResolutionComplete();
+    } catch (err) {
+      setError(err.message || "Failed to resolve issue");
+    } 
     console.log("Resolving issue:", { issueId, resolution });
 
-    navigate("/viewIssues"); // Redirect after resolution
+    navigate("/unresolved");
   };
   return (
     <div>
@@ -33,19 +39,19 @@ export default function ResolveIssueForm({handleCancelIssue}) {
       </div>
 
       <div className="bg-blue-50 p-4 rounded-lg mb-6">
-        <h2 className="font-semibold text-lg mb-2">{currentIssue.title}</h2>
+        <h2 className="font-semibold text-lg mb-2">{selectedIssue.type}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-gray-600">Service</p>
-            <p className="font-medium">{currentIssue.service}</p>
+            <p className="font-medium">{selectedIssue.service}</p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Office</p>
-            <p className="font-medium">{currentIssue.office}</p>
+            <p className="font-medium">{selectedIssue.office}</p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Reported By</p>
-            <p className="font-medium">{currentIssue.reportedBy}</p>
+            <p className="font-medium">{selectedIssue.reporter.username}</p>
           </div>
         </div>
       </div>
@@ -104,6 +110,8 @@ export default function ResolveIssueForm({handleCancelIssue}) {
             required
           />
         </div>
+
+         {error && <div className="error-message">{error}</div>}
 
         <div className="flex justify-end space-x-4 pt-4">
           <button

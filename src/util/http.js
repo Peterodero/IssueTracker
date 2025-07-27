@@ -113,4 +113,21 @@ export async function listAllIssues() {
   }
 }
 
+// api/issues.js
+export async function resolveIssue(issueId, resolutionData) {
+  const response = await fetch(url + `issues/${issueId}/resolve/`, {
+    method: "PUT", 
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
+    },
+    body: JSON.stringify(resolutionData)
+  });
 
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to resolve issue");
+  }
+
+  return await response.json();
+}
