@@ -21,7 +21,7 @@ export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssu
           ☰
         </button>
         <div>
-          <h2 className=" text-2xl p-3 font-semibold">Welcome Peter</h2>
+          <h2 className=" text-2xl p-3 font-semibold">Welcome</h2>
         </div>
 
         <button className="flex bg-red mr-2" onClick={handleLogout}>
