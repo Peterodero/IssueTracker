@@ -43,7 +43,7 @@ export default function Header({
         <div
           ref={sidebarRef}
           className={`fixed inset-0 mt-20 w-38 ${
-            showIssueSubmenu && `h-70`
+            showIssueSubmenu && `h-80`
           } h-52 bg-gray-300 z-55 rounded md:hidden`}
         >
           <nav className="flex-1 p-1">
@@ -121,6 +121,18 @@ export default function Header({
                   }
                 >
                   Update top-up
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/landing/viewTopUps"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 ${
+                      isActive ? "bg-gray-300" : ""
+                    }`
+                  }
+                >
+                  View Top-Ups
                 </NavLink>
               </li>
             </ul>

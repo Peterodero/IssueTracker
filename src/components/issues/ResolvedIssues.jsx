@@ -3,11 +3,14 @@ import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import { unResolveIssue } from "../../util/http";
 import Modal from "../UI/Modal";
+import NotificationModal from "./NotificationModal";
+import { useNavigate } from "react-router-dom";
 
 export default function ResolvedIssues() {
   const [loadingData, setLoadingData] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const { fetchResolvedIssues, resolvedIssuesList } = useContext(IssueContext);
 
@@ -33,6 +36,12 @@ export default function ResolvedIssues() {
       </div>
     );
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setOpenModal(false)
+    navigate("/landing/unresolved");
+  };
 
   async function handleUnResolveIssue(issue) {
     console.log(issue);
@@ -183,7 +192,7 @@ export default function ResolvedIssues() {
       {openModal && (
             <div className="flex items-center justify-center">
               <Modal>
-                  {error ? <div className="error-message">{error}</div> : <div>Issue marked as unresolved successfully</div>}
+                <NotificationModal handleSubmit={handleSubmit} error={error} title="Issue unresolved successfully"/>
               </Modal>
             </div>
           )}

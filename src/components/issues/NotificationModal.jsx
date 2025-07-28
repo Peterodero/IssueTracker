@@ -1,9 +1,9 @@
 
-export default function NotificationModal({error, handleSubmit}) {
+export default function NotificationModal({error, title, handleSubmit}) {
 
   return (
     <div>
-      {error ? <div className="error-message">{error}</div> : <div>Issue resolved successfully</div>}
+      {error ? <div className="error-message">{error}</div> : <div>{title}</div>}
       <form onSubmit={handleSubmit} className="space-y-6 flex justify-between">
         <div></div>
         <div className="space-y-2">

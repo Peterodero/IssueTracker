@@ -83,6 +83,7 @@ export default function ReportIssueContextProvider({ children }) {
 
   const fetchResolvedIssues = useCallback(async () => {
     const resolvedIssues = await listResolvedIssues();
+    console.log(resolvedIssues)
     setResolvedIssuesList(resolvedIssues.data);
   }, []);
 

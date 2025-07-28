@@ -40,7 +40,7 @@ export default function UnresolvedIssues() {
     setOpenModal(true);
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { 
     e.preventDefault();
     setOpenModal(false)
     navigate("/landing/unresolved");
@@ -182,9 +182,9 @@ export default function UnresolvedIssues() {
       </div>
 
       {openModal && (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center ml-4">
           <Modal>
-            <NotificationModal error={error} handleSubmit={handleSubmit} />
+            <NotificationModal error={error} handleSubmit={handleSubmit} title="Issue resolved successfully" /> 
           </Modal>
         </div>
       )}

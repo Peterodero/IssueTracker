@@ -16,8 +16,6 @@ export async function authenticateUser(data) {
     return errorData.detail;
   }
 
-  console.log(resData);
-
   return resData;
 }
 
@@ -32,7 +30,6 @@ export async function getOffices() {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData.detail);
     return errorData.detail;
   }
 
@@ -124,7 +121,6 @@ export async function resolveIssue(issueId) {
   }
 
   const resData = await response.json();
-  console.log(resData);
 
   return resData;
 }
@@ -136,7 +132,7 @@ export async function unResolveIssue(issueId) {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
     },
-    body: JSON.stringify({id: issueId})
+    body: JSON.stringify({id: issueId, status: "unsolved"})
   });
 
   if (!response.ok) {
@@ -161,12 +157,10 @@ export async function listResolvedIssues() {
     });
 
     if (!response.ok) {
-        console.log(response)
       throw new Error('Failed to fetch resolved issues');
     }
 
     const resolvedIssues = await response.json();
-    console.log(resolvedIssues)
     return resolvedIssues;
     
   } catch (error) {
@@ -186,12 +180,10 @@ export async function listUnResolvedIssues() {
     });
 
     if (!response.ok) {
-        console.log(response)
       throw new Error('Failed to fetch unresolved issues');
     }
 
     const unresolvedIssues = await response.json();
-    console.log(unresolvedIssues)
     return unresolvedIssues;
     
   } catch (error) {
@@ -218,8 +210,6 @@ export async function updateTopUp(formData) {
     }),
   });
   const resData = await response.json();
-
-  console.log(resData)
 
   return resData;
 }

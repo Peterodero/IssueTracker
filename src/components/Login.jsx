@@ -7,6 +7,7 @@ import ErrorBlock from "./UI/ErrorBlock";
 
 export default function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(true);
+  // const [loginError, setLoginError] = useState("");
 
   const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ export default function Login() {
     },
 
     onError: (error) => {
+      // setLoginError("Wrong credentials. Try creating an account.");
       console.error("Failed to sign in:", error);
     },
   });
