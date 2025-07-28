@@ -12,7 +12,7 @@ export default function ReportIssuePage() {
 
   useEffect(() => {
   if (formData.office) {
-    fetchServices(formData.office);
+    fetchServices();
   }
 }, [formData.office,fetchServices]);
 

@@ -1,12 +1,14 @@
 import { createContext, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  getAllTopUps,
   getOffices,
   getServices,
   listAllIssues,
   listResolvedIssues,
   listUnResolvedIssues,
   reportIssue,
+  updateTopUp,
 } from "../util/http";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -23,16 +25,19 @@ export const IssueContext = createContext({
   handleChange: () => {},
   handleClearForm: () => {},
   handleSubmitIssueForm: () => {},
+  handleSubmitTopUpForm: () => {},
   fetchOffices: () => {},
   fetchServices: () => {},
   fetchIssues: () => {},
   fetchResolvedIssues: () => {},
   resolvedIssuesList: () => {},
   fetchUnResolvedIssues: () => {},
+  fetchTopUps: ()=> {},
   unResolvedIssuesList: [],
   officeList: [],
   serviceList: [],
   issuesList: [],
+  topUpList: []
 });
 
 export default function ReportIssueContextProvider({ children }) {
@@ -41,6 +46,10 @@ export default function ReportIssueContextProvider({ children }) {
     service: "",
     type: "",
     description: "",
+    date: "",
+    sim_number: "",
+    amount: "",
+    attachments: [],
   });
 
   const [submited, setSubmited] = useState(false);
@@ -50,6 +59,7 @@ export default function ReportIssueContextProvider({ children }) {
   const [issuesList, setIssuesList] = useState([]);
   const [resolvedIssuesList, setResolvedIssuesList] = useState([]);
   const [unResolvedIssuesList, setUnResolvedIssuesList] = useState([]);
+  const [topUpList, setTopUpList] = useState([])
 
   const navigate = useNavigate();
 
@@ -80,6 +90,12 @@ export default function ReportIssueContextProvider({ children }) {
     const unResolvedIssues = await listUnResolvedIssues();
     setUnResolvedIssuesList(unResolvedIssues.data);
   }, []);
+
+  const fetchTopUps  = useCallback(async ()=>{
+    const allTopUps = await getAllTopUps();
+    setTopUpList(allTopUps);
+    
+  }, [])
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -118,6 +134,9 @@ export default function ReportIssueContextProvider({ children }) {
       service: "",
       type: "",
       description: "",
+      date: "",
+      sim_number: "",
+      amount: "",
       attachments: [],
     });
   }
@@ -143,11 +162,18 @@ export default function ReportIssueContextProvider({ children }) {
     setSubmited(true);
   }
 
+  async function handleSubmitTopUpForm(event) {
+    event.preventDefault();
+    console.log(formData);
+    await updateTopUp(formData);
+  }
+
   const ctxValue = {
     formData: formData,
     handleChange: handleChange,
     handleClearForm: handleClearForm,
     handleSubmitIssueForm: handleSubmitIssueForm,
+    handleSubmitTopUpForm: handleSubmitTopUpForm,
     handleModal: handleModal,
     submited: submited,
     fetchOffices: fetchOffices,
@@ -155,6 +181,8 @@ export default function ReportIssueContextProvider({ children }) {
     fetchIssues: fetchIssues,
     fetchResolvedIssues: fetchResolvedIssues,
     fetchUnResolvedIssues: fetchUnResolvedIssues,
+    fetchTopUps: fetchTopUps,
+    topUpList: topUpList,
     resolvedIssuesList: resolvedIssuesList,
     unResolvedIssuesList: unResolvedIssuesList,
     officeList: officeList,

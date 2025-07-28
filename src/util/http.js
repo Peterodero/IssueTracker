@@ -71,19 +71,16 @@ export async function reportIssue(formData) {
       "Authorization": `Bearer ${accessToken}`
     },
     body: JSON.stringify({
-    ...formData,
+    type: formData.type,
+    description: formData.description,
+    service: formData.service,
+    office: formData.office,
     status: "unsolved", 
     assigned_to: "552b97e1-8ff9-4331-8559-47e11eecf555"
 
     }),
   });
   const resData = await response.json();
-
-//   if (!response.ok) {
-//     const errorData = await response.json();
-//     console.log(errorData.detail);
-//     return errorData.detail;
-//   }
 
   return resData;
 }
@@ -199,5 +196,52 @@ export async function listUnResolvedIssues() {
     
   } catch (error) {
     console.error('Error fetching unresolved issues:', error);
+  }
+}
+
+
+export async function updateTopUp(formData) {
+    const accessToken = sessionStorage.getItem("accessToken")
+     const response = await fetch(url + "data-bundles/create/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
+    },
+    body: JSON.stringify({
+    office: formData.office,
+    sim_number: formData.sim_number,
+    amount: Number(formData.amount),
+    purchase_date: formData.date,
+    notes: "Monthly data bundle for office internet"
+
+    }),
+  });
+  const resData = await response.json();
+
+  console.log(resData)
+
+  return resData;
+}
+
+export async function getAllTopUps() {
+     try {
+    const response = await fetch(url + "data-bundles/list/", {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch issues');
+    }
+
+    const topUps = await response.json();
+    return topUps;
+    
+  } catch (error) {
+    console.error('Error fetching services:', error);
   }
 }

@@ -15,6 +15,7 @@ import CreateServices from "./components/admin/CreateServices";
 import ResolvedIssues from "./components/issues/ResolvedIssues";
 import AllIssues from "./components/issues/AllIssues";
 import UnresolvedIssues from "./components/issues/UnresolvedIssues";
+import ViewTopUp from "./components/airtimeTopUp/ViewTopUp";
 
 function App() {
   const router = createBrowserRouter([
@@ -69,6 +70,10 @@ function App() {
             {
               path: "unresolved",
               element: <UnresolvedIssues/>
+            },
+            {
+              path: "viewTopUps",
+              element: <ViewTopUp/>
             }
           ],
         },

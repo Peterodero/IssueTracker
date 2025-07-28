@@ -95,6 +95,19 @@ export default function Sidebar({ isMobile, showSidebar, toggleIssueSubmenu, sho
               Update top-up
             </NavLink>
           </li>
+
+          <li>
+            <NavLink
+              to="/landing/viewTopUps"
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 ${
+                  isActive ? "bg-gray-300" : ""
+                }`
+              }
+            >
+              View Top-Ups
+            </NavLink>
+          </li>
         </ul>
       </nav>
       <div className="p-4 border-t border-gray-800">
