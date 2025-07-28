@@ -40,12 +40,17 @@ export default function LandingPage() {
     setShowSidebar(!showSidebar);
   };
 
+  const onCloseSidebar = () => {
+    setShowSidebar(false);
+  }
+
   return (
     <div className="flex flex-col">
       <Header
         toggleSidebar={toggleSidebar}
         isMobile={isMobile}
         showSidebar={showSidebar}
+        onCloseSidebar={onCloseSidebar}
         toggleIssueSubmenu={toggleIssueSubmenu}
         showIssueSubmenu={showIssueSubmenu}
       />

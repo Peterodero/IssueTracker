@@ -28,7 +28,7 @@ export default function ResolvedIssues() {
 
   if (loadingData) {
     return (
-      <div className="ml-100">
+      <div className="md:ml-100">
         <LoadingIndicator />
       </div>
     );

@@ -7,23 +7,21 @@ import ErrorBlock from "./UI/ErrorBlock";
 
 export default function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(true);
-  // const [loginError, setLoginError] = useState("");
 
   const navigate = useNavigate();
 
-  const { mutate, isError, isPending, error, } = useMutation({
+  const { mutate, isError, isPending, error } = useMutation({
     mutationFn: authenticateUser,
     onSuccess: (data) => {
-      sessionStorage.setItem('accessToken', data.access);
-      sessionStorage.setItem('refreshToken', data.refresh);
+      sessionStorage.setItem("accessToken", data.access);
+      sessionStorage.setItem("refreshToken", data.refresh);
       // sessionStorage.setItem("userName", data.name);
       sessionStorage.setItem("role", data.role);
 
-      navigate('/landing')
+      navigate("/landing");
     },
 
-      onError: (error) => {
-      // setLoginError("Wrong credentials. Try creating an account.");
+    onError: (error) => {
       console.error("Failed to sign in:", error);
     },
   });
@@ -34,18 +32,17 @@ export default function Login() {
     const fd = new FormData(event.target);
 
     const data = Object.fromEntries(fd.entries());
+    data.username = data.username.trim();
 
     const validatePassword = passwordValidator(data.password, 6);
 
     setPasswordIsValid(validatePassword);
 
-    if (!passwordIsValid) {
-      throw new Error("Please fill in all fields");
+    if (!validatePassword) {
+      return;
     }
-
     mutate(data);
 
-    console.log(data);
   }
 
   return (
@@ -56,7 +53,7 @@ export default function Login() {
       </div>
 
       <form
-        className="flex flex-col md:gap-6 lg:gap-6 gap-1 justify-center shadow bg-white md:w-3/8 p-1 md:p-10 rounded-xl"
+        className="flex flex-col md:gap-6 lg:gap-6 gap-1 justify-center shadow bg-white md:w-3/8 w-4/5 p-5 md:p-10 rounded-xl"
         onSubmit={handleFormSubmit}
       >
         <div className="px-2">
@@ -66,7 +63,7 @@ export default function Login() {
               name="username"
               placeholder="Enter your username"
               required
-              className="border rounded py-1 px-2"
+              className="border rounded py-2 px-3"
             />
           </div>
 
@@ -77,7 +74,7 @@ export default function Login() {
               name="password"
               placeholder="Enter your password"
               required
-              className="border rounded py-1 px-2"
+              className="border rounded py-2 px-3"
             />
           </div>
           {!passwordIsValid && (
@@ -96,11 +93,9 @@ export default function Login() {
       {isError && (
         <ErrorBlock
           title="Failed to login."
-          message=
-           {
-            error?.detail || 
-            "Failed to login.Check your details and try again!"
-           }
+          message={
+            error?.detail || "Failed to login.Check your details and try again!"
+          }
         />
       )}
     </div>

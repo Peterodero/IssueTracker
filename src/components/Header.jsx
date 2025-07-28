@@ -1,16 +1,26 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import { useRef } from "react";
+import useOutsideClick from "../hooks/useOutsideClick";
 
-export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssueSubmenu, showIssueSubmenu  }) {
-
+export default function Header({
+  toggleSidebar,
+  isMobile,
+  showSidebar,
+  onCloseSidebar,
+  toggleIssueSubmenu,
+  showIssueSubmenu,
+}) {
   const navigate = useNavigate();
+  const sidebarRef = useRef(null);
 
-  function handleLogout(){
-    sessionStorage.removeItem("accessToken")
-    navigate('/login')
+  useOutsideClick(sidebarRef, onCloseSidebar);
+
+  function handleLogout() {
+    sessionStorage.removeItem("accessToken");
+    navigate("/login");
   }
 
-  // let name = sessionStorage.getItem('userName')
   return (
     <>
       <header className="bg-gray-200 shadow p-2 flex flex-row h-20 items-center justify-between sticky top-0 z-50">
@@ -31,8 +41,10 @@ export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssu
 
       {isMobile && showSidebar && (
         <div
-          className={`fixed inset-0 mt-20 w-38 ${showIssueSubmenu && `h-70`} h-52 bg-gray-300 z-55 md:hidden`}
-          
+          ref={sidebarRef}
+          className={`fixed inset-0 mt-20 w-38 ${
+            showIssueSubmenu && `h-70`
+          } h-52 bg-gray-300 z-55 rounded md:hidden`}
         >
           <nav className="flex-1 p-1">
             <ul className="space-y-1">
