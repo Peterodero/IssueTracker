@@ -44,6 +44,16 @@ export default function Sidebar({ isMobile, showSidebar, toggleIssueSubmenu, sho
               {showIssueSubmenu && (
                 <div className="ml-4 mt-1 space-y-1">
                   <NavLink
+                    to="/landing/allIssues"
+                    className={({ isActive }) =>
+                      `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
+                        isActive ? "bg-gray-300" : ""
+                      }`
+                    }
+                  >
+                    All Issues
+                  </NavLink>
+                   <NavLink
                     to="/landing/resolved"
                     className={({ isActive }) =>
                       `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${

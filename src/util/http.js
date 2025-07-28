@@ -85,8 +85,6 @@ export async function reportIssue(formData) {
 //     return errorData.detail;
 //   }
 
-  console.log(resData);
-
   return resData;
 }
 
@@ -105,7 +103,6 @@ export async function listAllIssues() {
     }
 
     const issues = await response.json();
-    console.log(issues[0])
     return issues;
     
   } catch (error) {
@@ -114,14 +111,14 @@ export async function listAllIssues() {
 }
 
 // api/issues.js
-export async function resolveIssue(issueId, resolutionData) {
-  const response = await fetch(url + `issues/${issueId}/resolve/`, {
+export async function resolveIssue(issueId) {
+  const response = await fetch(url + "issues/update/", {
     method: "PUT", 
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
     },
-    body: JSON.stringify(resolutionData)
+    body: JSON.stringify({id: issueId})
   });
 
   if (!response.ok) {
@@ -129,5 +126,78 @@ export async function resolveIssue(issueId, resolutionData) {
     throw new Error(error.message || "Failed to resolve issue");
   }
 
-  return await response.json();
+  const resData = await response.json();
+  console.log(resData);
+
+  return resData;
+}
+
+export async function unResolveIssue(issueId) {
+  const response = await fetch(url + "issues/update/", {
+    method: "PUT", 
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
+    },
+    body: JSON.stringify({id: issueId})
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to resolve issue");
+  }
+
+  const resData = await response.json();
+
+  return resData;
+}
+
+export async function listResolvedIssues() {
+     try {
+    const response = await fetch(url + "issues/list/", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({status: "solved"})
+    });
+
+    if (!response.ok) {
+        console.log(response)
+      throw new Error('Failed to fetch resolved issues');
+    }
+
+    const resolvedIssues = await response.json();
+    console.log(resolvedIssues)
+    return resolvedIssues;
+    
+  } catch (error) {
+    console.error('Error fetching resolved issues:', error);
+  }
+}
+
+export async function listUnResolvedIssues() {
+     try {
+    const response = await fetch(url + "issues/list/", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({status: "unsolved"})
+    });
+
+    if (!response.ok) {
+        console.log(response)
+      throw new Error('Failed to fetch unresolved issues');
+    }
+
+    const unresolvedIssues = await response.json();
+    console.log(unresolvedIssues)
+    return unresolvedIssues;
+    
+  } catch (error) {
+    console.error('Error fetching unresolved issues:', error);
+  }
 }

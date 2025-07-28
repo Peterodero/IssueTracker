@@ -4,6 +4,8 @@ import {
   getOffices,
   getServices,
   listAllIssues,
+  listResolvedIssues,
+  listUnResolvedIssues,
   reportIssue,
 } from "../util/http";
 
@@ -24,6 +26,10 @@ export const IssueContext = createContext({
   fetchOffices: () => {},
   fetchServices: () => {},
   fetchIssues: () => {},
+  fetchResolvedIssues: () => {},
+  resolvedIssuesList: () => {},
+  fetchUnResolvedIssues: () => {},
+  unResolvedIssuesList: [],
   officeList: [],
   serviceList: [],
   issuesList: [],
@@ -42,6 +48,8 @@ export default function ReportIssueContextProvider({ children }) {
   const [officeList, setOfficeList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
   const [issuesList, setIssuesList] = useState([]);
+  const [resolvedIssuesList, setResolvedIssuesList] = useState([]);
+  const [unResolvedIssuesList, setUnResolvedIssuesList] = useState([]);
 
   const navigate = useNavigate();
 
@@ -59,7 +67,18 @@ export default function ReportIssueContextProvider({ children }) {
 
   const fetchIssues = useCallback(async () => {
     const issues = await listAllIssues();
-    setIssuesList(issues);
+    console.log(issues.data);
+    setIssuesList(issues.data);
+  }, []);
+
+  const fetchResolvedIssues = useCallback(async () => {
+    const resolvedIssues = await listResolvedIssues();
+    setResolvedIssuesList(resolvedIssues.data);
+  }, []);
+
+  const fetchUnResolvedIssues = useCallback(async () => {
+    const unResolvedIssues = await listUnResolvedIssues();
+    setUnResolvedIssuesList(unResolvedIssues.data);
   }, []);
 
   function handleChange(event) {
@@ -134,6 +153,10 @@ export default function ReportIssueContextProvider({ children }) {
     fetchOffices: fetchOffices,
     fetchServices: fetchServices,
     fetchIssues: fetchIssues,
+    fetchResolvedIssues: fetchResolvedIssues,
+    fetchUnResolvedIssues: fetchUnResolvedIssues,
+    resolvedIssuesList: resolvedIssuesList,
+    unResolvedIssuesList: unResolvedIssuesList,
     officeList: officeList,
     serviceList: serviceList,
     issuesList: issuesList,

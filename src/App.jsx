@@ -7,12 +7,14 @@ import LandingPage from "./pages/LandingPage";
 import ReportIssuePage from "./components/issues/ReportIssue";
 import ViewIssues from "./components/ViewIssues";
 import UpdateTopUp from "./components/UpdateTopUp";
-import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateOffices from "./components/admin/CreateOffices";
 import CreateServices from "./components/admin/CreateServices";
+import ResolvedIssues from "./components/issues/ResolvedIssues";
+import AllIssues from "./components/issues/AllIssues";
+import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 
 function App() {
   const router = createBrowserRouter([
@@ -57,9 +59,17 @@ function App() {
               element: <UpdateTopUp />,
             },
             {
-              path: "unresolved",
-              element: <UnresolvedIssues />,
+              path: "allIssues",
+              element: <AllIssues />,
             },
+            {
+              path: "resolved",
+              element: <ResolvedIssues/>
+            },
+            {
+              path: "unresolved",
+              element: <UnresolvedIssues/>
+            }
           ],
         },
       ],

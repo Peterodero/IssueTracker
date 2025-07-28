@@ -66,6 +66,16 @@ export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssu
                   {showIssueSubmenu && (
                     <div className="ml-4 mt-1 space-y-1">
                       <NavLink
+                        to="/landing/allIssues"
+                        className={({ isActive }) =>
+                          `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        All Issues
+                      </NavLink>
+                      <NavLink
                         to="/landing/resolved"
                         className={({ isActive }) =>
                           `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
@@ -99,18 +109,6 @@ export default function Header({toggleSidebar, isMobile, showSidebar, toggleIssu
                   }
                 >
                   Update top-up
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/landing/history"
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-2 rounded  hover:bg-gray-200 ${
-                      isActive ? "bg-gray-300" : ""
-                    }`
-                  }
-                >
-                  History
                 </NavLink>
               </li>
             </ul>

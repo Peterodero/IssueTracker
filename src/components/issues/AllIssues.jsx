@@ -1,24 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
-import Modal from "../UI/Modal";
 import LoadingIndicator from "../UI/LoadingIndicator";
-import { resolveIssue } from "../../util/http";
-import NotificationModal from "./NotificationModal";
-import { useNavigate } from "react-router-dom";
 
-export default function UnresolvedIssues() {
-  const { fetchUnResolvedIssues, unResolvedIssuesList } = useContext(IssueContext);
-  const [openModal, setOpenModal] = useState(false);
-  const navigate = useNavigate();
+export default function AllIssues() {
+  const { fetchIssues, issuesList } = useContext(IssueContext);
 
   const [loadingData, setLoadingData] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
       setLoadingData(true);
       try {
-        await fetchUnResolvedIssues();
+        await fetchIssues();
       } catch (error) {
         console.error("Error loading issues:", error);
       } finally {
@@ -27,24 +20,8 @@ export default function UnresolvedIssues() {
     };
 
     loadData();
-  }, [fetchUnResolvedIssues]);
+  }, [fetchIssues]);
 
-  async function handleResolveIssue(issue) {
-    console.log(issue);
-    try {
-      await resolveIssue(issue.id);
-      fetchUnResolvedIssues();
-    } catch (err) {
-      setError(err.message || "Failed to resolve issue");
-    }
-    setOpenModal(true);
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setOpenModal(false)
-    navigate("/landing/unresolved");
-  };
 
   if (loadingData) {
     return (
@@ -76,13 +53,13 @@ export default function UnresolvedIssues() {
                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Issue
                 </th>
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                {/* <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Action
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {unResolvedIssuesList.map((issue, index) => {
+              {issuesList.map((issue, index) => {
                 const officeName = issue.office?.name || "No office assigned";
                 const officeLocation = issue.office?.location || "";
                 const serviceName =
@@ -163,7 +140,7 @@ export default function UnresolvedIssues() {
                     </td>
 
                     {/* Action */}
-                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
+                    {/* <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleResolveIssue(issue)}
@@ -172,7 +149,7 @@ export default function UnresolvedIssues() {
                           Resolve
                         </button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}
@@ -181,13 +158,13 @@ export default function UnresolvedIssues() {
         </div>
       </div>
 
-      {openModal && (
+      {/* {openModal && (
         <div className="flex items-center justify-center">
           <Modal>
             <NotificationModal error={error} handleSubmit={handleSubmit} />
           </Modal>
         </div>
-      )}
+      )} */}
     </>
   );
 }

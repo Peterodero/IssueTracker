@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import UnresolvedIssues from "./issues/UnresolvedIssues";
-import ResolveIssueForm from "./issues/ResolveIssueForm"
+import UnresolvedIssues from "./issues/AllIssues";
+import ResolveIssueForm from "./issues/NotificationModal"
 
 export default function ViewIssues() {
   const [issuesStatus, setIssuesStatus] = useState();
