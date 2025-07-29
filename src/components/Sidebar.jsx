@@ -92,7 +92,7 @@ export default function Sidebar({ isMobile, showSidebar, toggleIssueSubmenu, sho
                 }`
               }
             >
-              Update top-up
+              Update Top-Up
             </NavLink>
           </li>
 

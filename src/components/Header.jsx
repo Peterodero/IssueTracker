@@ -120,7 +120,7 @@ export default function Header({
                     }`
                   }
                 >
-                  Update top-up
+                  Update Top-Up
                 </NavLink>
               </li>
               <li>
