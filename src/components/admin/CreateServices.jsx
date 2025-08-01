@@ -47,7 +47,7 @@ const CreateServices = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6">
+    <div className="max-w-4xl mx-auto p-6 rounded-lg shadow md:ml-5 bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 md:w-5xl">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="p-6">
@@ -74,7 +74,7 @@ const CreateServices = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="e.g. Web Development"
+                  placeholder="e.g. TKT"
                 />
               </div>
 

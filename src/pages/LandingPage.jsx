@@ -9,10 +9,20 @@ export default function LandingPage() {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const [showIssueSubmenu, setShowIssueSubmenu] = useState(false);
+  const [showManageSubmenu, setShowManageSubmenu] = useState(false);
+  const [showAirtimeSubmenu, setShowAirtimeSubmenu] = useState(false);
 
   const toggleIssueSubmenu = () => {
     setShowIssueSubmenu(!showIssueSubmenu);
   };
+
+  const toggleManageSubmenu = () => {
+    setShowManageSubmenu(!showManageSubmenu);
+  };
+   const toggleAirtimeSubmenu = () => {
+    setShowAirtimeSubmenu(!showAirtimeSubmenu);
+  };
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -51,8 +61,13 @@ export default function LandingPage() {
         isMobile={isMobile}
         showSidebar={showSidebar}
         onCloseSidebar={onCloseSidebar}
+        toggleAirtimeSubmenu={toggleAirtimeSubmenu}
         toggleIssueSubmenu={toggleIssueSubmenu}
+        showAirtimeSubmenu={showAirtimeSubmenu}
         showIssueSubmenu={showIssueSubmenu}
+        toggleManageSubmenu={toggleManageSubmenu}
+        showManageSubmenu={showManageSubmenu}
+
       />
 
       <div className="flex flex-col md:flex-row flex-1 gap-2 md:gap-4">
@@ -60,7 +75,11 @@ export default function LandingPage() {
           <Sidebar
             isMobile={isMobile}
             showSidebar={showSidebar}
+            toggleAirtimeSubmenu={toggleAirtimeSubmenu}
             toggleIssueSubmenu={toggleIssueSubmenu}
+            toggleManageSubmenu={toggleManageSubmenu}
+            showAirtimeSubmenu={showAirtimeSubmenu}
+            showManageSubmenu={showManageSubmenu}
             showIssueSubmenu={showIssueSubmenu}
           />
         </div>

@@ -16,6 +16,7 @@ import ResolvedIssues from "./components/issues/ResolvedIssues";
 import AllIssues from "./components/issues/AllIssues";
 import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 import ViewTopUp from "./components/airtimeTopUp/ViewTopUp";
+import ViewAttachment from "./components/issues/Image";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,14 +27,6 @@ function App() {
     {
       path: "/login",
       element: <LoginPage />,
-    },
-    {
-      path: "/create-offices",
-      element: <CreateOffices/>
-    },
-    {
-      path: "/create-services",
-      element: <CreateServices/>
     },
     {
       path: "/landing",
@@ -65,15 +58,27 @@ function App() {
             },
             {
               path: "resolved",
-              element: <ResolvedIssues/>
+              element: <ResolvedIssues />,
             },
             {
               path: "unresolved",
-              element: <UnresolvedIssues/>
+              element: <UnresolvedIssues />,
             },
             {
               path: "viewTopUps",
-              element: <ViewTopUp/>
+              element: <ViewTopUp />,
+            },
+            {
+              path: "create-offices",
+              element: <CreateOffices />,
+            },
+            {
+              path: "create-services",
+              element: <CreateServices />,
+            },
+            {
+              path: "view-attachment",
+              element: <ViewAttachment/>
             }
           ],
         },

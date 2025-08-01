@@ -1,11 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
+import { useNavigate } from "react-router-dom";
 
 export default function AllIssues() {
   const { fetchIssues, issuesList } = useContext(IssueContext);
 
   const [loadingData, setLoadingData] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
@@ -21,7 +24,6 @@ export default function AllIssues() {
 
     loadData();
   }, [fetchIssues]);
-
 
   if (loadingData) {
     return (
@@ -53,9 +55,7 @@ export default function AllIssues() {
                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Issue
                 </th>
-                {/* <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
-                  Action
-                </th> */}
+                
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
@@ -132,24 +132,19 @@ export default function AllIssues() {
                           {issue.description || "No description"}
                         </span>
                         {issue.attachments && (
-                          <span className="text-xs text-blue-500 mt-1">
+                          <button
+                            className="text-xs text-blue-500 mt-1 cursor-pointer hover:underline"
+                            onClick={() =>
+                              navigate("/landing/view-attachment", {
+                                state: { attachmentUrl: issue.attachments },
+                              })
+                            }
+                          >
                             Has attachments
-                          </span>
+                          </button>
                         )}
                       </div>
                     </td>
-
-                    {/* Action */}
-                    {/* <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleResolveIssue(issue)}
-                          className="px-3 py-1 bg-green-100 text-green-800 rounded-md text-xs font-medium hover:bg-green-200"
-                        >
-                          Resolve
-                        </button>
-                      </div>
-                    </td> */}
                   </tr>
                 );
               })}
@@ -157,14 +152,6 @@ export default function AllIssues() {
           </table>
         </div>
       </div>
-
-      {/* {openModal && (
-        <div className="flex items-center justify-center">
-          <Modal>
-            <NotificationModal error={error} handleSubmit={handleSubmit} />
-          </Modal>
-        </div>
-      )} */}
     </>
   );
 }

@@ -1,7 +1,7 @@
-const url = "https://issue-tracker-jywg.onrender.com/api/";
+export const url = "https://issue-tracker-jywg.onrender.com/api";
 
 export async function authenticateUser(data) {
-  const response = await fetch(url + "auth/login/", {
+  const response = await fetch(url + "/auth/login/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export async function authenticateUser(data) {
 }
 
 export async function getOffices() {
-  const response = await fetch(url + "offices/list/", {
+  const response = await fetch(url + "/offices/list/", {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -38,7 +38,7 @@ export async function getOffices() {
 
 export async function getServices() {
      try {
-    const response = await fetch(url + "services/list/", {
+    const response = await fetch(url + "/services/list/", {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -61,21 +61,14 @@ export async function getServices() {
 
 export async function reportIssue(formData) {
     const accessToken = sessionStorage.getItem("accessToken")
-     const response = await fetch(url + "issues/create/", {
+    console.log(formData)
+     const response = await fetch(url + "/issues/create/", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
       "Authorization": `Bearer ${accessToken}`
     },
-    body: JSON.stringify({
-    type: formData.type,
-    description: formData.description,
-    service: formData.service,
-    office: formData.office,
-    status: "unsolved", 
-    assigned_to: "552b97e1-8ff9-4331-8559-47e11eecf555"
-
-    }),
+    body: formData
   });
   const resData = await response.json();
 
@@ -84,7 +77,7 @@ export async function reportIssue(formData) {
 
 export async function listAllIssues() {
      try {
-    const response = await fetch(url + "issues/list/", {
+    const response = await fetch(url + "/issues/list/", {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -106,7 +99,7 @@ export async function listAllIssues() {
 
 // api/issues.js
 export async function resolveIssue(issueId) {
-  const response = await fetch(url + "issues/update/", {
+  const response = await fetch(url + "/issues/update/", {
     method: "PUT", 
     headers: {
       "Content-Type": "application/json",
@@ -126,7 +119,7 @@ export async function resolveIssue(issueId) {
 }
 
 export async function unResolveIssue(issueId) {
-  const response = await fetch(url + "issues/update/", {
+  const response = await fetch(url + "/issues/update/", {
     method: "PUT", 
     headers: {
       "Content-Type": "application/json",
@@ -147,7 +140,7 @@ export async function unResolveIssue(issueId) {
 
 export async function listResolvedIssues() {
      try {
-    const response = await fetch(url + "issues/list/", {
+    const response = await fetch(url + "/issues/list/", {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -170,7 +163,7 @@ export async function listResolvedIssues() {
 
 export async function listUnResolvedIssues() {
      try {
-    const response = await fetch(url + "issues/list/", {
+    const response = await fetch(url + "/issues/list/", {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -194,7 +187,7 @@ export async function listUnResolvedIssues() {
 
 export async function updateTopUp(formData) {
     const accessToken = sessionStorage.getItem("accessToken")
-     const response = await fetch(url + "data-bundles/create/", {
+     const response = await fetch(url + "/data-bundles/create/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -216,7 +209,7 @@ export async function updateTopUp(formData) {
 
 export async function getAllTopUps() {
      try {
-    const response = await fetch(url + "data-bundles/list/", {
+    const response = await fetch(url + "/data-bundles/list/", {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,

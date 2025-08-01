@@ -8,8 +8,12 @@ export default function Header({
   isMobile,
   showSidebar,
   onCloseSidebar,
+  toggleAirtimeSubmenu,
   toggleIssueSubmenu,
+  toggleManageSubmenu,
+  showAirtimeSubmenu,
   showIssueSubmenu,
+  showManageSubmenu,
 }) {
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
@@ -43,7 +47,7 @@ export default function Header({
         <div
           ref={sidebarRef}
           className={`fixed inset-0 mt-20 w-38 ${
-            showIssueSubmenu && `h-80`
+            (showIssueSubmenu || showAirtimeSubmenu || showManageSubmenu) && `h-100`
           } h-52 bg-gray-300 z-55 rounded md:hidden`}
         >
           <nav className="flex-1 p-1">
@@ -52,7 +56,7 @@ export default function Header({
                 <NavLink
                   to="/landing/reportIssue"
                   className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-2 rounded  hover:bg-gray-200 ${
+                    `flex items-center gap-2 px-3 py-1 rounded  hover:bg-gray-200 ${
                       isActive ? "bg-gray-300" : ""
                     }`
                   }
@@ -64,23 +68,23 @@ export default function Header({
                 <div className="flex flex-col">
                   <button
                     onClick={toggleIssueSubmenu}
-                    className={`flex items-center justify-between gap-2 px-3 py-2 rounded hover:bg-gray-200 ${
+                    className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
                       location.pathname.includes("/landing/viewIssues")
                         ? "bg-gray-300"
                         : ""
                     }`}
                   >
-                    <span className=" a-view-issues px-0 py-2 rounded hover:bg-gray-200">
+                    <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
                       View Issues
                     </span>
                     <span>{showIssueSubmenu ? "🔽" : "▶️"}</span>
                   </button>
                   {showIssueSubmenu && (
-                    <div className="ml-4 mt-1 space-y-1">
+                    <div className="ml-4 space-y-1">
                       <NavLink
                         to="/landing/allIssues"
                         className={({ isActive }) =>
-                          `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""
                           }`
                         }
@@ -90,7 +94,7 @@ export default function Header({
                       <NavLink
                         to="/landing/resolved"
                         className={({ isActive }) =>
-                          `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""
                           }`
                         }
@@ -100,7 +104,7 @@ export default function Header({
                       <NavLink
                         to="/landing/unresolved"
                         className={({ isActive }) =>
-                          `block px-3 py-2 rounded hover:bg-gray-200 text-sm ${
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""
                           }`
                         }
@@ -111,29 +115,88 @@ export default function Header({
                   )}
                 </div>
               </li>
+
               <li>
-                <NavLink
-                  to="/landing/resolveTopUp"
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-2 rounded  hover:bg-gray-200 ${
-                      isActive ? "bg-gray-300" : ""
-                    }`
-                  }
-                >
-                  Update Top-Up
-                </NavLink>
+                <div className="flex flex-col">
+                  <button
+                    onClick={toggleAirtimeSubmenu}
+                    className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
+                      location.pathname.includes("/landing/viewIssues")
+                        ? "bg-gray-300"
+                        : ""
+                    }`}
+                  >
+                    <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
+                      Airtime
+                    </span>
+                    <span>{showAirtimeSubmenu ? "🔽" : "▶️"}</span>
+                  </button>
+                  {showAirtimeSubmenu && (
+                    <div className="ml-4 space-y-1">
+                      <NavLink
+                        to="/landing/resolveTopUp"
+                        className={({ isActive }) =>
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        Update Top-Up
+                      </NavLink>
+                      <NavLink
+                        to="/landing/viewTopUps"
+                        className={({ isActive }) =>
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        View Top-Ups
+                      </NavLink>
+                    </div>
+                  )}
+                </div>
               </li>
               <li>
-                <NavLink
-                  to="/landing/viewTopUps"
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 ${
-                      isActive ? "bg-gray-300" : ""
-                    }`
-                  }
-                >
-                  View Top-Ups
-                </NavLink>
+                <div className="flex flex-col">
+                  <button
+                    onClick={toggleManageSubmenu}
+                    className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
+                      location.pathname.includes("/landing/viewIssues")
+                        ? "bg-gray-300"
+                        : ""
+                    }`}
+                  >
+                    <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
+                      Manage
+                    </span>
+                    <span>{showManageSubmenu ? "🔽" : "▶️"}</span>
+                  </button>
+                  {showManageSubmenu && (
+                    <div className="ml-4 space-y-1">
+                      <NavLink
+                        to="/landing/create-offices"
+                        className={({ isActive }) =>
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        Create Office
+                      </NavLink>
+                      <NavLink
+                        to="/landing/create-services"
+                        className={({ isActive }) =>
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        Create Service
+                      </NavLink>
+                    </div>
+                  )}
+                </div>
               </li>
             </ul>
           </nav>

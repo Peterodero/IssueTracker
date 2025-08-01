@@ -7,7 +7,8 @@ import NotificationModal from "./NotificationModal";
 import { useNavigate } from "react-router-dom";
 
 export default function UnresolvedIssues() {
-  const { fetchUnResolvedIssues, unResolvedIssuesList } = useContext(IssueContext);
+  const { fetchUnResolvedIssues, unResolvedIssuesList } =
+    useContext(IssueContext);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
@@ -40,9 +41,9 @@ export default function UnresolvedIssues() {
     setOpenModal(true);
   }
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setOpenModal(false)
+    setOpenModal(false);
     navigate("/landing/unresolved");
   };
 
@@ -155,9 +156,16 @@ export default function UnresolvedIssues() {
                           {issue.description || "No description"}
                         </span>
                         {issue.attachments && (
-                          <span className="text-xs text-blue-500 mt-1">
+                          <button
+                            className="text-xs text-blue-500 mt-1 cursor-pointer hover:underline"
+                            onClick={() =>
+                              navigate("/landing/view-attachment", {
+                                state: { attachmentUrl: issue.attachments },
+                              })
+                            }
+                          >
                             Has attachments
-                          </span>
+                          </button>
                         )}
                       </div>
                     </td>
@@ -184,7 +192,11 @@ export default function UnresolvedIssues() {
       {openModal && (
         <div className="flex items-center justify-center ml-4">
           <Modal>
-            <NotificationModal error={error} handleSubmit={handleSubmit} title="Issue resolved successfully" /> 
+            <NotificationModal
+              error={error}
+              handleSubmit={handleSubmit}
+              title="Issue resolved successfully"
+            />
           </Modal>
         </div>
       )}

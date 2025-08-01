@@ -18,7 +18,7 @@ export const IssueContext = createContext({
     service: "",
     type: "",
     description: "",
-    attachments: [],
+    attachments: "",
   },
   handleModal: () => {},
   submited: "",
@@ -32,12 +32,12 @@ export const IssueContext = createContext({
   fetchResolvedIssues: () => {},
   resolvedIssuesList: () => {},
   fetchUnResolvedIssues: () => {},
-  fetchTopUps: ()=> {},
+  fetchTopUps: () => {},
   unResolvedIssuesList: [],
   officeList: [],
   serviceList: [],
   issuesList: [],
-  topUpList: []
+  topUpList: [],
 });
 
 export default function ReportIssueContextProvider({ children }) {
@@ -49,7 +49,7 @@ export default function ReportIssueContextProvider({ children }) {
     date: "",
     sim_number: "",
     amount: "",
-    attachments: [],
+    attachments: "",
   });
 
   const [submited, setSubmited] = useState(false);
@@ -59,14 +59,14 @@ export default function ReportIssueContextProvider({ children }) {
   const [issuesList, setIssuesList] = useState([]);
   const [resolvedIssuesList, setResolvedIssuesList] = useState([]);
   const [unResolvedIssuesList, setUnResolvedIssuesList] = useState([]);
-  const [topUpList, setTopUpList] = useState([])
+  const [topUpList, setTopUpList] = useState([]);
 
   const navigate = useNavigate();
 
   const fetchOffices = useCallback(async () => {
     const offices = await getOffices();
     setOfficeList(offices);
-    console.log(offices);
+    // console.log(offices);
   }, []);
 
   const fetchServices = useCallback(async () => {
@@ -83,7 +83,7 @@ export default function ReportIssueContextProvider({ children }) {
 
   const fetchResolvedIssues = useCallback(async () => {
     const resolvedIssues = await listResolvedIssues();
-    console.log(resolvedIssues)
+    console.log(resolvedIssues);
     setResolvedIssuesList(resolvedIssues.data);
   }, []);
 
@@ -92,11 +92,10 @@ export default function ReportIssueContextProvider({ children }) {
     setUnResolvedIssuesList(unResolvedIssues.data);
   }, []);
 
-  const fetchTopUps  = useCallback(async ()=>{
+  const fetchTopUps = useCallback(async () => {
     const allTopUps = await getAllTopUps();
     setTopUpList(allTopUps);
-    
-  }, [])
+  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -124,7 +123,6 @@ export default function ReportIssueContextProvider({ children }) {
         serviceName: value,
       }));
     } else {
-      // Handle other fields normally
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   }
@@ -138,7 +136,7 @@ export default function ReportIssueContextProvider({ children }) {
       date: "",
       sim_number: "",
       amount: "",
-      attachments: [],
+      attachments: "",
     });
   }
 
@@ -150,18 +148,55 @@ export default function ReportIssueContextProvider({ children }) {
       type: "",
       description: "",
       status: "unsolved",
-      attachments: [],
+      attachments: "",
     });
     navigate("/landing");
   }
 
-  function handleSubmitIssueForm(event) {
-    event.preventDefault();
+  const updateAttachments = (files) => {
+    setFormData((prev) => ({
+      ...prev,
+      attachments: files,
+    }));
+  };
 
-    reportIssue(formData);
+  async function handleSubmitIssueForm(event) {
+  event.preventDefault();
+  
+  try {
+    const formPayload = new FormData();
 
+    // Append all regular form fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== 'attachments' && value !== undefined && value !== null) {
+        formPayload.append(key, value);
+      }
+    });
+
+    // Process and append files with truncated names
+    if (Array.isArray(formData.attachments)) {
+      formData.attachments.forEach(file => {
+        // Truncate filename if too long (keeping extension)
+        let processedFile = file;
+        if (file.name.length > 100) {
+          const ext = file.name.split('.').pop();
+          const nameWithoutExt = file.name.slice(0, -(ext.length + 1));
+          const truncatedName = nameWithoutExt.slice(0, 95 - ext.length) + '.' + ext;
+          processedFile = new File([file], truncatedName, { type: file.type });
+        }
+        formPayload.append('attachments', processedFile);
+      });
+    }
+
+    const response = await reportIssue(formPayload);
     setSubmited(true);
+    return response;
+  } catch (error) {
+    console.error('Submission failed:', error);
+    setSubmited(false);
+    throw error;
   }
+}
 
   async function handleSubmitTopUpForm(event) {
     event.preventDefault();
@@ -189,6 +224,7 @@ export default function ReportIssueContextProvider({ children }) {
     officeList: officeList,
     serviceList: serviceList,
     issuesList: issuesList,
+    updateAttachments: updateAttachments,
   };
 
   return (
