@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useRef } from "react";
 import useOutsideClick from "../hooks/useOutsideClick";
@@ -17,6 +17,7 @@ export default function Header({
 }) {
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
+  const location = useLocation()
 
   useOutsideClick(sidebarRef, onCloseSidebar);
 
@@ -38,8 +39,8 @@ export default function Header({
           <h2 className=" text-2xl p-3 font-semibold">Welcome</h2>
         </div>
 
-        <button className="flex bg-red mr-2" onClick={handleLogout}>
-          <Link to="">Logout</Link>
+        <button className="text-gray-600 flex bg-red mr-2 bg-green-200 py-2 px-5 rounded" onClick={handleLogout}>
+          Logout
         </button>
       </header>
 
