@@ -28,7 +28,7 @@ export default function AdminHeader({
     <>
       <header className="bg-gray-200 shadow p-2 flex flex-row h-20 items-center justify-between sticky top-0 z-50">
         <button
-          className="md:hidden bg-blue-500 text-white px-1 rounded shadow-lg"
+          className="md:hidden bg-orange-300 text-white px-1 rounded shadow-lg"
           onClick={toggleSidebar}
         >
           ☰
@@ -38,7 +38,7 @@ export default function AdminHeader({
         </div>
 
         <button
-          className="text-gray-600 flex bg-red mr-2 bg-green-200 py-2 px-5 rounded"
+          className="text-white flex bg-red mr-2 bg-red-400 py-1 px-2 rounded"
           onClick={handleLogout}
         >
           Logout
@@ -50,15 +50,15 @@ export default function AdminHeader({
           ref={sidebarRef}
           className={`fixed inset-0 mt-20 w-38 ${
             (showIssueSubmenu || showAirtimeSubmenu || showManageSubmenu) &&
-            `h-100`
-          } h-52 bg-gray-300 z-55 rounded md:hidden`}
+            `h-full`
+          } h-full bg-orange-300 z-55 rounded md:hidden`}
         >
           <nav className="flex-1 p-1">
             <ul className="space-y-1">
               <li>
                 <div className="space-y-1">
                   <NavLink
-                    to="/landing/analytics"
+                    to="/admin/analytics"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 ${
                         isActive ? "bg-gray-300" : ""
@@ -88,7 +88,7 @@ export default function AdminHeader({
                   {showIssueSubmenu && (
                     <div className="ml-4 space-y-1">
                       <NavLink
-                        to="/landing/allIssues"
+                        to="/admin/allIssues"
                         className={({ isActive }) =>
                           `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""
@@ -98,7 +98,7 @@ export default function AdminHeader({
                         All Issues
                       </NavLink>
                       <NavLink
-                        to="/landing/resolved"
+                        to="/admin/admin_resolved"
                         className={({ isActive }) =>
                           `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""
@@ -108,7 +108,7 @@ export default function AdminHeader({
                         Resolved
                       </NavLink>
                       <NavLink
-                        to="/landing/unresolved"
+                        to="/admin/admin_unresolved"
                         className={({ isActive }) =>
                           `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""
@@ -125,7 +125,7 @@ export default function AdminHeader({
               <li>
                 <div className="space-y-1">
                   <NavLink
-                    to="/landing/viewTopUps"
+                    to="/admin/viewTopUps"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 ${
                         isActive ? "bg-gray-300" : ""
@@ -154,7 +154,7 @@ export default function AdminHeader({
                   {showManageSubmenu && (
                     <div className="ml-4 space-y-1">
                       <NavLink
-                        to="/landing/create-offices"
+                        to="/admin/create-offices"
                         className={({ isActive }) =>
                           `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""
@@ -164,7 +164,7 @@ export default function AdminHeader({
                         Create Office
                       </NavLink>
                       <NavLink
-                        to="/landing/create-services"
+                        to="/admin/create-services"
                         className={({ isActive }) =>
                           `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                             isActive ? "bg-gray-300" : ""

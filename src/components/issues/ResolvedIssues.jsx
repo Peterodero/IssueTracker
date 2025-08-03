@@ -40,7 +40,7 @@ export default function ResolvedIssues() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setOpenModal(false)
-    navigate("/landing/unresolved");
+    navigate(1);
   };
 
   async function handleUnResolveIssue(issue) {

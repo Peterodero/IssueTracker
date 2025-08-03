@@ -44,7 +44,7 @@ export default function UnresolvedIssues() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setOpenModal(false);
-    navigate("/landing/unresolved");
+    navigate(1);
   };
 
   if (loadingData) {

@@ -87,7 +87,7 @@ function App() {
           children: [
             {
               index: true,
-              element: <Navigate to="allIssues" />,
+              element: <Navigate to="analytics" />,
             },
             {
               path: "analytics",
@@ -107,7 +107,7 @@ function App() {
             },
 
             {
-              path: "resolved",
+              path: "admin_resolved",
               element: <ResolvedIssues />,
             },
             {

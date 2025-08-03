@@ -45,10 +45,10 @@ export default function ViewAttachment() {
   return (
     <div className="max-w-5xl md:w-4xl mx-auto overflow-scroll  md:ml-10 p-4 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-start mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Issue Details</h1>
+        <h2 className="text-3xl font-bold text-gray-800">Issue Details</h2>
         <button
           onClick={() => navigate(-1)}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
+          className="px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
         >
           Back to Issues
         </button>
@@ -61,7 +61,7 @@ export default function ViewAttachment() {
           <DetailItem label="Status" value={issue.status} badge />
           
           <div className="bg-gray-50 p-4 rounded-md">
-            <h3 className="font-semibold text-lg mb-2">Description</h3>
+            <h4 className="font-semibold text-xl mb-2">Description</h4>
             <p className="text-gray-700">{issue.description}</p>
           </div>
         </div>
@@ -78,7 +78,7 @@ export default function ViewAttachment() {
       {/* Attachment Section */}
       {issue.attachments && (
         <div className="mt-8 border-t pt-6">
-          <h2 className="text-xl font-semibold mb-4">Attachments</h2>
+          <h2 className="text-xl font-semibold mb-4 text-center">Attachments</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {issue.attachments.map((attachment, index) => (
               <AttachmentPreview key={index} url={attachment.file} />
@@ -93,7 +93,7 @@ export default function ViewAttachment() {
 function DetailItem({ label, value, subValue, badge = false }) {
   return (
     <div>
-      <h3 className="text-sm font-medium text-gray-500">{label}</h3>
+      <h4 className="text-xl font-medium text-gray-500">{label}</h4>
       {badge ? (
         <span className={`inline-block mt-1 px-3 py-1 rounded-full text-sm font-medium ${
           value === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
@@ -101,7 +101,7 @@ function DetailItem({ label, value, subValue, badge = false }) {
           {value}
         </span>
       ) : (
-        <p className="text-gray-900 font-medium">{value}</p>
+        <p className="text-gray-900 font-medium p-2">{value}</p>
       )}
       {subValue && <p className="text-sm text-gray-500 mt-1">{subValue}</p>}
     </div>
