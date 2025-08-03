@@ -157,11 +157,11 @@ export default function ResolvedIssues() {
                       <span className="text-gray-600">
                         {issue.description || "No description"}
                       </span>
-                      {issue.attachments && (
+                      {/* {issue.attachments && (
                         <span className="text-xs text-blue-500 mt-1">
                           Has attachments
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </td>
 

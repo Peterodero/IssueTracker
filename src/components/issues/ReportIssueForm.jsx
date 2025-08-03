@@ -9,7 +9,7 @@ export default function ReportIssueForm() {
  const handlePhotoChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
-    const validTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+    const validTypes = ['image/png', 'image/jpeg', 'application/pdf' ,'text/plain' ,'text/markdown' ,'text/csv',];
     const maxSize = 5 * 1024 * 1024; // 5MB
     
     const files = Array.from(e.target.files).filter(file => 
@@ -131,7 +131,7 @@ export default function ReportIssueForm() {
                       onChange={handlePhotoChange}
                       className="sr-only"
                       multiple
-                      accept=".png,.jpg,.jpeg,.pdf"
+                      accept=".png,.jpg,.jpeg,.pdf,.md,.txt"
                     />
                   </label>
                   <p className="pl-1">or drag and drop</p>

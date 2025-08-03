@@ -1,12 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
-export default function Sidebar({
+export default function AdminSidebar({
   isMobile,
   showSidebar,
-  toggleAirtimeSubmenu,
   toggleIssueSubmenu,
-  showAirtimeSubmenu,
+  toggleManageSubmenu,
   showIssueSubmenu,
+  showManageSubmenu,
 }) {
   const navigate = useNavigate();
 
@@ -32,23 +32,26 @@ export default function Sidebar({
       <nav className="flex-1 p-4">
         <ul className="space-y-4">
           <li>
-            <NavLink
-              to="/landing/reportIssue"
-              className={({ isActive }) =>
-                `flex items-center gap-1 px-3 py-1 rounded hover:bg-gray-200 ${
-                  isActive ? "bg-gray-300" : ""
-                }`
-              }
-            >
-              Report Issue
-            </NavLink>
+            <div className=" space-y-1">
+              <NavLink
+                to="/admin/analytics"
+                className={({ isActive }) =>
+                  `block px-3 py-1 rounded hover:bg-gray-200 ${
+                    isActive ? "bg-gray-300" : ""
+                  }`
+                }
+              >
+                Dashboard
+              </NavLink>
+            </div>
           </li>
+
           <li>
             <div className="flex flex-col">
               <button
                 onClick={toggleIssueSubmenu}
                 className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
-                  location.pathname.includes("/landing/viewIssues")
+                  location.pathname.includes("/admin/viewIssues")
                     ? "bg-gray-300"
                     : ""
                 }`}
@@ -61,7 +64,7 @@ export default function Sidebar({
               {showIssueSubmenu && (
                 <div className="ml-4 space-y-1">
                   <NavLink
-                    to="/landing/allIssues"
+                    to="/admin/allIssues"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                         isActive ? "bg-gray-300" : ""
@@ -71,7 +74,7 @@ export default function Sidebar({
                     All Issues
                   </NavLink>
                   <NavLink
-                    to="/landing/resolved"
+                    to="/admin/resolved"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                         isActive ? "bg-gray-300" : ""
@@ -81,7 +84,7 @@ export default function Sidebar({
                     Resolved
                   </NavLink>
                   <NavLink
-                    to="/landing/unresolved"
+                    to="/admin/admin_unresolved"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                         isActive ? "bg-gray-300" : ""
@@ -96,47 +99,57 @@ export default function Sidebar({
           </li>
 
           <li>
+            <div className=" space-y-1">
+              <NavLink
+                to="/admin/viewTopUps"
+                className={({ isActive }) =>
+                  `block px-3 py-1 rounded hover:bg-gray-200 ${
+                    isActive ? "bg-gray-300" : ""
+                  }`
+                }
+              >
+                View Top-Ups
+              </NavLink>
+            </div>
+          </li>
+
+          <li>
             <div className="flex flex-col">
               <button
-                onClick={toggleAirtimeSubmenu}
-                className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
-                  location.pathname.includes("/landing/viewIssues")
-                    ? "bg-gray-300"
-                    : ""
-                }`}
+                onClick={toggleManageSubmenu}
+                className="flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 "
               >
                 <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
-                  Airtime
+                  Manage
                 </span>
-                <span>{showAirtimeSubmenu ? "🔽" : "▶️"}</span>
+                <span>{showManageSubmenu ? "🔽" : "▶️"}</span>
               </button>
-              {showAirtimeSubmenu && (
+              {showManageSubmenu && (
                 <div className="ml-4  space-y-1">
                   <NavLink
-                    to="/landing/resolveTopUp"
+                    to="/admin/create-offices"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                         isActive ? "bg-gray-300" : ""
                       }`
                     }
                   >
-                    Update Top-Up
+                    Create Office
                   </NavLink>
                   <NavLink
-                    to="/landing/viewTopUps"
+                    to="/admin/create-services"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                         isActive ? "bg-gray-300" : ""
                       }`
                     }
                   >
-                    View Top-Ups
+                    Create Service
                   </NavLink>
                 </div>
               )}
             </div>
           </li>
-    
         </ul>
       </nav>
       <div className="p-3 border-t border-gray-800">

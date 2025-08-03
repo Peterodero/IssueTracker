@@ -1,21 +1,21 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
 import { useRef } from "react";
-import useOutsideClick from "../hooks/useOutsideClick";
+import useOutsideClick from "../../hooks/useOutsideClick";
 
-export default function Header({
+export default function AdminHeader({
   toggleSidebar,
   isMobile,
   showSidebar,
   onCloseSidebar,
-  toggleAirtimeSubmenu,
   toggleIssueSubmenu,
+  toggleManageSubmenu,
   showAirtimeSubmenu,
   showIssueSubmenu,
+  showManageSubmenu,
 }) {
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
-  const location = useLocation()
+  const location = useLocation();
 
   useOutsideClick(sidebarRef, onCloseSidebar);
 
@@ -37,7 +37,10 @@ export default function Header({
           <h2 className=" text-2xl p-3 font-semibold">Welcome</h2>
         </div>
 
-        <button className="text-gray-600 flex bg-red mr-2 bg-green-200 py-2 px-5 rounded" onClick={handleLogout}>
+        <button
+          className="text-gray-600 flex bg-red mr-2 bg-green-200 py-2 px-5 rounded"
+          onClick={handleLogout}
+        >
           Logout
         </button>
       </header>
@@ -46,23 +49,27 @@ export default function Header({
         <div
           ref={sidebarRef}
           className={`fixed inset-0 mt-20 w-38 ${
-            (showIssueSubmenu || showAirtimeSubmenu) && `h-80`
+            (showIssueSubmenu || showAirtimeSubmenu || showManageSubmenu) &&
+            `h-100`
           } h-52 bg-gray-300 z-55 rounded md:hidden`}
         >
           <nav className="flex-1 p-1">
             <ul className="space-y-1">
               <li>
-                <NavLink
-                  to="/landing/reportIssue"
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-1 rounded  hover:bg-gray-200 ${
-                      isActive ? "bg-gray-300" : ""
-                    }`
-                  }
-                >
-                  Report Issue
-                </NavLink>
+                <div className="space-y-1">
+                  <NavLink
+                    to="/landing/analytics"
+                    className={({ isActive }) =>
+                      `block px-3 py-1 rounded hover:bg-gray-200 ${
+                        isActive ? "bg-gray-300" : ""
+                      }`
+                    }
+                  >
+                    Dashboard
+                  </NavLink>
+                </div>
               </li>
+
               <li>
                 <div className="flex flex-col">
                   <button
@@ -116,47 +123,20 @@ export default function Header({
               </li>
 
               <li>
-                <div className="flex flex-col">
-                  <button
-                    onClick={toggleAirtimeSubmenu}
-                    className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
-                      location.pathname.includes("/landing/viewIssues")
-                        ? "bg-gray-300"
-                        : ""
-                    }`}
+                <div className="space-y-1">
+                  <NavLink
+                    to="/landing/viewTopUps"
+                    className={({ isActive }) =>
+                      `block px-3 py-1 rounded hover:bg-gray-200 ${
+                        isActive ? "bg-gray-300" : ""
+                      }`
+                    }
                   >
-                    <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
-                      Airtime
-                    </span>
-                    <span>{showAirtimeSubmenu ? "🔽" : "▶️"}</span>
-                  </button>
-                  {showAirtimeSubmenu && (
-                    <div className="ml-4 space-y-1">
-                      <NavLink
-                        to="/landing/resolveTopUp"
-                        className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
-                          }`
-                        }
-                      >
-                        Update Top-Up
-                      </NavLink>
-                      <NavLink
-                        to="/landing/viewTopUps"
-                        className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
-                          }`
-                        }
-                      >
-                        View Top-Ups
-                      </NavLink>
-                    </div>
-                  )}
+                    View Top-Ups
+                  </NavLink>
                 </div>
               </li>
-              {/* <li>
+              <li>
                 <div className="flex flex-col">
                   <button
                     onClick={toggleManageSubmenu}
@@ -196,7 +176,7 @@ export default function Header({
                     </div>
                   )}
                 </div>
-              </li> */}
+              </li>
             </ul>
           </nav>
         </div>

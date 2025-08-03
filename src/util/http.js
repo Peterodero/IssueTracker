@@ -16,6 +16,8 @@ export async function authenticateUser(data) {
     return errorData.detail;
   }
 
+  console.log(resData)
+
   return resData;
 }
 
@@ -91,6 +93,31 @@ export async function listAllIssues() {
 
     const issues = await response.json();
     return issues;
+    
+  } catch (error) {
+    console.error('Error fetching services:', error);
+  }
+}
+
+export async function getIssueDetails(issueId) {
+  console.log(issueId)
+     try {
+    const response = await fetch(url + "/issues/list/", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(issueId)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch issues');
+    }
+
+    const issueDetails = await response.json();
+    console.log(issueDetails.data)
+    return issueDetails.data;
     
   } catch (error) {
     console.error('Error fetching services:', error);
@@ -227,4 +254,8 @@ export async function getAllTopUps() {
   } catch (error) {
     console.error('Error fetching services:', error);
   }
+}
+
+export async function getAnalytics() {
+  
 }

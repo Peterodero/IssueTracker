@@ -16,10 +16,9 @@ export default function Login() {
     onSuccess: (data) => {
       sessionStorage.setItem("accessToken", data.access);
       sessionStorage.setItem("refreshToken", data.refresh);
-      // sessionStorage.setItem("userName", data.name);
       sessionStorage.setItem("role", data.role);
 
-      navigate("/landing");
+      navigate(data.role === 'admin' ? "/admin" : "/landing");
     },
 
     onError: (error) => {

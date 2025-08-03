@@ -16,7 +16,10 @@ import ResolvedIssues from "./components/issues/ResolvedIssues";
 import AllIssues from "./components/issues/AllIssues";
 import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 import ViewTopUp from "./components/airtimeTopUp/ViewTopUp";
-import ViewAttachment from "./components/issues/Image";
+import ViewAttachment from "./components/admin/Attachment";
+import AdminLandingPage from "./components/admin/AdminLandingPage";
+import AdminUnresolvedIssues from "./components/admin/AdminUnResolvedIssues";
+import AnalyticsPage from "./components/admin/AnalyticsPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -68,6 +71,32 @@ function App() {
               path: "viewTopUps",
               element: <ViewTopUp />,
             },
+
+          ],
+        },
+      ],
+    },
+
+    {
+      path: "/admin",
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: "/admin",
+          element: <AdminLandingPage />, // Admin routes use the same layout
+          children: [
+            {
+              index: true,
+              element: <Navigate to="allIssues" />,
+            },
+            {
+              path: "analytics",
+              element: <AnalyticsPage/>
+            },
+            {
+              path: "allIssues",
+              element: <AllIssues />,
+            },
             {
               path: "create-offices",
               element: <CreateOffices />,
@@ -76,10 +105,29 @@ function App() {
               path: "create-services",
               element: <CreateServices />,
             },
+
             {
-              path: "view-attachment",
-              element: <ViewAttachment/>
-            }
+              path: "resolved",
+              element: <ResolvedIssues />,
+            },
+            {
+              path: "admin_unresolved",
+              element: <AdminUnresolvedIssues />,
+            },
+            {
+              path: "viewTopUps",
+              element: <ViewTopUp />,
+            },
+            {
+              path: "viewIssues",
+              element: <ViewIssues />,
+            },
+            
+            {
+              path: "view-attachment/:issue_id",
+              element: <ViewAttachment />,
+            },
+            
           ],
         },
       ],

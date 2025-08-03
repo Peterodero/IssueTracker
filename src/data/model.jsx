@@ -15,3 +15,49 @@ export const issueTypes = {
   Defoca: ["Payment Failure", "Invoice Error"],
   Deductions: ["Calculation Error", "Report Generation"],
 };
+
+export const mockGetAnalytics = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        data: {
+          status_counts: [
+            { status: 'open', count: 12 },
+            { status: 'in_progress', count: 8 },
+            { status: 'resolved', count: 23 }
+          ],
+          issues_created: {
+            today: 5,
+            week: 28,
+            month: 112
+          },
+          avg_resolution_time: 18.5,
+          office_distribution: [
+            { office__name: 'Nairobi', count: 45 },
+            { office__name: 'Kampala', count: 32 },
+            { office__name: 'Dar es Salaam', count: 22 }
+          ],
+          service_distribution: [
+            { service__name: 'Login', count: 23 },
+            { service__name: 'Payments', count: 18 },
+            { service__name: 'Database', count: 15 }
+          ],
+          recent_activity: [
+            {
+              id: 123,
+              type: 'Login Issue',
+              status: 'resolved',
+              updated_at: new Date().toISOString()
+            },
+            {
+              id: 124,
+              type: 'Payment Failure',
+              status: 'in_progress',
+              updated_at: new Date(Date.now() - 3600000).toISOString()
+            }
+          ]
+        }
+      });
+    }, 500); // Simulate network delay
+  });
+};
