@@ -20,7 +20,7 @@ import AdminLandingPage from "./components/admin/AdminLandingPage";
 import AdminUnresolvedIssues from "./components/admin/AdminUnResolvedIssues";
 import AnalyticsPage from "./components/admin/AnalyticsPage";
 import AdminResolvedIssues from "./components/admin/AdminResolveIssues";
-import UnresolvedIssues from "./components/issues/UnResolvedIssues";
+import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 
 function App() {
   const router = createBrowserRouter([
