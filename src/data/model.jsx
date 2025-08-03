@@ -22,7 +22,7 @@ export const mockGetAnalytics = () => {
       resolve({
         data: {
           status_counts: [
-            { status: 'open', count: 12 },
+            { status: 'unresolved', count: 12 },
             { status: 'in_progress', count: 8 },
             { status: 'resolved', count: 23 }
           ],
@@ -34,13 +34,14 @@ export const mockGetAnalytics = () => {
           avg_resolution_time: 18.5,
           office_distribution: [
             { office__name: 'Nairobi', count: 45 },
-            { office__name: 'Kampala', count: 32 },
-            { office__name: 'Dar es Salaam', count: 22 }
+            { office__name: 'Nakuru', count: 32 },
+            { office__name: 'Mombasa', count: 22 }
           ],
           service_distribution: [
-            { service__name: 'Login', count: 23 },
-            { service__name: 'Payments', count: 18 },
-            { service__name: 'Database', count: 15 }
+            { service__name: 'TKT', count: 23 },
+            { service__name: 'Defoca', count: 18 },
+            { service__name: 'Mzigo', count: 15 },
+            { service__name: 'Collections', count: 10 }
           ],
           recent_activity: [
             {

@@ -74,7 +74,7 @@ export default function AdminSidebar({
                     All Issues
                   </NavLink>
                   <NavLink
-                    to="/admin/resolved"
+                    to="/admin/admin_resolved"
                     className={({ isActive }) =>
                       `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
                         isActive ? "bg-gray-300" : ""
@@ -154,7 +154,7 @@ export default function AdminSidebar({
       </nav>
       <div className="p-3 border-t border-gray-800">
         <button
-          className="w-full px-3 py-1 rounded bg-gray-300 hover:bg-gray-200 transition"
+          className="w-full px-3 py-1 rounded bg-red-400 hover:bg-red-300 text-white transition"
           onClick={handleLogout}
         >
           Logout

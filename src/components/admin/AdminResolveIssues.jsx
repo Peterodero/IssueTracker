@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
-import { unResolveIssue } from "../../util/http";
+import { deleteIssue, unResolveIssue } from "../../util/http";
+import { Link, useNavigate } from "react-router-dom";
+import NotificationModal from "../issues/NotificationModal";
 import Modal from "../UI/Modal";
-import NotificationModal from "./NotificationModal";
-import { useNavigate } from "react-router-dom";
 
-export default function ResolvedIssues() {
+export default function AdminResolvedIssues() {
   const [loadingData, setLoadingData] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -46,7 +47,8 @@ export default function ResolvedIssues() {
   async function handleUnResolveIssue(issue) {
     console.log(issue);
     try {
-      await unResolveIssue(issue.id);
+      const successMessage = await unResolveIssue(issue.id);
+      setMessage(successMessage.message);
       fetchResolvedIssues();
     } catch (err) {
       setError(err.message || "Failed to unresolve issue");
@@ -54,9 +56,20 @@ export default function ResolvedIssues() {
     setOpenModal(true);
   }
 
+  async function handleDeleteIssue(issue) {
+    try {
+      const successMessage = await deleteIssue(issue.id);
+      setMessage(successMessage.message);
+      fetchResolvedIssues();
+    } catch (err) {
+      setError(err.message || "Failed to delete issue");
+    }
+    setOpenModal(true);
+  }
+
   return (
     <>
-      <div className=" max-w-5xl md:w-4xl mx-auto overflow-scroll  md:ml-8 p-4">
+      <div className=" max-w-5xl md:w-4.5xl mx-auto overflow-scroll  md:ml-8 p-4">
         <div className=" rounded-lg ">
           <table className="w-full ">
             <thead>
@@ -78,6 +91,9 @@ export default function ResolvedIssues() {
                 </th>
                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Status
+                </th>
+                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                  Details
                 </th>
                 <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Action
@@ -157,11 +173,6 @@ export default function ResolvedIssues() {
                         <span className="text-gray-600">
                           {issue.description || "No description"}
                         </span>
-                        {/* {issue.attachments && (
-                        <span className="text-xs text-blue-500 mt-1">
-                          Has attachments
-                        </span>
-                      )} */}
                       </div>
                     </td>
 
@@ -173,9 +184,23 @@ export default function ResolvedIssues() {
                       </div>
                     </td>
 
+                    <td className="py-4 px-5 text-sm text-gray-700">
+                      <div className="flex flex-col">
+                        <Link to={`/admin/view-attachment/${issue.id}`}>
+                          View Details
+                        </Link>
+                      </div>
+                    </td>
+
                     {/* Action */}
-                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
-                      <div className="flex space-x-2">
+                    <td className="py-4 px-5 text-sm text-gray-700 sm:table-cell">
+                      <div className="flex flex-col gap-2 space-x-1">
+                        <button
+                          onClick={() => handleDeleteIssue(issue)}
+                          className="px-3 py-1 bg-red-400 text-white rounded-md text-xs font-medium hover:bg-red-600"
+                        >
+                          Delete
+                        </button>
                         <button
                           onClick={() => handleUnResolveIssue(issue)}
                           className="px-3 py-1 bg-green-100 text-green-800 rounded-md text-xs font-medium hover:bg-green-200"
@@ -197,7 +222,8 @@ export default function ResolvedIssues() {
             <NotificationModal
               handleSubmit={handleSubmit}
               error={error}
-              title="Issue unresolved successfully"
+              title="Success!"
+              mesg={message}
             />
           </Modal>
         </div>

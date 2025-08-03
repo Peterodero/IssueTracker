@@ -14,12 +14,13 @@ import CreateOffices from "./components/admin/CreateOffices";
 import CreateServices from "./components/admin/CreateServices";
 import ResolvedIssues from "./components/issues/ResolvedIssues";
 import AllIssues from "./components/issues/AllIssues";
-import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 import ViewTopUp from "./components/airtimeTopUp/ViewTopUp";
 import ViewAttachment from "./components/admin/Attachment";
 import AdminLandingPage from "./components/admin/AdminLandingPage";
 import AdminUnresolvedIssues from "./components/admin/AdminUnResolvedIssues";
 import AnalyticsPage from "./components/admin/AnalyticsPage";
+import AdminResolvedIssues from "./components/admin/AdminResolveIssues";
+import UnresolvedIssues from "./components/issues/UnResolvedIssues";
 
 function App() {
   const router = createBrowserRouter([
@@ -108,7 +109,7 @@ function App() {
 
             {
               path: "admin_resolved",
-              element: <ResolvedIssues />,
+              element: <AdminResolvedIssues />,
             },
             {
               path: "admin_unresolved",

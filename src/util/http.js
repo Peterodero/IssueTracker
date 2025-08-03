@@ -145,6 +145,28 @@ export async function resolveIssue(issueId) {
   return resData;
 }
 
+
+export async function deleteIssue(issueId) {
+  const response = await fetch(url + "/issues/delete/", {
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
+    },
+    body: JSON.stringify({id: issueId})
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to resolve issue");
+  }
+
+  const resData = await response.json();
+  console.log(resData)
+
+  return resData;
+}
+
 export async function unResolveIssue(issueId) {
   const response = await fetch(url + "/issues/update/", {
     method: "PUT", 

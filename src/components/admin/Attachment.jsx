@@ -31,7 +31,11 @@ export default function ViewAttachment() {
   }, [issueId]);
 
   if (loading) {
-    return <LoadingIndicator />;
+    return(
+     <div className="md:ml-100 md:mt-10">
+        <LoadingIndicator />
+      </div>
+    )
   }
 
   if (error) {
@@ -76,7 +80,7 @@ export default function ViewAttachment() {
       </div>
 
       {/* Attachment Section */}
-      {issue.attachments && (
+      {issue.attachments.length > 0 && (
         <div className="mt-8 border-t pt-6">
           <h2 className="text-xl font-semibold mb-4 text-center">Attachments</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

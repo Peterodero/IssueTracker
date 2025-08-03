@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import Modal from "../UI/Modal";
 import LoadingIndicator from "../UI/LoadingIndicator";
-import { resolveIssue } from "../../util/http";
+import { deleteIssue, resolveIssue } from "../../util/http";
 import NotificationModal from "../issues/NotificationModal";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -14,6 +14,7 @@ export default function AdminUnresolvedIssues() {
 
   const [loadingData, setLoadingData] = useState(false);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -31,14 +32,26 @@ export default function AdminUnresolvedIssues() {
   }, [fetchUnResolvedIssues]);
 
   async function handleResolveIssue(issue) {
-    console.log(issue);
     try {
-      await resolveIssue(issue.id);
+      const successMessage = await resolveIssue(issue.id);
+      setMessage(successMessage.message);
       fetchUnResolvedIssues();
     } catch (err) {
       setError(err.message || "Failed to resolve issue");
     }
     setOpenModal(true);
+  }
+
+  async function handleDeleteIssue(issue) {
+    try {
+      const successMessage = await deleteIssue(issue.id);
+      setMessage(successMessage.message);
+      fetchUnResolvedIssues();
+    } catch (err) {
+      setError(err.message || "Failed to delete issue");
+    }
+    setOpenModal(true);
+    console.log(message);
   }
 
   const handleSubmit = async (e) => {
@@ -49,7 +62,7 @@ export default function AdminUnresolvedIssues() {
 
   if (loadingData) {
     return (
-      <div className="md:ml-100">
+      <div className="md:ml-100 md:mt-10">
         <LoadingIndicator />
       </div>
     );
@@ -57,30 +70,33 @@ export default function AdminUnresolvedIssues() {
 
   return (
     <>
-      <div className=" max-w-5xl md:w-4xl mx-auto overflow-scroll  md:ml-10 p-4">
+      <div className=" max-w-5xl md:w-4.5xl mx-auto overflow-scroll  md:ml-8 p-4">
         <div className=" rounded-lg ">
           <table className="w-full ">
             <thead>
               <tr className="border-b border-gray-200 bg-blue-200">
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
+                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700">
                   #
                 </th>
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
+                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700">
                   Office
                 </th>
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Service
                 </th>
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700">
+                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700">
                   By
                 </th>
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Issue Type
                 </th>
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                  Status
+                </th>
+                 <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Details
                 </th>
-                <th className="py-5 px-4 text-left text-sm font-semibold text-gray-700 sm:table-cell">
+                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
                   Action
                 </th>
               </tr>
@@ -101,7 +117,7 @@ export default function AdminUnresolvedIssues() {
                     className="hover:bg-gray-50 transition-colors"
                   >
                     {/* Index Number */}
-                    <td className="py-4 px-4 text-sm font-medium text-gray-900">
+                    <td className="py-4 px-5 text-sm font-medium text-gray-900">
                       <span
                         className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
                           index % 2 === 0
@@ -114,7 +130,7 @@ export default function AdminUnresolvedIssues() {
                     </td>
 
                     {/* Office */}
-                    <td className="py-4 px-4 text-sm text-gray-700">
+                    <td className="py-4 px-5 text-sm text-gray-700">
                       <div className="flex flex-col">
                         <span className="font-semibold">{officeName}</span>
                         {officeLocation && (
@@ -126,7 +142,7 @@ export default function AdminUnresolvedIssues() {
                     </td>
 
                     {/* Service */}
-                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
+                    <td className="py-4 px-5 text-sm text-gray-700 sm:table-cell">
                       <div className="flex flex-col">
                         <span>{serviceName}</span>
                         {serviceDesc && (
@@ -138,7 +154,7 @@ export default function AdminUnresolvedIssues() {
                     </td>
 
                     {/* Reporter */}
-                    <td className="py-4 px-4 text-sm text-gray-700">
+                    <td className="py-4 px-5 text-sm text-gray-700">
                       <div className="flex flex-col">
                         <span>{reporterName}</span>
                         {reporterPhone && (
@@ -150,7 +166,7 @@ export default function AdminUnresolvedIssues() {
                     </td>
 
                     {/* Issue Details */}
-                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
+                    <td className="py-4 px-5 text-sm text-gray-700 sm:table-cell">
                       <div className="flex flex-col">
                         <span className="font-semibold text-gray-900">
                           {issue.type || "No type specified"}
@@ -158,15 +174,29 @@ export default function AdminUnresolvedIssues() {
                       </div>
                     </td>
 
-                    <td className="py-4 px-4 text-sm text-gray-700">
+                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
                       <div className="flex flex-col">
-                       <Link to={`/admin/view-attachment/${issue.id}`}>View Details</Link>
+                        {issue.status === "unsolved" && <span className="text-green-700">Unresolved</span>}
+                      </div>
+                    </td>
+
+                    <td className="py-4 px-5 text-sm text-gray-700">
+                      <div className="flex flex-col">
+                        <Link to={`/admin/view-attachment/${issue.id}`}>
+                          View Details
+                        </Link>
                       </div>
                     </td>
 
                     {/* Action */}
-                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
-                      <div className="flex space-x-2">
+                    <td className="py-4 px-5 text-sm text-gray-700 sm:table-cell">
+                      <div className="flex flex-col gap-2 space-x-1">
+                        <button
+                          onClick={() => handleDeleteIssue(issue)}
+                          className="px-3 py-1 bg-red-400 text-white rounded-md text-xs font-medium hover:bg-red-600"
+                        >
+                          Delete
+                        </button>
                         <button
                           onClick={() => handleResolveIssue(issue)}
                           className="px-3 py-1 bg-green-100 text-green-800 rounded-md text-xs font-medium hover:bg-green-200"
@@ -189,7 +219,8 @@ export default function AdminUnresolvedIssues() {
             <NotificationModal
               error={error}
               handleSubmit={handleSubmit}
-              title="Issue resolved successfully"
+              title="Success!"
+              mesg={message}
             />
           </Modal>
         </div>
