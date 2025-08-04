@@ -6,19 +6,19 @@ import { getIssueDetails } from "../../util/http";
 import { formatDate } from "../../util/date";
 
 export default function ViewAttachment() {
-  const issueId  = useParams();
+  const issueId = useParams();
   const navigate = useNavigate();
   const [issue, setIssue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(issueId)
+  console.log(issueId);
 
   useEffect(() => {
     const fetchIssueDetails = async () => {
       try {
         const resData = await getIssueDetails(issueId);
-        const data = resData[0]
-        console.log(data)
+        const data = resData[0];
+        console.log(data);
         setIssue(data);
       } catch (err) {
         setError(err.message || "Failed to load issue details");
@@ -31,15 +31,17 @@ export default function ViewAttachment() {
   }, [issueId]);
 
   if (loading) {
-    return(
-     <div className="md:ml-100 md:mt-10">
+    return (
+      <div className="md:ml-100 md:mt-10">
         <LoadingIndicator />
       </div>
-    )
+    );
   }
 
   if (error) {
-    return <ErrorBlock message={error} onRetry={() => window.location.reload()} />;
+    return (
+      <ErrorBlock message={error} onRetry={() => window.location.reload()} />
+    );
   }
 
   if (!issue) {
@@ -61,9 +63,12 @@ export default function ViewAttachment() {
       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6">
         {/* Left Column - Basic Info */}
         <div className="space-y-4">
-          <DetailItem label="Date Reported" value={formatDate(issue.created_at)} />
+          <DetailItem
+            label="Date Reported"
+            value={formatDate(issue.created_at)}
+          />
           <DetailItem label="Status" value={issue.status} badge />
-          
+
           <div className="bg-gray-50 p-4 rounded-md">
             <h4 className="font-semibold text-xl mb-2">Description</h4>
             <p className="text-gray-700">{issue.description}</p>
@@ -73,19 +78,36 @@ export default function ViewAttachment() {
         {/* Right Column - Related Entities */}
         <div className="space-y-4">
           <DetailItem label="Issue Type" value={issue.type} />
-          <DetailItem label="Office" value={issue.office?.name} subValue={issue.office?.location} />
-          <DetailItem label="Service" value={issue.service?.name} subValue={issue.service?.description} />
-          <DetailItem label="Reported By" value={issue.reporter?.username} subValue={issue.reporter?.phone_number} />
+          <DetailItem
+            label="Office"
+            value={issue.office?.name}
+            subValue={issue.office?.location}
+          />
+          <DetailItem
+            label="Service"
+            value={issue.service?.name}
+            subValue={issue.service?.description}
+          />
+          <DetailItem
+            label="Reported By"
+            value={issue.reporter?.username}
+            subValue={issue.reporter?.phone_number}
+          />
         </div>
       </div>
 
       {/* Attachment Section */}
       {issue.attachments.length > 0 && (
         <div className="mt-8 border-t pt-6">
-          <h2 className="text-xl font-semibold mb-4 text-center">Attachments</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <h2 className="text-xl font-semibold mb-4 text-center">
+            Attachments
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:ml-10">
             {issue.attachments.map((attachment, index) => (
-              <AttachmentPreview key={index} url={attachment.file} />
+              <AttachmentPreview
+                key={index}
+                url={`https://issue-tracker-jywg.onrender.com${attachment.file}`}
+              />
             ))}
           </div>
         </div>
@@ -99,9 +121,13 @@ function DetailItem({ label, value, subValue, badge = false }) {
     <div>
       <h4 className="text-xl font-medium text-gray-500">{label}</h4>
       {badge ? (
-        <span className={`inline-block mt-1 px-3 py-1 rounded-full text-sm font-medium ${
-          value === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-        }`}>
+        <span
+          className={`inline-block mt-1 px-3 py-1 rounded-full text-sm font-medium ${
+            value === "resolved"
+              ? "bg-green-100 text-green-800"
+              : "bg-yellow-100 text-yellow-800"
+          }`}
+        >
           {value}
         </span>
       ) : (
@@ -114,27 +140,29 @@ function DetailItem({ label, value, subValue, badge = false }) {
 
 function AttachmentPreview({ url }) {
   const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
-  
+
   return (
-    <div className="border rounded-md overflow-hidden">
+    <div className="border rounded-md items-center overflow-hidden md:w-3xl">
       {isImage ? (
-        <img 
-          src={url} 
-          alt="Attachment" 
-          className="w-full h-48 object-cover"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = '/placeholder-image.png';
-          }}
-        />
+        <div className="flex-1 flex items-center justify-center overflow-hidden bg-gray-50">
+          <img
+            src={url}
+            alt="Attachment"
+            className="object-contain max-h-full max-w-full p-2"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/placeholder-image.png";
+            }}
+          />
+        </div>
       ) : (
         <div className="bg-gray-100 h-48 flex items-center justify-center">
           <span className="text-gray-500">File Attachment</span>
         </div>
       )}
       <div className="p-3 bg-gray-50">
-        <a 
-          href={url} 
+        <a
+          href={url}
           download
           className="text-blue-600 hover:text-blue-800 text-sm font-medium"
         >

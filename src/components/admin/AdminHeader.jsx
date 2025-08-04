@@ -38,7 +38,7 @@ export default function AdminHeader({
         </div>
 
         <button
-          className="text-white flex bg-red mr-2 bg-red-400 py-1 px-2 rounded"
+          className="text-black flex bg-red mr-2 md:bg-red-400 bg-orange-300 py-1 px-2 rounded"
           onClick={handleLogout}
         >
           Logout

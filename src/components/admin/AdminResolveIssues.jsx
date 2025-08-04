@@ -45,7 +45,6 @@ export default function AdminResolvedIssues() {
   };
 
   async function handleUnResolveIssue(issue) {
-    console.log(issue);
     try {
       const successMessage = await unResolveIssue(issue.id);
       setMessage(successMessage.message);
