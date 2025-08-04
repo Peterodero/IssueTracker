@@ -16,8 +16,6 @@ export async function authenticateUser(data) {
     return errorData.detail;
   }
 
-  console.log(resData)
-
   return resData;
 }
 
@@ -63,7 +61,6 @@ export async function getServices() {
 
 export async function reportIssue(formData) {
     const accessToken = sessionStorage.getItem("accessToken")
-    console.log(formData)
      const response = await fetch(url + "/issues/create/", {
     method: "POST",
     headers: {
@@ -116,7 +113,6 @@ export async function getIssueDetails(issueId) {
     }
 
     const issueDetails = await response.json();
-    console.log(issueDetails.data)
     return issueDetails.data;
     
   } catch (error) {

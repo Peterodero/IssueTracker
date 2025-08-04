@@ -23,7 +23,6 @@ export const mockGetAnalytics = () => {
         data: {
           status_counts: [
             { status: 'unresolved', count: 12 },
-            { status: 'in_progress', count: 8 },
             { status: 'resolved', count: 23 }
           ],
           issues_created: {

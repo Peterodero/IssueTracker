@@ -173,6 +173,16 @@ export default function AdminHeader({
                       >
                         Create Service
                       </NavLink>
+                      <NavLink
+                        to="/admin/register-user"
+                        className={({ isActive }) =>
+                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
+                            isActive ? "bg-gray-300" : ""
+                          }`
+                        }
+                      >
+                        Register User
+                      </NavLink>
                     </div>
                   )}
                 </div>

@@ -21,10 +21,10 @@ export default function Login() {
       navigate(data.role === 'admin' ? "/admin" : "/landing");
     },
 
-    onError: (error) => {
-      // setLoginError("Wrong credentials. Try creating an account.");
-      console.error("Failed to sign in:", error);
-    },
+    // onError: (error) => {
+    //   // setLoginError("Wrong credentials. Try creating an account.");
+    //   console.error("Failed to sign in:", error);
+    // },
   });
 
   function handleFormSubmit(event) {
