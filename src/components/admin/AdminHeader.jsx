@@ -11,6 +11,7 @@ export default function AdminHeader({
   toggleManageSubmenu,
   showIssueSubmenu,
   showManageSubmenu,
+  navigateToPath,
 }) {
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
@@ -49,7 +50,7 @@ export default function AdminHeader({
         </div>
 
         <button
-          className="flex items-center bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300"
+          className="flex items-center bg-orange-500 hover:bg-orange-600 text-white py-2 px-3 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300"
           onClick={handleLogout}
         >
           <svg
@@ -72,14 +73,14 @@ export default function AdminHeader({
       {isMobile && showSidebar && (
         <div
           ref={sidebarRef}
-          className="fixed inset-0 mt-16 w-48 h-full bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out"
+          className="fixed inset-0 mt-16 w-50 h-full bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out"
         >
           <nav className="flex-1 p-4 overflow-y-auto">
             <ul className="space-y-2">
               <li>
                 <div className="py-1">
                   <button
-                    onClick={() => navigate("/admin/analytics")}
+                    onClick={() => navigateToPath("/admin/analytics")}
                     className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
                       location.pathname === "/admin/analytics"
                         ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
@@ -94,7 +95,7 @@ export default function AdminHeader({
               <li>
                 <div>
                   <button
-                    onClick={() => navigate("/admin/viewTopUps")}
+                    onClick={() => navigateToPath("/admin/viewTopUps")}
                     className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
                       location.pathname === "/admin/viewTopUps"
                         ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
@@ -123,42 +124,38 @@ export default function AdminHeader({
                   </button>
                   {showIssueSubmenu && (
                     <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
-                      <NavLink
-                        to="/admin/allIssues"
-                        className={({ isActive }) =>
-                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
-                            isActive
-                              ? "bg-orange-100 text-orange-600 font-medium"
-                              : "text-gray-600"
-                          }`
-                        }
+                      <button
+                        onClick={() => navigateToPath("/admin/allIssues")}
+                        className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                          location.pathname === "/admin/allIssues"
+                            ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                            : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                        }`}
                       >
-                        All Issues
-                      </NavLink>
-                      <NavLink
-                        to="/admin/admin_resolved"
-                        className={({ isActive }) =>
-                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
-                            isActive
-                              ? "bg-orange-100 text-orange-600 font-medium"
-                              : "text-gray-600"
-                          }`
-                        }
+                        <div className="flex items-center">All Issues</div>
+                      </button>
+                      <button
+                        onClick={() => navigateToPath("/admin/admin_resolved")}
+                        className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                          location.pathname === "/admin/admin_resolved"
+                            ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                            : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                        }`}
                       >
-                        Resolved
-                      </NavLink>
-                      <NavLink
-                        to="/admin/admin_unresolved"
-                        className={({ isActive }) =>
-                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
-                            isActive
-                              ? "bg-orange-100 text-orange-600 font-medium"
-                              : "text-gray-600"
-                          }`
+                        <div className="flex items-center">Resolved</div>
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigateToPath("/admin/admin_unresolved")
                         }
+                        className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                          location.pathname === "/admin/admin_unresolved"
+                            ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                            : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                        }`}
                       >
-                        Unresolved
-                      </NavLink>
+                        <div className="flex items-center">Unresolved</div>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -181,42 +178,36 @@ export default function AdminHeader({
                   </button>
                   {showManageSubmenu && (
                     <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
-                      <NavLink
-                        to="/admin/create-offices"
-                        className={({ isActive }) =>
-                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
-                            isActive
-                              ? "bg-orange-100 text-orange-600 font-medium"
-                              : "text-gray-600"
-                          }`
-                        }
+                      <button
+                        onClick={() => navigateToPath("/admin/create-offices")}
+                        className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                          location.pathname === "/admin/create-offices"
+                            ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                            : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                        }`}
                       >
-                        Create Office
-                      </NavLink>
-                      <NavLink
-                        to="/admin/create-services"
-                        className={({ isActive }) =>
-                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
-                            isActive
-                              ? "bg-orange-100 text-orange-600 font-medium"
-                              : "text-gray-600"
-                          }`
-                        }
+                        <div className="flex items-center">Create Office</div>
+                      </button>
+                      <button
+                        onClick={() => navigateToPath("/admin/create-services")}
+                        className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                          location.pathname === "/admin/create-services"
+                            ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                            : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                        }`}
                       >
-                        Create Service
-                      </NavLink>
-                      <NavLink
-                        to="/admin/register-user"
-                        className={({ isActive }) =>
-                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
-                            isActive
-                              ? "bg-orange-100 text-orange-600 font-medium"
-                              : "text-gray-600"
-                          }`
-                        }
+                        <div className="flex items-center">Create Service</div>
+                      </button>
+                      <button
+                        onClick={() => navigateToPath("/admin/register-user")}
+                        className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                          location.pathname === "/admin/register-user"
+                            ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                            : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                        }`}
                       >
-                        Register User
-                      </NavLink>
+                        <div className="flex items-center">Register</div>
+                      </button>
                     </div>
                   )}
                 </div>

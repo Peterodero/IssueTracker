@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
 import AdminSidebar from "./AdminSidebar";
@@ -11,6 +11,8 @@ export default function AdminLandingPage() {
   const [showIssueSubmenu, setShowIssueSubmenu] = useState(false);
   const [showManageSubmenu, setShowManageSubmenu] = useState(false);
   const [showAirtimeSubmenu, setShowAirtimeSubmenu] = useState(false);
+
+  const navigate = useNavigate();
 
   const toggleIssueSubmenu = () => {
     setShowIssueSubmenu(!showIssueSubmenu);
@@ -54,6 +56,11 @@ export default function AdminLandingPage() {
     setShowSidebar(false);
   }
 
+  const navigateToPath = (path)=> {
+    setShowSidebar(false)
+    navigate(path)
+  }
+
   return (
     <div className="flex flex-col">
       <AdminHeader
@@ -67,6 +74,7 @@ export default function AdminLandingPage() {
         showIssueSubmenu={showIssueSubmenu}
         toggleManageSubmenu={toggleManageSubmenu}
         showManageSubmenu={showManageSubmenu}
+        navigateToPath={navigateToPath}
 
       />
 

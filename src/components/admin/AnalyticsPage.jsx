@@ -39,9 +39,9 @@ export default function AnalyticsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-black border-b-2 border-orange-300 pb-2 inline-block">
+          <h2 className="text-3xl font-bold text-black border-b-2 border-orange-300 pb-2 inline-block">
             Analytics Dashboard
-          </h1>
+          </h2>
         </div>
 
         {/* Dashboard Content */}

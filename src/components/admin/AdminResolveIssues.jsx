@@ -69,9 +69,9 @@ export default function AdminResolvedIssues() {
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
+        <h2 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Resolved Issues
-        </h1>
+        </h2>
         
         {/* Search Form */}
         <div className="bg-white p-4 rounded-lg shadow-md mb-6">
