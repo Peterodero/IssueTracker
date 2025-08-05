@@ -100,7 +100,7 @@ export default function ViewAttachment() {
       {issue.attachments.length > 0 && (
         <div className="mt-8 border-t pt-6">
           <h2 className="text-xl font-semibold mb-4 text-center">
-            Attachments
+            File Attachment
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:ml-10">
             {issue.attachments.map((attachment, index) => (

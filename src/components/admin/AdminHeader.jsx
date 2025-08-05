@@ -9,7 +9,6 @@ export default function AdminHeader({
   onCloseSidebar,
   toggleIssueSubmenu,
   toggleManageSubmenu,
-  showAirtimeSubmenu,
   showIssueSubmenu,
   showManageSubmenu,
 }) {
@@ -26,47 +25,84 @@ export default function AdminHeader({
 
   return (
     <>
-      <header className="bg-gray-200 shadow p-2 flex flex-row h-20 items-center justify-between sticky top-0 z-50">
-        <button
-          className="md:hidden bg-orange-300 text-white px-1 rounded shadow-lg"
-          onClick={toggleSidebar}
-        >
-          ☰
-        </button>
-        <div>
-          <h2 className=" text-2xl p-3 font-semibold">Welcome</h2>
+      {/* Header */}
+      <header className="bg-white shadow-md p-4 flex items-center justify-between sticky top-0 z-50 border-b border-gray-200">
+        <div className="flex items-center space-x-4">
+          <button
+            className="md:hidden bg-orange-500 text-white p-2 rounded-md hover:bg-orange-600 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300"
+            onClick={toggleSidebar}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <h2 className="text-xl font-bold text-gray-800">Welcome</h2>
         </div>
 
         <button
-          className="text-black flex bg-red mr-2 md:bg-red-400 bg-orange-300 py-1 px-2 rounded"
+          className="flex items-center bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300"
           onClick={handleLogout}
         >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-1"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+              clipRule="evenodd"
+            />
+          </svg>
           Logout
         </button>
       </header>
 
+      {/* Mobile Sidebar */}
       {isMobile && showSidebar && (
         <div
           ref={sidebarRef}
-          className={`fixed inset-0 mt-20 w-38 ${
-            (showIssueSubmenu || showAirtimeSubmenu || showManageSubmenu) &&
-            `h-full`
-          } h-full bg-orange-300 z-55 rounded md:hidden`}
+          className="fixed inset-0 mt-16 w-48 h-full bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out"
         >
-          <nav className="flex-1 p-1">
-            <ul className="space-y-1">
+          <nav className="flex-1 p-4 overflow-y-auto">
+            <ul className="space-y-2">
               <li>
-                <div className="space-y-1">
-                  <NavLink
-                    to="/admin/analytics"
-                    className={({ isActive }) =>
-                      `block px-3 py-1 rounded hover:bg-gray-200 ${
-                        isActive ? "bg-gray-300" : ""
-                      }`
-                    }
+                <div className="py-1">
+                  <button
+                    onClick={() => navigate("/admin/analytics")}
+                    className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/admin/analytics"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
                   >
-                    Dashboard
-                  </NavLink>
+                    <div className="flex items-center">Dashboard</div>
+                  </button>
+                </div>
+              </li>
+
+              <li>
+                <div>
+                  <button
+                    onClick={() => navigate("/admin/viewTopUps")}
+                    className={`block w-full text-left px-4 py-3 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/admin/viewTopUps"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
+                  >
+                    <div className="flex items-center">View Top-Up</div>
+                  </button>
                 </div>
               </li>
 
@@ -74,24 +110,26 @@ export default function AdminHeader({
                 <div className="flex flex-col">
                   <button
                     onClick={toggleIssueSubmenu}
-                    className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
-                      location.pathname.includes("/landing/viewIssues")
-                        ? "bg-gray-300"
-                        : ""
+                    className={`flex items-center justify-between w-full px-4 py-3 rounded-md hover:bg-orange-50 transition-colors ${
+                      location.pathname.includes("/admin/viewIssues")
+                        ? "bg-orange-100 text-orange-600"
+                        : "text-gray-700"
                     }`}
                   >
-                    <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
-                      View Issues
+                    <span>View Issues</span>
+                    <span className="text-sm">
+                      {showIssueSubmenu ? "▼" : "►"}
                     </span>
-                    <span>{showIssueSubmenu ? "🔽" : "▶️"}</span>
                   </button>
                   {showIssueSubmenu && (
-                    <div className="ml-4 space-y-1">
+                    <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
                       <NavLink
                         to="/admin/allIssues"
                         className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
+                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
+                            isActive
+                              ? "bg-orange-100 text-orange-600 font-medium"
+                              : "text-gray-600"
                           }`
                         }
                       >
@@ -100,8 +138,10 @@ export default function AdminHeader({
                       <NavLink
                         to="/admin/admin_resolved"
                         className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
+                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
+                            isActive
+                              ? "bg-orange-100 text-orange-600 font-medium"
+                              : "text-gray-600"
                           }`
                         }
                       >
@@ -110,8 +150,10 @@ export default function AdminHeader({
                       <NavLink
                         to="/admin/admin_unresolved"
                         className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
+                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
+                            isActive
+                              ? "bg-orange-100 text-orange-600 font-medium"
+                              : "text-gray-600"
                           }`
                         }
                       >
@@ -123,41 +165,29 @@ export default function AdminHeader({
               </li>
 
               <li>
-                <div className="space-y-1">
-                  <NavLink
-                    to="/admin/viewTopUps"
-                    className={({ isActive }) =>
-                      `block px-3 py-1 rounded hover:bg-gray-200 ${
-                        isActive ? "bg-gray-300" : ""
-                      }`
-                    }
-                  >
-                    View Top-Ups
-                  </NavLink>
-                </div>
-              </li>
-              <li>
                 <div className="flex flex-col">
                   <button
                     onClick={toggleManageSubmenu}
-                    className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
-                      location.pathname.includes("/landing/viewIssues")
-                        ? "bg-gray-300"
-                        : ""
+                    className={`flex items-center justify-between w-full px-4 py-3 rounded-md hover:bg-orange-50 transition-colors ${
+                      location.pathname.includes("/admin/manage")
+                        ? "bg-orange-100 text-orange-600"
+                        : "text-gray-700"
                     }`}
                   >
-                    <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
-                      Manage
+                    <span>Manage</span>
+                    <span className="text-sm">
+                      {showManageSubmenu ? "▼" : "►"}
                     </span>
-                    <span>{showManageSubmenu ? "🔽" : "▶️"}</span>
                   </button>
                   {showManageSubmenu && (
-                    <div className="ml-4 space-y-1">
+                    <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
                       <NavLink
                         to="/admin/create-offices"
                         className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
+                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
+                            isActive
+                              ? "bg-orange-100 text-orange-600 font-medium"
+                              : "text-gray-600"
                           }`
                         }
                       >
@@ -166,8 +196,10 @@ export default function AdminHeader({
                       <NavLink
                         to="/admin/create-services"
                         className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
+                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
+                            isActive
+                              ? "bg-orange-100 text-orange-600 font-medium"
+                              : "text-gray-600"
                           }`
                         }
                       >
@@ -176,8 +208,10 @@ export default function AdminHeader({
                       <NavLink
                         to="/admin/register-user"
                         className={({ isActive }) =>
-                          `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                            isActive ? "bg-gray-300" : ""
+                          `block px-4 py-2 rounded-md hover:bg-orange-50 transition-colors text-sm ${
+                            isActive
+                              ? "bg-orange-100 text-orange-600 font-medium"
+                              : "text-gray-600"
                           }`
                         }
                       >

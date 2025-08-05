@@ -62,169 +62,203 @@ export default function AdminUnresolvedIssues() {
 
   if (loadingData) {
     return (
-      <div className="md:ml-100 md:mt-10">
+      <div className="flex items-center justify-center md:ml-150">
         <LoadingIndicator />
       </div>
     );
   }
 
   return (
-    <>
-      <div className=" max-w-5xl md:w-4.5xl mx-auto overflow-scroll  md:ml-8 p-4">
-        <div className=" rounded-lg ">
-          <table className="w-full ">
-            <thead>
-              <tr className="border-b border-gray-200 bg-blue-200">
-                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700">
-                  #
-                </th>
-                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700">
-                  Office
-                </th>
-                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
-                  Service
-                </th>
-                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700">
-                  By
-                </th>
-                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
-                  Issue Type
-                </th>
-                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
-                  Status
-                </th>
-                 <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
-                  Details
-                </th>
-                <th className="py-5 px-5 text-left text-sm font-semibold text-gray-700 sm:table-cell">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {unResolvedIssuesList.map((issue, index) => {
-                const officeName = issue.office?.name || "No office assigned";
-                const officeLocation = issue.office?.location || "";
-                const serviceName =
-                  issue.service?.name || "No service specified";
-                const serviceDesc = issue.service?.description || "";
-                const reporterName = issue.reporter?.username || "Unknown";
-                const reporterPhone = issue.reporter?.phone_number || "";
+    <div className="min-h-screen bg-white p-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
+          Unresolved Issues
+        </h1>
+        
+        {/* Search Form */}
+        <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+          <form className="flex flex-col md:flex-row items-center gap-4">
+            <div className="w-full md:w-auto">
+              <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+                Search by date
+              </label>
+              <input 
+                id="date" 
+                type="date" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+              />
+            </div>
+            <button 
+              type="button" 
+              className="w-full flex  md:w-auto mt-6 md:mt-6 px-6 py-2 bg-orange-300 text-white font-medium rounded-md hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
+            >
+              Search Issues
+            </button>
+          </form>
+        </div>
 
-                return (
-                  <tr
-                    key={issue.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    {/* Index Number */}
-                    <td className="py-4 px-5 text-sm font-medium text-gray-900">
-                      <span
-                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
-                          index % 2 === 0
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {index + 1}
-                      </span>
-                    </td>
+        {/* Issues Table */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-orange-300">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    #
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Office
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Service
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    By
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Issue Type
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Details
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {unResolvedIssuesList.map((issue, index) => {
+                  const officeName = issue.office?.name || "No office assigned";
+                  const officeLocation = issue.office?.location || "";
+                  const serviceName =
+                    issue.service?.name || "No service specified";
+                  const serviceDesc = issue.service?.description || "";
+                  const reporterName = issue.reporter?.username || "Unknown";
+                  const reporterPhone = issue.reporter?.phone_number || "";
 
-                    {/* Office */}
-                    <td className="py-4 px-5 text-sm text-gray-700">
-                      <div className="flex flex-col">
-                        <span className="font-semibold">{officeName}</span>
-                        {officeLocation && (
-                          <span className="text-xs text-gray-500">
-                            {officeLocation}
-                          </span>
-                        )}
-                      </div>
-                    </td>
+                  return (
+                    <tr
+                      key={issue.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      {/* Index Number */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
+                            index % 2 === 0
+                              ? "bg-orange-100 text-orange-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {index + 1}
+                        </span>
+                      </td>
 
-                    {/* Service */}
-                    <td className="py-4 px-5 text-sm text-gray-700 sm:table-cell">
-                      <div className="flex flex-col">
-                        <span>{serviceName}</span>
-                        {serviceDesc && (
-                          <span className="text-xs text-gray-500 truncate max-w-xs">
-                            {serviceDesc}
-                          </span>
-                        )}
-                      </div>
-                    </td>
+                      {/* Office */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex flex-col">
+                          <span className="font-medium text-gray-900">{officeName}</span>
+                          {officeLocation && (
+                            <span className="text-xs text-gray-500">
+                              {officeLocation}
+                            </span>
+                          )}
+                        </div>
+                      </td>
 
-                    {/* Reporter */}
-                    <td className="py-4 px-5 text-sm text-gray-700">
-                      <div className="flex flex-col">
-                        <span>{reporterName}</span>
-                        {reporterPhone && (
-                          <span className="text-xs text-gray-500">
-                            {reporterPhone}
-                          </span>
-                        )}
-                      </div>
-                    </td>
+                      {/* Service */}
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="text-gray-900">{serviceName}</span>
+                          {serviceDesc && (
+                            <span className="text-xs text-gray-500 truncate max-w-xs">
+                              {serviceDesc}
+                            </span>
+                          )}
+                        </div>
+                      </td>
 
-                    {/* Issue Details */}
-                    <td className="py-4 px-5 text-sm text-gray-700 sm:table-cell">
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-gray-900">
+                      {/* Reporter */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex flex-col">
+                          <span className="text-gray-900">{reporterName}</span>
+                          {reporterPhone && (
+                            <span className="text-xs text-gray-500">
+                              {reporterPhone}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Issue Details */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="font-medium text-gray-900">
                           {issue.type || "No type specified"}
                         </span>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td className="py-4 px-4 text-sm text-gray-700 sm:table-cell">
-                      <div className="flex flex-col">
-                        {issue.status === "unsolved" && <span className="text-green-700">Unresolved</span>}
-                      </div>
-                    </td>
+                      {/* Status */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                          Unresolved
+                        </span>
+                      </td>
 
-                    <td className="py-4 px-5 text-sm text-gray-700">
-                      <div className="flex flex-col">
-                        <Link to={`/admin/view-attachment/${issue.id}`}>
+                      {/* Details */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Link 
+                          to={`/admin/view-attachment/${issue.id}`}
+                          className="text-orange-500 hover:text-orange-700 font-medium"
+                        >
                           View Details
                         </Link>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Action */}
-                    <td className="py-4 px-5 text-sm text-gray-700 sm:table-cell">
-                      <div className="flex flex-col gap-2 space-x-1">
-                        <button
-                          onClick={() => handleDeleteIssue(issue)}
-                          className="px-3 py-1 bg-red-400 text-white rounded-md text-xs font-medium hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                        <button
-                          onClick={() => handleResolveIssue(issue)}
-                          className="px-3 py-1 bg-green-100 text-green-800 rounded-md text-xs font-medium hover:bg-green-200"
-                        >
-                          Resolve
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      {/* Action */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleDeleteIssue(issue)}
+                            className="px-3 py-1 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            onClick={() => handleResolveIssue(issue)}
+                            className="px-3 py-1 bg-orange-300 text-white rounded-md text-sm font-medium hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
+                          >
+                            Resolve
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        {unResolvedIssuesList.length === 0 && !loadingData && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No unresolved issues found</p>
+          </div>
+        )}
       </div>
 
       {openModal && (
-        <div className="flex items-center justify-center ml-4">
-          <Modal>
-            <NotificationModal
-              error={error}
-              handleSubmit={handleSubmit}
-              title="Success!"
-              mesg={message}
-            />
-          </Modal>
-        </div>
+        <Modal>
+          <NotificationModal
+            error={error}
+            handleSubmit={handleSubmit}
+            title={error ? "Error" : "Success!"}
+            mesg={message}
+          />
+        </Modal>
       )}
-    </>
+    </div>
   );
 }
