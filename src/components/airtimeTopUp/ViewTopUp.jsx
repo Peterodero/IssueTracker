@@ -32,7 +32,7 @@ export default function ViewTopUp() {
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
+        <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Top-Up Records
         </h2>
 
