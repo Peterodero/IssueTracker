@@ -7,8 +7,6 @@ import ErrorBlock from "./UI/ErrorBlock";
 
 export default function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(true);
-  // const [loginError, setLoginError] = useState("");
-
   const navigate = useNavigate();
 
   const { mutate, isError, isPending, error } = useMutation({
@@ -20,85 +18,100 @@ export default function Login() {
 
       navigate(data.role === 'admin' ? "/admin" : "/landing");
     },
-
-    // onError: (error) => {
-    //   // setLoginError("Wrong credentials. Try creating an account.");
-    //   console.error("Failed to sign in:", error);
-    // },
   });
 
   function handleFormSubmit(event) {
     event.preventDefault();
 
     const fd = new FormData(event.target);
-
     const data = Object.fromEntries(fd.entries());
     data.username = data.username.trim();
 
     const validatePassword = passwordValidator(data.password, 6);
-
     setPasswordIsValid(validatePassword);
 
     if (!validatePassword) {
       return;
     }
     mutate(data);
-
   }
 
   return (
-    <div className="flex flex-col items-center mt-20 ">
-      <div className="mb-2">
-        <h2 className="mb-2 text-3xl font-bold">Welcome!</h2>
-        <p className="font-semibold">Please login to continue..</p>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
+          <p className="text-gray-600">Please login to continue</p>
+        </div>
+
+        <form
+          className="bg-white shadow-lg rounded-xl p-8 border border-gray-200"
+          onSubmit={handleFormSubmit}
+        >
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Username <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="username"
+                placeholder="Enter your username"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+              />
+              {!passwordIsValid && (
+                <p className="mt-1 text-sm text-red-500">
+                  Password must be at least 6 characters
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <button
+              type="submit"
+              disabled={isPending}
+              className={`w-full px-6 py-3 rounded-md text-white font-medium focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 transition-colors ${
+                isPending ? 'bg-orange-400 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600'
+              }`}
+            >
+              {isPending ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Logging In...
+                </span>
+              ) : 'Login'}
+            </button>
+          </div>
+        </form>
+
+        {isError && (
+          <div className="mt-6">
+            <ErrorBlock
+              title="Login Failed"
+              message={
+                error?.detail || "Invalid credentials. Please try again."
+              }
+            />
+          </div>
+        )}
       </div>
-
-      <form
-        className="flex flex-col md:gap-6 lg:gap-6 gap-1 justify-center shadow bg-white md:w-3/8 w-4/5 p-5 md:p-10 rounded-xl"
-        onSubmit={handleFormSubmit}
-      >
-        <div className="px-2">
-          <div className="my-4 flex flex-col">
-            <label className="mb-1">Username</label>
-            <input
-              name="username"
-              placeholder="Enter your username"
-              required
-              className="border rounded py-2 px-3"
-            />
-          </div>
-
-          <div className="mb-4 flex flex-col">
-            <label className="mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              required
-              className="border rounded py-2 px-3"
-            />
-          </div>
-          {!passwordIsValid && (
-            <p className="text-red-400">
-              Invalid password.Password should be atleast 6 characters
-            </p>
-          )}
-        </div>
-
-        <div className="flex justify-center">
-          <button className="w-3/4 py-2 bg-blue-500 text-white rounded">
-            {isPending ? "Logging In..." : "Login"}
-          </button>
-        </div>
-      </form>
-      {isError && (
-        <ErrorBlock
-          title="Failed to login."
-          message={
-            error?.detail || "Failed to login.Check your details and try again!"
-          }
-        />
-      )}
     </div>
   );
 }
