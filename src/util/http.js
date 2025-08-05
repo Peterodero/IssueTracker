@@ -277,3 +277,11 @@ export async function getAllTopUps() {
 export async function getAnalytics() {
   
 }
+
+export async function fetchUsers() {
+  
+}
+
+export async function toggleUserStatus() {
+  
+}

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
+import SearchByDate from "../SearchByDate";
 
 export default function ViewTopUp() {
   const [loadingData, setLoadingData] = useState(false);
@@ -35,6 +36,8 @@ export default function ViewTopUp() {
         <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Top-Up Records
         </h2>
+
+        <SearchByDate/>
 
         {/* Top-Ups Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden md:w-4xl">

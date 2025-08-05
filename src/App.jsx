@@ -22,6 +22,7 @@ import AnalyticsPage from "./components/admin/AnalyticsPage";
 import AdminResolvedIssues from "./components/admin/AdminResolveIssues";
 import UnresolvedIssues from "./components/issues/UnresolvedIssues";
 import RegisterUser from "./components/admin/RegisterUser";
+import DisableUser from "./components/admin/DisableUser";
 
 function App() {
   const router = createBrowserRouter([
@@ -106,6 +107,10 @@ function App() {
             {
               path: "create-services",
               element: <CreateServices />,
+            },
+            {
+              path: "disable-user",
+              element: <DisableUser/>
             },
             {
               path: "register-user",
