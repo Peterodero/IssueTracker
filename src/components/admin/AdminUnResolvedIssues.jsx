@@ -228,7 +228,7 @@ export default function AdminUnresolvedIssues() {
                           </button>
                           <button
                             onClick={() => handleResolveIssue(issue)}
-                            className="px-3 py-1 bg-orange-300 text-white rounded-md text-sm font-medium hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
+                            className="px-3 py-1 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
                           >
                             Resolve
                           </button>

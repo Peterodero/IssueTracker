@@ -50,7 +50,7 @@ export default function AdminHeader({
         </div>
 
         <button
-          className="flex items-center bg-orange-500 hover:bg-orange-600 text-white py-2 px-3 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300"
+          className="flex items-center bg-red-500 hover:bg-red-600 text-white py-2 px-3 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300"
           onClick={handleLogout}
         >
           <svg

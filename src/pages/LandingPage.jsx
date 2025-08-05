@@ -1,5 +1,5 @@
 import Header from "../components/Header";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import ReportIssueContextProvider from "../store/issue-context";
 import { useEffect, useState } from "react";
@@ -11,6 +11,8 @@ export default function LandingPage() {
   const [showIssueSubmenu, setShowIssueSubmenu] = useState(false);
   const [showManageSubmenu, setShowManageSubmenu] = useState(false);
   const [showAirtimeSubmenu, setShowAirtimeSubmenu] = useState(false);
+
+  const navigate = useNavigate()
 
   const toggleIssueSubmenu = () => {
     setShowIssueSubmenu(!showIssueSubmenu);
@@ -47,11 +49,16 @@ export default function LandingPage() {
   }, []);
 
   const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
+    setShowSidebar(!showSidebar); 
   };
 
   const onCloseSidebar = () => {
     setShowSidebar(false);
+  }
+
+    const navigateToPath = (path)=> {
+    setShowSidebar(false)
+    navigate(path)
   }
 
   return (
@@ -67,6 +74,7 @@ export default function LandingPage() {
         showIssueSubmenu={showIssueSubmenu}
         toggleManageSubmenu={toggleManageSubmenu}
         showManageSubmenu={showManageSubmenu}
+        navigateToPath={navigateToPath}
 
       />
 
@@ -81,6 +89,7 @@ export default function LandingPage() {
             showAirtimeSubmenu={showAirtimeSubmenu}
             showManageSubmenu={showManageSubmenu}
             showIssueSubmenu={showIssueSubmenu}
+            navigateToPath={navigateToPath}
           />
         </div>
 

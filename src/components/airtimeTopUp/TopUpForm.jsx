@@ -4,21 +4,20 @@ import { useNavigate } from "react-router-dom";
 
 export default function TopUpForm({ handleSubmit, errors }) {
   const { formData, officeList, serviceList, handleChange } = useContext(IssueContext);
-
   const navigate = useNavigate();
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6 p-4 md:p-6">
       {/* Office Selection */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Office *
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Office <span className="text-red-500">*</span>
         </label>
         <select
           name="office"
           value={formData.officeName}
           onChange={handleChange}
-          className={`w-full p-2 border rounded-md ${
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 ${
             errors.office ? "border-red-500" : "border-gray-300"
           }`}
         >
@@ -36,14 +35,14 @@ export default function TopUpForm({ handleSubmit, errors }) {
 
       {/* Service Selection */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Service *
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Service <span className="text-red-500">*</span>
         </label>
         <select
           name="service"
           value={formData.serviceName}
           onChange={handleChange}
-          className={`w-full p-2 border rounded-md ${
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 ${
             errors.service ? "border-red-500" : "border-gray-300"
           }`}
         >
@@ -61,8 +60,8 @@ export default function TopUpForm({ handleSubmit, errors }) {
 
       {/* SIM Number */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          SIM Number *
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          SIM Number <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -70,8 +69,8 @@ export default function TopUpForm({ handleSubmit, errors }) {
           value={formData.sim_number}
           onChange={handleChange}
           placeholder="0712345678"
-          className={`w-full p-2 border rounded-md ${
-            errors.simNumber ? "border-red-500" : "border-gray-300"
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 ${
+            errors.sim_number ? "border-red-500" : "border-gray-300"
           }`}
         />
         {errors.sim_number && (
@@ -81,8 +80,8 @@ export default function TopUpForm({ handleSubmit, errors }) {
 
       {/* Amount */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Amount (KSh) *
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Amount (KSh) <span className="text-red-500">*</span>
         </label>
         <input
           type="number"
@@ -90,7 +89,7 @@ export default function TopUpForm({ handleSubmit, errors }) {
           value={formData.amount}
           onChange={handleChange}
           placeholder="500"
-          className={`w-full p-2 border rounded-md ${
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 ${
             errors.amount ? "border-red-500" : "border-gray-300"
           }`}
           min="1"
@@ -101,40 +100,36 @@ export default function TopUpForm({ handleSubmit, errors }) {
       </div>
 
       {/* Date */}
-
-       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-           Date *
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Date <span className="text-red-500">*</span>
         </label>
         <input
           type="date"
           name="date"
           value={formData.date}
           onChange={handleChange}
-          placeholder="2025-07-17"
-          className={`w-full p-2 border rounded-md ${
-            errors.amount ? "border-red-500" : "border-gray-300"
+          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 ${
+            errors.date ? "border-red-500" : "border-gray-300"
           }`}
-          min="1"
         />
-        {errors.amount && (
-          <p className="text-red-500 text-xs mt-1">{errors.amount}</p>
+        {errors.date && (
+          <p className="text-red-500 text-xs mt-1">{errors.date}</p>
         )}
       </div>
 
-
       {/* Form Actions */}
-      <div className="flex justify-end space-x-3 pt-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6">
         <button
           type="button"
           onClick={() => navigate("/resolveTopUp")}
-          className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+          className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-300 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none"
+          className="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 transition-colors"
         >
           Update Top-Up
         </button>

@@ -7,6 +7,7 @@ export default function Sidebar({
   toggleIssueSubmenu,
   showAirtimeSubmenu,
   showIssueSubmenu,
+  navigateToPath,
 }) {
   const navigate = useNavigate();
 
@@ -17,79 +18,79 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`fixed left-0 top-2 pt-8 h-screen w-64 text-black flex flex-col ${
-        isMobile ? "fixed top-16 left-0 w-64 h-full transform" : "block"
-      }
-        ${
-          isMobile
-            ? showSidebar
-              ? "translate-x-0"
-              : "-translate-x-full"
-            : "translate-x-0"
-        }`}
+      className={`fixed left-0 top-0 pt-16 h-screen w-64 bg-white text-black flex flex-col shadow-lg z-40 border-r border-gray-200 transition-transform duration-300 ease-in-out ${
+        isMobile
+          ? showSidebar
+            ? "translate-x-0"
+            : "-translate-x-full"
+          : "translate-x-0"
+      }`}
     >
-      <div className="p-6 text-2xl font-bold"></div>
-      <nav className="flex-1 p-4">
-        <ul className="space-y-4">
+      <div className="px-2 py-3 mt-2 text-xl font-bold border-b border-gray-200">
+        <p className="text-orange-500 text-sm">User Panel</p>
+      </div>
+      <nav className="flex-1 p-4 overflow-y-auto">
+        <ul className="space-y-2">
           <li>
-            <NavLink
-              to="/landing/reportIssue"
-              className={({ isActive }) =>
-                `flex items-center gap-1 px-3 py-1 rounded hover:bg-gray-200 ${
-                  isActive ? "bg-gray-300" : ""
-                }`
-              }
-            >
-              Report Issue
-            </NavLink>
+            <div className="py-1">
+              <button
+                onClick={() => navigateToPath("/landing/reportIssue")}
+                className={`block w-full text-left px-4 py-2 rounded-md transition-colors duration-200 ${
+                  location.pathname === "/landing/reportIssue"
+                    ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                    : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                }`}
+              >
+                <div className="flex items-center">Report Issue</div>
+              </button>
+            </div>
           </li>
+
           <li>
             <div className="flex flex-col">
               <button
                 onClick={toggleIssueSubmenu}
-                className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
+                className={`flex items-center justify-between w-full px-4 py-2 rounded-md hover:bg-orange-50 transition-colors ${
                   location.pathname.includes("/landing/viewIssues")
-                    ? "bg-gray-300"
-                    : ""
+                    ? "bg-orange-100 text-orange-600"
+                    : "text-gray-700"
                 }`}
               >
-                <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
-                  View Issues
-                </span>
-                <span>{showIssueSubmenu ? "🔽" : "▶️"}</span>
+                <span>View Issues</span>
+                <span className="text-sm">{showIssueSubmenu ? "▼" : "►"}</span>
               </button>
               {showIssueSubmenu && (
-                <div className="ml-4 space-y-1">
-                  <NavLink
-                    to="/landing/allIssues"
-                    className={({ isActive }) =>
-                      `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                        isActive ? "bg-gray-300" : ""
-                      }`
-                    }
+                <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
+                  <button
+                    onClick={() => navigateToPath("/landing/allIssues")}
+                    className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/landing/allIssues"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
                   >
-                    All Issues
-                  </NavLink>
-                  <NavLink
-                    to="/landing/resolved"
-                    className={({ isActive }) =>
-                      `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                        isActive ? "bg-gray-300" : ""
-                      }`
-                    }
+                    <div className="flex items-center">All Issues</div>
+                  </button>
+                  <button
+                    onClick={() => navigateToPath("/landing/resolved")}
+                    className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/landing/resolved"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
                   >
-                    Resolved
-                  </NavLink>
-                  <NavLink
-                    to="/landing/unresolved"
-                    className={({ isActive }) =>
-                      `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                        isActive ? "bg-gray-300" : ""
-                      }`
-                    }
+                    <div className="flex items-center">Resolved</div>
+                  </button>
+                  <button
+                    onClick={() => navigateToPath("/landing/unresolved")}
+                    className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/landing/unresolved"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
                   >
-                    Unresolved
-                  </NavLink>
+                    <div className="flex items-center">Unresolved</div>
+                  </button>
                 </div>
               )}
             </div>
@@ -99,49 +100,48 @@ export default function Sidebar({
             <div className="flex flex-col">
               <button
                 onClick={toggleAirtimeSubmenu}
-                className={`flex items-center justify-between gap-2 px-3 py-1 rounded hover:bg-gray-200 ${
-                  location.pathname.includes("/landing/viewIssues")
-                    ? "bg-gray-300"
-                    : ""
+                className={`flex items-center justify-between w-full px-4 py-2 rounded-md hover:bg-orange-50 transition-colors ${
+                  location.pathname.includes("/landing/airtime")
+                    ? "bg-orange-100 text-orange-600"
+                    : "text-gray-700"
                 }`}
               >
-                <span className=" a-view-issues px-0 py-1 rounded hover:bg-gray-200">
-                  Airtime
+                <span>Airtime</span>
+                <span className="text-sm">
+                  {showAirtimeSubmenu ? "▼" : "►"}
                 </span>
-                <span>{showAirtimeSubmenu ? "🔽" : "▶️"}</span>
               </button>
               {showAirtimeSubmenu && (
-                <div className="ml-4  space-y-1">
-                  <NavLink
-                    to="/landing/resolveTopUp"
-                    className={({ isActive }) =>
-                      `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                        isActive ? "bg-gray-300" : ""
-                      }`
-                    }
+                <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
+                  <button
+                    onClick={() => navigateToPath("/landing/resolveTopUp")}
+                    className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/landing/resolveTopUp"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
                   >
-                    Update Top-Up
-                  </NavLink>
-                  <NavLink
-                    to="/landing/viewTopUps"
-                    className={({ isActive }) =>
-                      `block px-3 py-1 rounded hover:bg-gray-200 text-sm ${
-                        isActive ? "bg-gray-300" : ""
-                      }`
-                    }
+                    <div className="flex items-center">Record Top-Up</div>
+                  </button>
+                  <button
+                    onClick={() => navigateToPath("/landing/viewTopUps")}
+                    className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/landing/viewTopUps"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
                   >
-                    View Top-Ups
-                  </NavLink>
+                    <div className="flex items-center">View Top-Up</div>
+                  </button>
                 </div>
               )}
             </div>
           </li>
-    
         </ul>
       </nav>
-      <div className="p-3 border-t border-gray-800">
+      <div className="p-4 border-t border-gray-200 mt-auto">
         <button
-          className="w-full px-3 py-1 rounded bg-gray-300 hover:bg-gray-200 transition"
+          className="w-full px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-300"
           onClick={handleLogout}
         >
           Logout

@@ -89,6 +89,7 @@ export default function AdminLandingPage() {
             showAirtimeSubmenu={showAirtimeSubmenu}
             showManageSubmenu={showManageSubmenu}
             showIssueSubmenu={showIssueSubmenu}
+            navigateToPath={navigateToPath}
           />
         </div>
 
