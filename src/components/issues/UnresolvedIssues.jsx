@@ -59,9 +59,9 @@ export default function UnresolvedIssues() {
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
+        <h2 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Unresolved Issues
-        </h1>
+        </h2>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">

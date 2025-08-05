@@ -21,7 +21,7 @@ export default function ReportIssuePage() {
       <div className="max-w-4xl mx-auto p-6 rounded-lg shadow md:ml-5 bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 md:w-5xl">
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-auto">
           <div className="flex flex-col bg-orange-300 md:p-6 p-3 text-black">
-            <h1 className="text-2xl font-bold">Report New Issue</h1>
+            <h2 className="text-2xl font-bold">Report New Issue</h2>
             <div className="flex mt-4 md:space-x-6 space-x-4">
               <div className="flex items-center">
                 <div

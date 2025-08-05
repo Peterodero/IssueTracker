@@ -28,7 +28,7 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen md:ml-150">
+      <div className="flex items-start justify-center min-h-screen md:ml-150">
         <Spin size="large" className="text-orange-500" />
       </div>
     );
