@@ -206,6 +206,33 @@ export async function listResolvedIssues() {
   }
 }
 
+export async function listResolvedIssuesByDate(date) {
+     try {
+    const response = await fetch(url + "/issues/list/", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        status: "solved",
+        start_date: date.startDate,
+        end_date: date.endDate
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch resolved issues');
+    }
+
+    const resolvedIssues = await response.json();
+    return resolvedIssues;
+    
+  } catch (error) {
+    console.error('Error fetching resolved issues:', error);
+  }
+}
+
 export async function listUnResolvedIssues() {
      try {
     const response = await fetch(url + "/issues/list/", {
@@ -215,6 +242,33 @@ export async function listUnResolvedIssues() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({status: "unsolved"})
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch unresolved issues');
+    }
+
+    const unresolvedIssues = await response.json();
+    return unresolvedIssues;
+    
+  } catch (error) {
+    console.error('Error fetching unresolved issues:', error);
+  }
+}
+
+export async function listUnResolvedIssuesByDate(date) {
+     try {
+    const response = await fetch(url + "/issues/list/", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        status: "unsolved",
+        start_date: date.startDate,
+        end_date: date.endDate
+      })
     });
 
     if (!response.ok) {

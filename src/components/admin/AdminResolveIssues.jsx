@@ -11,9 +11,11 @@ export default function AdminResolvedIssues() {
   const [openModal, setOpenModal] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
+
+
   const navigate = useNavigate();
 
-  const { fetchResolvedIssues, resolvedIssuesList } = useContext(IssueContext);
+  const { fetchResolvedIssues, resolvedIssuesList, fetchResolvedIssuesByDate, issueDate, handleIssueDateChange } = useContext(IssueContext);
 
   useEffect(() => {
     const loadData = async () => {
@@ -44,6 +46,11 @@ export default function AdminResolvedIssues() {
     navigate(1);
   };
 
+  const handleSubmitDate = async(e) => {
+    e.preventDefault()
+    await fetchResolvedIssuesByDate()
+  }
+
   async function handleUnResolveIssue(issue) {
     try {
       const successMessage = await unResolveIssue(issue.id);
@@ -66,6 +73,8 @@ export default function AdminResolvedIssues() {
     setOpenModal(true);
   }
 
+
+
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
@@ -75,19 +84,35 @@ export default function AdminResolvedIssues() {
         
         {/* Search Form */}
         <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-          <form className="flex flex-col md:flex-row items-center gap-4">
+          <form onSubmit={handleSubmitDate} className="flex flex-col md:flex-row items-center gap-4">
             <div className="w-full md:w-auto">
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-                Search by date
+              <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">
+                Start date
               </label>
               <input 
-                id="date" 
+                id="start-date" 
+                name="startDate"
+                onChange={handleIssueDateChange}
+                value={issueDate.startDate}
+                type="date" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+              />
+            </div>
+            <div className="w-full md:w-auto">
+              <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-1">
+                End date
+              </label>
+              <input 
+                id="end-date" 
+                name="endDate"
+                onChange={handleIssueDateChange}
+                value={issueDate.endDate}
                 type="date" 
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
               />
             </div>
             <button 
-              type="button" 
+              type="submit" 
               className="w-full md:w-auto mt-6 md:mt-6 px-6 py-2 bg-orange-300 text-white font-medium rounded-md hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
             >
               Search Issues

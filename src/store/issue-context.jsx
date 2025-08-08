@@ -6,7 +6,9 @@ import {
   getServices,
   listAllIssues,
   listResolvedIssues,
+  listResolvedIssuesByDate,
   listUnResolvedIssues,
+  listUnResolvedIssuesByDate,
   reportIssue,
   updateTopUp,
 } from "../util/http";
@@ -20,9 +22,14 @@ export const IssueContext = createContext({
     description: "",
     attachments: "",
   },
+  issueDate: {
+    startDate: "",
+    endDate: ""
+  },
   handleModal: () => {},
   submited: "",
   handleChange: () => {},
+  handleIssueDateChange: ()=>{},
   handleClearForm: () => {},
   handleSubmitIssueForm: () => {},
   handleSubmitTopUpForm: () => {},
@@ -32,6 +39,8 @@ export const IssueContext = createContext({
   fetchResolvedIssues: () => {},
   resolvedIssuesList: () => {},
   fetchUnResolvedIssues: () => {},
+  fetchResolvedIssuesByDate: ()=>{},
+  fetchUnresolvedIssuesByDate: ()=>{},
   fetchTopUps: () => {},
   unResolvedIssuesList: [],
   officeList: [],
@@ -61,6 +70,11 @@ export default function ReportIssueContextProvider({ children }) {
   const [unResolvedIssuesList, setUnResolvedIssuesList] = useState([]);
   const [topUpList, setTopUpList] = useState([]);
 
+  const [issueDate, setIssueDate] = useState({
+    startDate: "",
+    endDate: ""
+  })
+
   const navigate = useNavigate();
 
   const fetchOffices = useCallback(async () => {
@@ -86,6 +100,28 @@ export default function ReportIssueContextProvider({ children }) {
     console.log(resolvedIssues);
     setResolvedIssuesList(resolvedIssues.data);
   }, []);
+
+  function handleIssueDateChange(event){
+    setIssueDate((prevState)=> {
+      return {
+        ...prevState,
+        [event.target.name] : event.target.value
+      }
+    })
+
+    console.log(issueDate)
+  }
+
+    const fetchResolvedIssuesByDate = useCallback(async () => {
+    const resolvedIssues = await listResolvedIssuesByDate(issueDate);
+    setResolvedIssuesList(resolvedIssues.data);
+  }, [issueDate]);
+
+    const fetchUnresolvedIssuesByDate = useCallback(async () => {
+    const resolvedIssues = await listUnResolvedIssuesByDate(issueDate);
+    console.log(resolvedIssues);
+    setUnResolvedIssuesList(resolvedIssues.data);
+  }, [issueDate]);
 
   const fetchUnResolvedIssues = useCallback(async () => {
     const unResolvedIssues = await listUnResolvedIssues();
@@ -206,7 +242,9 @@ export default function ReportIssueContextProvider({ children }) {
 
   const ctxValue = {
     formData: formData,
+    issueDate: issueDate,
     handleChange: handleChange,
+    handleIssueDateChange: handleIssueDateChange,
     handleClearForm: handleClearForm,
     handleSubmitIssueForm: handleSubmitIssueForm,
     handleSubmitTopUpForm: handleSubmitTopUpForm,
@@ -217,6 +255,8 @@ export default function ReportIssueContextProvider({ children }) {
     fetchIssues: fetchIssues,
     fetchResolvedIssues: fetchResolvedIssues,
     fetchUnResolvedIssues: fetchUnResolvedIssues,
+    fetchResolvedIssuesByDate: fetchResolvedIssuesByDate,
+    fetchUnresolvedIssuesByDate:fetchUnresolvedIssuesByDate,
     fetchTopUps: fetchTopUps,
     topUpList: topUpList,
     resolvedIssuesList: resolvedIssuesList,
