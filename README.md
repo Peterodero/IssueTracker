@@ -1,12 +1,37 @@
-# React + Vite
+# Issue Tracker System
+A comprehensive issue tracking and airtime management system with admin and user interfaces.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
 
-Currently, two official plugins are available:
+### Admin Features
+- 📊 Dashboard with analytics and metrics
+- 👥 User management (enable/disable accounts)
+- 🏢 Office and service configuration
+- 🎫 Full issue oversight (view/resolve/unresolve)
+- 📈 Resolution metrics and reporting
+- 🔍 Search and filter capabilities
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### User Features
+- 🐛 Issue reporting with attachments
+- 🔍 View issue status (all/resolved/unresolved)
+- 📱 Airtime top-up management
+- 📅 Activity feed of recent actions
+- 📂 Attachment management for issues
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend
+- React 18
+- React Router 6
+- Tailwind CSS
+- TanStack Query (React Query)
+- Context API for state management
+- Axios for HTTP requests
+
+### Backend
+- Django REST Framework
+- JWT Authentication
+- PostgreSQL
+
+
+### url https://issue-tracker-psi-ten.vercel.app/
