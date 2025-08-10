@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { createOffices } from '../../util/http';
 
 const CreateOffices = () => {
   const [formData, setFormData] = useState({
@@ -8,41 +8,27 @@ const CreateOffices = () => {
   });
   const [message, setMessage] = useState({ text: '', type: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errMessage, setErrMessage] = useState("");
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setMessage({ text: '', type: '' });
+    // setMessage({ text: '', type: '' });
 
-    try {
-      const response = await axios.post('https://issue-tracker-jywg.onrender.com/api/offices/create/', formData, {
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem("accessToken")}`,
-          'Content-Type': 'application/json'
-        }
-      });
+    const resMessage = await createOffices(formData)
 
-      setMessage({ text: 'Office created successfully!', type: 'success' });
-      setFormData({ name: '', location: '' }); // Reset form
-      console.log(response);
-    } catch (error) {
-      let errorMessage = 'An error occurred';
-      if (error.response) {
-        errorMessage = error.response.data.message || error.response.statusText;
-      } else if (error.request) {
-        errorMessage = 'No response from server';
-      } else {
-        errorMessage = error.message;
-      }
-      setMessage({ text: `Error: ${errorMessage}`, type: 'error' });
-    } finally {
-      setIsSubmitting(false);
+    if(resMessage.errors){
+      setErrMessage(resMessage.errors.name[0])
     }
+
+    setIsSubmitting(false)
+    console.log(resMessage)
   };
 
   return (
@@ -53,8 +39,12 @@ const CreateOffices = () => {
             <h2 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
               Create New Office
             </h2>
-            
-            {message.text && (
+            {errMessage && (
+              <div className='mb-4 p-4 rounded-md bg-red-50 text-red-800 border border-red-200'>
+                {errMessage}
+              </div>
+            )}
+            {/* {message.text && (
               <div className={`mb-4 p-4 rounded-md ${
                 message.type === 'success' 
                   ? 'bg-green-50 text-green-800 border border-green-200' 
@@ -62,7 +52,7 @@ const CreateOffices = () => {
               }`}>
                 {message.text}
               </div>
-            )}
+            )} */}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -78,7 +68,7 @@ const CreateOffices = () => {
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
                   placeholder="e.g. Main Office"
-                />
+                /> 
               </div>
 
               <div>

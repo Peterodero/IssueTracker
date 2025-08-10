@@ -2,12 +2,12 @@ import { Card, Row, Col, Tooltip } from 'antd';
 import { HeatMapOutlined } from '@ant-design/icons';
 
 export default function OfficeHeatmap({ offices }) {
-  // Generate mock heatmap data (replace with real data from API)
-  const heatmapData = offices.map(office => ({
-    name: office.office__name,
-    value: office.count,
-    intensity: Math.min(100, Math.round((office.count / Math.max(...offices.map(o => o.count))) * 100))
-  }));
+  // // Generate mock heatmap data (replace with real data from API)
+  // const heatmapData = offices.map(office => ({
+  //   name: office.office__name,
+  //   value: office.count,
+  //   intensity: Math.min(100, Math.round((office.count / Math.max(...offices.map(o => o.count))) * 100))
+  // }));
 
   const getIntensityColor = (intensity) => {
     if (intensity > 80) return '#f5222d';
@@ -28,12 +28,12 @@ export default function OfficeHeatmap({ offices }) {
     
     >
       <Row gutter={[16, 16]}>
-        {heatmapData.map((office, index) => (
-          <Col key={index} xs={12} sm={8} md={6} lg={4}>
-            <Tooltip title={`${office.name}: ${office.value} issues`}>
+        {offices.map((office, index) => (
+          <Col key={index} xs={12} sm={6} md={6} lg={8}>
+            <Tooltip title={`${office.office_name}: ${office.total_issues} issues`}>
               <div style={{ 
                 backgroundColor: getIntensityColor(office.intensity),
-                padding: '12px 0',
+                padding: '12px 5px',
                 borderRadius: 4,
                 textAlign: 'center',
                 color: '#fff',
@@ -46,7 +46,8 @@ export default function OfficeHeatmap({ offices }) {
                   transform: 'scale(1.05)'
                 }
               }}>
-                {office.name}
+                <span className='text-sm text-black'>{office.office_name}</span><br></br>
+                {`${office.total_issues} issues`}
               </div>
             </Tooltip>
           </Col>

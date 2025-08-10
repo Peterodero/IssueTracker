@@ -1,16 +1,16 @@
 import { Card, Statistic, Progress, Tooltip } from 'antd';
 import { ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
-export default function ResolutionMetrics({ avgTime }) {
+export default function ResolutionMetrics({ resolutionRate }) {
   const targetResolutionTime = 24; // Your target in hours
   
-  const resolutionRate = Math.min(100, Math.round((targetResolutionTime / avgTime) * 100));
+  // const resolutionRate = Math.min(100, Math.round((targetResolutionTime / avgTime) * 100));
   
   return (
     <Card title="Resolution Metrics" >
       <Statistic
         title="Avg. Resolution Time"
-        value={avgTime.toFixed(1)}
+        value={24}
         suffix="hours"
         prefix={<ClockCircleOutlined />}
         style={{ marginBottom: 24 }}

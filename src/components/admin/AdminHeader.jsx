@@ -216,7 +216,7 @@ export default function AdminHeader({
                             : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                         }`}
                       >
-                        <div className="flex items-center">Disable User</div>
+                        <div className="flex items-center">Users</div>
                       </button>
                     </div>
                   )}

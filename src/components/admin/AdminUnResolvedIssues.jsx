@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchByDate from "../SearchByDate";
 
 export default function AdminUnresolvedIssues() {
-  const { fetchUnResolvedIssues, unResolvedIssuesList } =
+  const { fetchUnResolvedIssues,fetchUnresolvedIssuesByDate, unResolvedIssuesList } =
     useContext(IssueContext);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
@@ -55,11 +55,16 @@ export default function AdminUnresolvedIssues() {
     console.log(message);
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { 
     e.preventDefault();
     setOpenModal(false);
     navigate("/admin/admin_unresolved");
   };
+
+    async function handleSubmitDate(e){
+    e.preventDefault()
+    await fetchUnresolvedIssuesByDate()
+  }
 
   if (loadingData) {
     return (
@@ -76,7 +81,7 @@ export default function AdminUnresolvedIssues() {
           Unresolved Issues
         </h2>
         
-        <SearchByDate/>
+        <SearchByDate handleSubmit={handleSubmitDate}/>
 
         {/* Issues Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">

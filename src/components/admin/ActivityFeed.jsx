@@ -1,25 +1,26 @@
-import { Card, List, Tag, Avatar } from 'antd';
-import { 
-  ClockCircleOutlined, 
+import { Card, List, Tag, Avatar } from "antd";
+import {
+  ClockCircleOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  UserOutlined 
-} from '@ant-design/icons';
-import moment from 'moment';
+  UserOutlined,
+} from "@ant-design/icons";
+import moment from "moment";
 
 export default function ActivityFeed({ activities }) {
   const getActivityIcon = (status) => {
-    switch(status) {
-      case 'open': return <ExclamationCircleOutlined style={{ color: '#faad14' }} />;
-      case 'resolved': return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
-      default: return <ClockCircleOutlined style={{ color: '#1890ff' }} />;
+    switch (status) {
+      case "open":
+        return <ExclamationCircleOutlined style={{ color: "#faad14" }} />;
+      case "resolved":
+        return <CheckCircleOutlined style={{ color: "#52c41a" }} />;
+      default:
+        return <ClockCircleOutlined style={{ color: "#1890ff" }} />;
     }
   };
 
   return (
-    <Card 
-      title="Recent Activity" 
-    >
+    <Card title="Recent Activity">
       <List
         itemLayout="horizontal"
         dataSource={activities}
@@ -30,9 +31,11 @@ export default function ActivityFeed({ activities }) {
               title={
                 <span>
                   {getActivityIcon(item.status)}
-                  <span style={{ marginLeft: 8 }}>
-                    Issue #{item.id} - {item.type}
-                  </span>
+                  <span style={{ marginLeft: 8 }}>Issue - {item.type}</span>
+                  <div className="flex flex-row items-center gap-2 m-2">
+                    <label className="text-lg">Description : </label>
+                    <span>{item.description}</span>
+                  </div>
                 </span>
               }
               description={
@@ -40,7 +43,7 @@ export default function ActivityFeed({ activities }) {
                   <Tag color={getStatusColor(item.status)}>
                     {item.status.toUpperCase()}
                   </Tag>
-                  {moment(item.updated_at).fromNow()}
+                  Posted {moment(item.created_at).fromNow()}
                 </span>
               }
             />
@@ -54,12 +57,12 @@ export default function ActivityFeed({ activities }) {
 // Reuse from StatusSummary.js
 function getStatusColor(status) {
   const colors = {
-    open: 'gold',
-    pending: 'orange',
-    in_progress: 'blue',
-    resolved: 'green',
-    closed: 'gray',
-    rejected: 'red'
+    open: "gold",
+    pending: "orange",
+    in_progress: "blue",
+    resolved: "green",
+    closed: "gray",
+    rejected: "red",
   };
-  return colors[status.toLowerCase()] || 'purple';
+  return colors[status.toLowerCase()] || "purple";
 }

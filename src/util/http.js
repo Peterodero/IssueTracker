@@ -11,9 +11,8 @@ export async function authenticateUser(data) {
   const resData = await response.json();
 
   if (!response.ok) {
-    const errorData = await response.json();
-    console.log(errorData.detail);
-    return errorData.detail;
+    console.log(resData.detail);
+    return resData.detail;
   }
 
   return resData;
@@ -317,25 +316,125 @@ export async function getAllTopUps() {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch issues');
+      throw new Error('Failed to fetch top-ups');
     }
 
     const topUps = await response.json();
     return topUps;
     
   } catch (error) {
-    console.error('Error fetching services:', error);
+    console.error('Error fetching ', error);
+  }
+}
+export async function getAllTopUpsByDate(date) {
+     try {
+    const response = await fetch(url + `/data-bundles/list/?start_date=${date.startDate}&end_date=${date.endDate}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch top-ups');
+    }
+
+    const topUps = await response.json();
+    return topUps;
+    
+  } catch (error) {
+    console.error('Error fetching ', error);
   }
 }
 
 export async function getAnalytics() {
-  
+       try {
+    const response = await fetch(url + "/issues/analytics/", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch analytics');
+    }
+
+    const analytics = await response.json();
+    console.log(analytics)
+    return analytics;
+    
+  } catch (error) {
+    console.error('Error fetching analytics', error);
+  }
 }
 
 export async function fetchUsers() {
-  
+       try {
+    const response = await fetch(url + "/users/", {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch users');
+    }
+
+    const users = await response.json();
+    console.log(users)
+    return users;
+    
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  }
 }
 
-export async function toggleUserStatus() {
-  
+export async function toggleUserStatus(data) {
+   const accessToken = sessionStorage.getItem("accessToken")
+     const response = await fetch(url + "/users/update-status/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
+    },
+    body: JSON.stringify(data),
+  });
+  const resData = await response.json();
+
+  return resData;
+}
+
+export async function createOffices(formData) {
+      try {
+      const response = await fetch(url + '/offices/create/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem("accessToken")}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+      console.log(data.errors.name[0])
+
+      // if (!response.ok) {
+      //   throw new Error(data.message || response.statusText);
+      // }
+
+      return data
+
+      // setMessage({ text: 'Office created successfully!', type: 'success' });
+      // setFormData({ name: '', location: '' });
+    } catch (error) {
+      console.log(error.message) 
+      // setMessage({ text: `Error: ${errorMessage}`, type: 'error' });
+    } finally {
+      // setIsSubmitting(false);
+    }
 }

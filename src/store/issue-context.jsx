@@ -2,6 +2,7 @@ import { createContext, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getAllTopUps,
+  getAllTopUpsByDate,
   getOffices,
   getServices,
   listAllIssues,
@@ -37,6 +38,7 @@ export const IssueContext = createContext({
   fetchServices: () => {},
   fetchIssues: () => {},
   fetchResolvedIssues: () => {},
+  fetchTopUpByDate: ()=>{},
   resolvedIssuesList: () => {},
   fetchUnResolvedIssues: () => {},
   fetchResolvedIssuesByDate: ()=>{},
@@ -132,6 +134,11 @@ export default function ReportIssueContextProvider({ children }) {
     const allTopUps = await getAllTopUps();
     setTopUpList(allTopUps);
   }, []);
+
+   const fetchTopUpByDate = useCallback(async () => {
+    const filteredTopUps = await getAllTopUpsByDate(issueDate);
+    setTopUpList(filteredTopUps);
+  }, [issueDate]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -258,6 +265,7 @@ export default function ReportIssueContextProvider({ children }) {
     fetchResolvedIssuesByDate: fetchResolvedIssuesByDate,
     fetchUnresolvedIssuesByDate:fetchUnresolvedIssuesByDate,
     fetchTopUps: fetchTopUps,
+    fetchTopUpByDate: fetchTopUpByDate,
     topUpList: topUpList,
     resolvedIssuesList: resolvedIssuesList,
     unResolvedIssuesList: unResolvedIssuesList,

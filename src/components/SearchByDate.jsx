@@ -1,19 +1,14 @@
 import { useContext } from "react";
 import { IssueContext } from "../store/issue-context";
 
-export default function SearchByDate() {
+export default function SearchByDate({handleSubmit}) {
 
-  const {handleIssueDateChange, issueDate, fetchUnresolvedIssuesByDate} = useContext(IssueContext)
-
-  async function handleSubmit(e){
-    e.preventDefault()
-    await fetchUnresolvedIssuesByDate()
-  }
+  const {handleIssueDateChange, issueDate} = useContext(IssueContext)
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mb-6">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={(e)=>handleSubmit(e)}
         className="flex flex-col md:flex-row items-center gap-4"
       >
         <div className="w-full md:w-auto">

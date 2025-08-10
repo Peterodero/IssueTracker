@@ -5,7 +5,7 @@ import SearchByDate from "../SearchByDate";
 
 export default function ViewTopUp() {
   const [loadingData, setLoadingData] = useState(false);
-  const { fetchTopUps, topUpList } = useContext(IssueContext);
+  const { fetchTopUps,fetchTopUpByDate, topUpList } = useContext(IssueContext);
 
   useEffect(() => {
     const loadData = async () => {
@@ -30,6 +30,11 @@ export default function ViewTopUp() {
     );
   }
 
+  async function handleSubmitDate(e){
+    e.preventDefault()
+    await fetchTopUpByDate()
+  }
+
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
@@ -37,7 +42,7 @@ export default function ViewTopUp() {
           Top-Up Records
         </h2>
 
-        <SearchByDate/>
+        <SearchByDate handleSubmit={handleSubmitDate}/>
 
         {/* Top-Ups Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden md:w-4xl">

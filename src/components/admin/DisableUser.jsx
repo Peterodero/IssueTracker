@@ -34,7 +34,7 @@ export default function DisableUser() {
   const filteredUsers = users?.filter(
     (user) =>
       user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      user.phone_number.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleStatusToggle = (user) => {
@@ -44,8 +44,8 @@ export default function DisableUser() {
 
   const confirmToggle = () => {
     mutate({
-      userId: selectedUser.id,
-      isActive: !selectedUser.is_active,
+      id: selectedUser.id,
+      is_active: !selectedUser.is_active,
     });
   };
 
@@ -126,11 +126,11 @@ export default function DisableUser() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{user.email}</div>
+                      <div className="text-sm text-gray-900">{user.phone_number}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                        {user.role}
+                        {user.is_admin ? "Admin" : "Support Staff"}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -172,8 +172,8 @@ export default function DisableUser() {
 
       {/* Confirmation Modal */}
       {showConfirmation && (
-        <Modal onClose={() => setShowConfirmation(false)}>
-          <div className="bg-white p-6 rounded-lg max-w-sm mx-auto">
+        <Modal>
+          <div className=" p-1 rounded-lg max-w-sm mx-auto">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               Confirm Action
             </h3>

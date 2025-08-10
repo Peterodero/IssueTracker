@@ -2,7 +2,7 @@ import { Card, Progress, Tag, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
 export default function StatusSummary({ data }) {
-  const total = data.reduce((sum, item) => sum + item.count, 0);
+  // const total = data.reduce((sum, item) => sum + item.count, 0);
   
   return (
     <Card 
@@ -15,24 +15,37 @@ export default function StatusSummary({ data }) {
         </span>
       }
     >
-      {data.map((item) => (
-        <div key={item.status} style={{ marginBottom: 16 }}>
+      {/* {data.map((item) => ( */}
+        <div style={{ marginBottom: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-            <Tag color={getStatusColor(item.status)}>{item.status.toUpperCase()}</Tag>
+            <Tag color={getStatusColor("UNRESOLVED")}>UNRESOLVED ISSUES</Tag>
             <span>
-              {item.count} ({Math.round((item.count / total) * 100)}%)
+              {data.unresolved_issues} ({Math.round((data.unresolved_issues / data.total_issues) * 100)}%)
             </span>
           </div>
           <Progress 
-            percent={Math.round((item.count / total) * 100)}
-            strokeColor={getStatusColor(item.status)}
+            percent={data.unresolved_issues && Math.round((data.unresolved_issues  / data.total_issues) * 100)}
+            strokeColor={getStatusColor("UNRESOLVED")}
             showInfo={false}
             strokeLinecap="round"
           />
         </div>
-      ))}
+         <div style={{ marginBottom: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <Tag color={getStatusColor("RESOLVED")}>RESOLVED ISSUES</Tag>
+            <span>
+              {data.resolved_issues} ({Math.round((data.resolved_issues / data.total_issues) * 100)}%)
+            </span>
+          </div>
+          <Progress 
+            percent={data.unresolved_issues && Math.round((data.resolved_issues / data.total_issues) * 100)}
+            strokeColor={getStatusColor("RESOLVED")}
+            showInfo={false}
+            strokeLinecap="round"
+          />
+        </div>
       <div style={{ marginTop: 16, fontWeight: 500 }}>
-        Total Issues: {total}
+        Total Issues: {data.total_issues}
       </div>
     </Card>
   );
