@@ -363,7 +363,6 @@ export async function getAnalytics() {
     }
 
     const analytics = await response.json();
-    console.log(analytics)
     return analytics;
     
   } catch (error) {
@@ -420,20 +419,18 @@ export async function createOffices(formData) {
         body: JSON.stringify(formData)
       });
 
-      const data = await response.json();
-      console.log(data.errors.name[0])
+      console.log(response.status)
 
-      // if (!response.ok) {
-      //   throw new Error(data.message || response.statusText);
-      // }
+      const data = await response.json();
+      // console.log(data.errors.name[0])
+
+      if (!response.ok) {
+       return 
+      }
 
       return data
-
-      // setMessage({ text: 'Office created successfully!', type: 'success' });
-      // setFormData({ name: '', location: '' });
     } catch (error) {
       console.log(error.message) 
-      // setMessage({ text: `Error: ${errorMessage}`, type: 'error' });
     } finally {
       // setIsSubmitting(false);
     }

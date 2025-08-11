@@ -3,7 +3,6 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 
 export default function StatusSummary({ data }) {
   // const total = data.reduce((sum, item) => sum + item.count, 0);
-  console.log(data.total_issues)
   return (
     <Card 
       title={

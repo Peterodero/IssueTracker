@@ -50,9 +50,12 @@ export default function DisableUser() {
   };
 
   if (isLoading) {
-    return <LoadingIndicator />;
+    return (
+      <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
+        <LoadingIndicator />
+      </div>
+    );
   }
-
   if (isError) {
     return (
       <div className="md:ml-110">
@@ -102,7 +105,7 @@ export default function DisableUser() {
                     Username
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Email
+                    Phone Number
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Role
@@ -126,7 +129,9 @@ export default function DisableUser() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{user.phone_number}</div>
+                      <div className="text-sm text-gray-900">
+                        {user.phone_number}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">

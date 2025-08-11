@@ -1,20 +1,14 @@
 import { Card, Row, Col, Tooltip } from 'antd';
 import { HeatMapOutlined } from '@ant-design/icons';
 
-export default function OfficeHeatmap({ offices }) {
-  // // Generate mock heatmap data (replace with real data from API)
-  // const heatmapData = offices.map(office => ({
-  //   name: office.office__name,
-  //   value: office.count,
-  //   intensity: Math.min(100, Math.round((office.count / Math.max(...offices.map(o => o.count))) * 100))
-  // }));
+export default function OfficeHeatmap({ offices,handleDeleteOffice }) {
 
   const getIntensityColor = (intensity) => {
     if (intensity > 80) return '#f5222d';
     if (intensity > 60) return '#fa8c16';
     if (intensity > 40) return '#faad14';
     if (intensity > 20) return '#a0d911';
-    return '#52c41a';
+    return ' #88E788';
   };
 
   return (
@@ -35,6 +29,8 @@ export default function OfficeHeatmap({ offices }) {
                 backgroundColor: getIntensityColor(office.intensity),
                 padding: '12px 5px',
                 borderRadius: 4,
+                display: 'flex',
+                flexDirection: 'column',
                 textAlign: 'center',
                 color: '#fff',
                 fontWeight: 'bold',
@@ -47,7 +43,8 @@ export default function OfficeHeatmap({ offices }) {
                 }
               }}>
                 <span className='text-sm text-black'>{office.office_name}</span><br></br>
-                {`${office.total_issues} issues`}
+                <span className='text-sm text-gray-500'>{`${office.total_issues} issues`}</span>
+                <button className=' items-center text-red-500 mt-2' onClick={()=>handleDeleteOffice(office.office_id)}>Delete</button>
               </div>
             </Tooltip>
           </Col>

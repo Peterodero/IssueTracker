@@ -24,7 +24,7 @@ export default function ViewTopUp() {
 
   if (loadingData) {
     return (
-      <div className="flex items-center justify-center md:ml-150">
+      <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
         <LoadingIndicator />
       </div>
     );

@@ -6,7 +6,7 @@ import DistributionCharts from "./DistributionCharts";
 import ResolutionMetrics from "./ResolutionMetrics";
 import ActivityFeed from "./ActivityFeed";
 import OfficeHeatmap from "./OfficeHeatmap";
-import {getAnalytics} from "../../util/http"
+import {getAnalytics, url} from "../../util/http"
 
 export default function AnalyticsPage() {
   const [analyticsData, setAnalyticsData] = useState({
@@ -31,9 +31,33 @@ export default function AnalyticsPage() {
     fetchData();
   }, []);
 
+    async function handleDeleteOffice(id){
+        const response = await fetch(url + "/offices/delete/", {
+          method: "POST", 
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
+          },
+          body: JSON.stringify({id:id})
+        });
+      
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || "Failed to resolve issue");
+        }
+      
+        const resData = await response.json();
+        // console.log(resData)
+
+        setLoading(true)
+        await getAnalytics()
+        setLoading(false)
+        return resData;
+    }
+
   if (loading) {
     return (
-      <div className="flex items-start justify-center min-h-screen md:ml-150">
+      <div className="flex items-start justify-center h-screen w-screen fixed top-30 left-0">
         <Spin size="large" className="text-orange-500" />
       </div>
     );
@@ -84,7 +108,7 @@ export default function AnalyticsPage() {
           </Col>
           <Col xs={24} lg={12}>
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 h-full">
-              <OfficeHeatmap offices={analyticsData.office_analytics} />
+              <OfficeHeatmap offices={analyticsData.office_analytics} handleDeleteOffice={handleDeleteOffice}/>
             </div>
           </Col>
         </Row>

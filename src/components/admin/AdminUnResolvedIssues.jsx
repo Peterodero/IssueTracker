@@ -8,8 +8,11 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchByDate from "../SearchByDate";
 
 export default function AdminUnresolvedIssues() {
-  const { fetchUnResolvedIssues,fetchUnresolvedIssuesByDate, unResolvedIssuesList } =
-    useContext(IssueContext);
+  const {
+    fetchUnResolvedIssues,
+    fetchUnresolvedIssuesByDate,
+    unResolvedIssuesList,
+  } = useContext(IssueContext);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
@@ -55,20 +58,20 @@ export default function AdminUnresolvedIssues() {
     console.log(message);
   }
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setOpenModal(false);
     navigate("/admin/admin_unresolved");
   };
 
-    async function handleSubmitDate(e){
-    e.preventDefault()
-    await fetchUnresolvedIssuesByDate()
+  async function handleSubmitDate(e) {
+    e.preventDefault();
+    await fetchUnresolvedIssuesByDate();
   }
 
   if (loadingData) {
     return (
-      <div className="flex items-center justify-center md:ml-150">
+      <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
         <LoadingIndicator />
       </div>
     );
@@ -80,8 +83,8 @@ export default function AdminUnresolvedIssues() {
         <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Unresolved Issues
         </h2>
-        
-        <SearchByDate handleSubmit={handleSubmitDate}/>
+
+        <SearchByDate handleSubmit={handleSubmitDate} />
 
         {/* Issues Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -146,7 +149,9 @@ export default function AdminUnresolvedIssues() {
                       {/* Office */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col">
-                          <span className="font-medium text-gray-900">{officeName}</span>
+                          <span className="font-medium text-gray-900">
+                            {officeName}
+                          </span>
                           {officeLocation && (
                             <span className="text-xs text-gray-500">
                               {officeLocation}
@@ -195,7 +200,7 @@ export default function AdminUnresolvedIssues() {
 
                       {/* Details */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link 
+                        <Link
                           to={`/admin/view-attachment/${issue.id}`}
                           className="text-orange-500 hover:text-orange-700 font-medium"
                         >

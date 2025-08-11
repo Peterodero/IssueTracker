@@ -12,10 +12,15 @@ export default function AdminResolvedIssues() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
 
-
   const navigate = useNavigate();
 
-  const { fetchResolvedIssues, resolvedIssuesList, fetchResolvedIssuesByDate, issueDate, handleIssueDateChange } = useContext(IssueContext);
+  const {
+    fetchResolvedIssues,
+    resolvedIssuesList,
+    fetchResolvedIssuesByDate,
+    issueDate,
+    handleIssueDateChange,
+  } = useContext(IssueContext);
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,7 +39,7 @@ export default function AdminResolvedIssues() {
 
   if (loadingData) {
     return (
-      <div className="flex items-center justify-center md:ml-150">
+      <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
         <LoadingIndicator />
       </div>
     );
@@ -46,10 +51,10 @@ export default function AdminResolvedIssues() {
     navigate(1);
   };
 
-  const handleSubmitDate = async(e) => {
-    e.preventDefault()
-    await fetchResolvedIssuesByDate()
-  }
+  const handleSubmitDate = async (e) => {
+    e.preventDefault();
+    await fetchResolvedIssuesByDate();
+  };
 
   async function handleUnResolveIssue(issue) {
     try {
@@ -73,46 +78,53 @@ export default function AdminResolvedIssues() {
     setOpenModal(true);
   }
 
-
-
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Resolved Issues
         </h2>
-        
+
         {/* Search Form */}
         <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-          <form onSubmit={handleSubmitDate} className="flex flex-col md:flex-row items-center gap-4">
+          <form
+            onSubmit={handleSubmitDate}
+            className="flex flex-col md:flex-row items-center gap-4"
+          >
             <div className="w-full md:w-auto">
-              <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="start-date"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Start date
               </label>
-              <input 
-                id="start-date" 
+              <input
+                id="start-date"
                 name="startDate"
                 onChange={handleIssueDateChange}
                 value={issueDate.startDate}
-                type="date" 
+                type="date"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
               />
             </div>
             <div className="w-full md:w-auto">
-              <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="end-date"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 End date
               </label>
-              <input 
-                id="end-date" 
+              <input
+                id="end-date"
                 name="endDate"
                 onChange={handleIssueDateChange}
                 value={issueDate.endDate}
-                type="date" 
+                type="date"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
               />
             </div>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="w-full md:w-auto mt-6 md:mt-6 px-6 py-2 bg-orange-300 text-white font-medium rounded-md hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
             >
               Search Issues
@@ -183,7 +195,9 @@ export default function AdminResolvedIssues() {
                       {/* Office */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col">
-                          <span className="font-medium text-gray-900">{officeName}</span>
+                          <span className="font-medium text-gray-900">
+                            {officeName}
+                          </span>
                           {officeLocation && (
                             <span className="text-xs text-gray-500">
                               {officeLocation}
@@ -237,7 +251,7 @@ export default function AdminResolvedIssues() {
 
                       {/* Details */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link 
+                        <Link
                           to={`/admin/view-attachment/${issue.id}`}
                           className="text-orange-500 hover:text-orange-700 font-medium"
                         >
