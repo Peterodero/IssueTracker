@@ -184,7 +184,7 @@ export default function AdminUnresolvedIssues() {
                         </div>
                       </td>
 
-                      {/* Issue Details */}
+                      {/* Issue */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="font-medium text-gray-900">
                           {issue.type || "No type specified"}

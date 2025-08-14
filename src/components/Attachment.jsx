@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import LoadingIndicator from "../UI/LoadingIndicator";
-import ErrorBlock from "../UI/ErrorBlock";
-import { getIssueDetails } from "../../util/http";
-import { formatDate } from "../../util/date";
+import LoadingIndicator from "./UI/LoadingIndicator";
+import ErrorBlock from "./UI/ErrorBlock";
+import { getIssueDetails } from "../util/http";
+import { formatDate } from "../util/date";
+
+import { DocumentIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 export default function ViewAttachment() {
   const issueId = useParams();
@@ -102,7 +104,7 @@ export default function ViewAttachment() {
           <h2 className="text-xl font-semibold mb-4 text-center">
             File Attachment
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:ml-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {issue.attachments.map((attachment, index) => (
               <AttachmentPreview
                 key={index}
@@ -142,30 +144,32 @@ function AttachmentPreview({ url }) {
   const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
 
   return (
-    <div className="border rounded-md items-center overflow-hidden md:w-3xl">
-      {isImage ? (
-        <div className="flex-1 flex items-center justify-center overflow-hidden bg-gray-50">
+    <div className="border rounded-md overflow-hidden h-full flex flex-col">
+      <div className="flex-1 flex items-center justify-center bg-gray-50 min-h-[200px] max-h-[300px] overflow-hidden">
+        {isImage ? (
           <img
             src={url}
             alt="Attachment"
-            className="object-contain max-h-full max-w-full p-2"
+            className="object-contain w-full h-full p-2"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = "/placeholder-image.png";
             }}
           />
-        </div>
-      ) : (
-        <div className="bg-gray-100 h-48 flex items-center justify-center">
-          <span className="text-gray-500">File Attachment</span>
-        </div>
-      )}
-      <div className="p-3 bg-gray-50">
+        ) : (
+          <div className="p-4 text-center">
+            <DocumentIcon className="h-12 w-12 mx-auto text-gray-400" />
+            <span className="text-gray-500 mt-2 block">File Attachment</span>
+          </div>
+        )}
+      </div>
+      <div className="p-3 bg-gray-50 border-t">
         <a
           href={url}
           download
-          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center justify-center gap-1"
         >
+          <ArrowDownTrayIcon className="h-4 w-4" />
           Download
         </a>
       </div>

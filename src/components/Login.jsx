@@ -7,16 +7,24 @@ import ErrorBlock from "./UI/ErrorBlock";
 
 export default function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(true);
+  const [errLogin, setErrLogin] = useState("")
   const navigate = useNavigate();
 
-  const { mutate, isError, isPending, error } = useMutation({
+  const { mutate, isPending, } = useMutation({
     mutationFn: authenticateUser,
     onSuccess: (data) => {
       sessionStorage.setItem("accessToken", data.access);
       sessionStorage.setItem("refreshToken", data.refresh);
       sessionStorage.setItem("role", data.role);
 
-      navigate(data.role === 'admin' ? "/admin" : "/landing");
+      if (data.role === 'admin'){
+        navigate("/admin")
+      } else if(data.role === 'user'){
+        navigate("/landing")
+      } else {
+        setErrLogin(data)
+        return
+      }
     },
   });
 
@@ -101,13 +109,11 @@ export default function Login() {
           </div>
         </form>
 
-        {isError && (
+        {errLogin && (
           <div className="mt-6">
             <ErrorBlock
               title="Login Failed"
-              message={
-                error?.detail || "Invalid credentials. Please try again."
-              }
+              message={errLogin}
             />
           </div>
         )}

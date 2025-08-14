@@ -282,6 +282,20 @@ export async function listUnResolvedIssuesByDate(date) {
   }
 }
 
+export async function addComment(issueId, text) {
+  const response = await fetch(`/api/issues/${issueId}/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text }),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to add comment');
+  }
+  return response.json();
+}
+
 
 export async function updateTopUp(formData) {
     const accessToken = sessionStorage.getItem("accessToken")
@@ -385,7 +399,6 @@ export async function fetchUsers() {
     }
 
     const users = await response.json();
-    console.log(users)
     return users;
     
   } catch (error) {

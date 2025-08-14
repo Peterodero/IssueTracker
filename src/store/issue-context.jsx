@@ -88,18 +88,18 @@ export default function ReportIssueContextProvider({ children }) {
   const fetchServices = useCallback(async () => {
     const services = await getServices();
     setServiceList(services);
-    console.log(services);
+    // console.log(services);
   }, []);
 
   const fetchIssues = useCallback(async () => {
     const issues = await listAllIssues();
-    console.log(issues.data);
+    // console.log(issues.data);
     setIssuesList(issues.data);
   }, []);
 
   const fetchResolvedIssues = useCallback(async () => {
     const resolvedIssues = await listResolvedIssues();
-    console.log(resolvedIssues);
+    // console.log(resolvedIssues);
     setResolvedIssuesList(resolvedIssues.data);
   }, []);
 
@@ -111,7 +111,6 @@ export default function ReportIssueContextProvider({ children }) {
       }
     })
 
-    console.log(issueDate)
   }
 
     const fetchResolvedIssuesByDate = useCallback(async () => {
@@ -146,7 +145,7 @@ export default function ReportIssueContextProvider({ children }) {
     if (name === "office") {
       const selectedOffice = officeList.find((office) => office.name === value);
 
-      console.log(selectedOffice.id);
+      // console.log(selectedOffice.id);
 
       setFormData((prevState) => {
         return {

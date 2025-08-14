@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import { issueTypes } from "../../data/model";
+import Select from "react-select";
 
 export default function ReportIssueForm() {
   const issueCtx = useContext(IssueContext);
@@ -9,42 +10,50 @@ export default function ReportIssueForm() {
   const handlePhotoChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
-    const validTypes = ['image/png', 'image/jpeg', 'application/pdf', 'text/plain', 'text/markdown', 'text/csv'];
+    const validTypes = [
+      "image/png",
+      "image/jpeg",
+      "application/pdf",
+      "text/plain",
+      "text/markdown",
+      "text/csv",
+    ];
     const maxSize = 5 * 1024 * 1024; // 5MB
-    
-    const files = Array.from(e.target.files).filter(file => 
-      validTypes.includes(file.type) && file.size <= maxSize
+
+    const files = Array.from(e.target.files).filter(
+      (file) => validTypes.includes(file.type) && file.size <= maxSize
     );
 
     if (files.length !== e.target.files.length) {
-      alert('Only PNG, JPG, PDF up to 5MB are allowed.');
+      alert("Only PNG, JPG, PDF up to 5MB are allowed.");
       return;
     }
 
-    const urls = files.map(file => URL.createObjectURL(file));
-    setPreviewUrls(prev => [...prev, ...urls]);
-    
+    const urls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls((prev) => [...prev, ...urls]);
+
     // Update attachments in formData
-    const currentAttachments = Array.isArray(issueCtx.formData.attachments) 
-      ? issueCtx.formData.attachments 
+    const currentAttachments = Array.isArray(issueCtx.formData.attachments)
+      ? issueCtx.formData.attachments
       : [];
     issueCtx.updateAttachments([...currentAttachments, ...files]);
-    
-    e.target.value = '';
+
+    e.target.value = "";
   };
 
   const removeImage = (indexToRemove) => {
     URL.revokeObjectURL(previewUrls[indexToRemove]);
-    setPreviewUrls(prev => prev.filter((_, i) => i !== indexToRemove));
-    
-    const updatedAttachments = issueCtx.formData.attachments
-      .filter((_, i) => i !== indexToRemove);
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== indexToRemove));
+
+    const updatedAttachments = issueCtx.formData.attachments.filter(
+      (_, i) => i !== indexToRemove
+    );
     issueCtx.updateAttachments(updatedAttachments);
   };
 
   useEffect(() => {
     return () => {
-      previewUrls.forEach(url => URL.revokeObjectURL(url));
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [previewUrls]);
 
@@ -54,37 +63,84 @@ export default function ReportIssueForm() {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Locate Office <span className="text-red-500">*</span>
         </label>
-        <select
-          value={issueCtx.formData.officeName || ""}
-          name="office"
-          onChange={issueCtx.handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+        <Select
+          options={issueCtx.officeList.map((office) => ({
+            value: office.name,
+            label: office.name,
+          }))}
+          value={{
+            value: issueCtx.formData.officeName || "",
+            label: issueCtx.formData.officeName || "Select an office",
+          }}
+          onChange={(selectedOption) => {
+            issueCtx.handleChange({
+              target: {
+                name: "office",
+                value: selectedOption.value,
+              },
+            });
+          }}
+          placeholder="Type to search offices..."
+          className="w-full"
+          classNames={{
+            control: (state) =>
+              `min-h-[42px] border border-gray-300 ${
+                state.isFocused
+                  ? "!border-orange-300 !ring-2 !ring-orange-200"
+                  : ""
+              }`,
+            option: (state) =>
+              `${state.isSelected ? "!bg-orange-500" : ""} ${
+                state.isFocused ? "!bg-orange-100" : ""
+              }`,
+            menu: () => "!mt-1",
+            dropdownIndicator: () => "text-gray-400",
+            indicatorSeparator: () => "!bg-gray-300",
+          }}
           required
-        >
-          <option value="">Select an office</option>
-          {issueCtx.officeList.map((office) => (
-            <option key={office.id} value={office.name}>{office.name}</option>
-          ))}
-        </select>
+        />
       </div>
-
       {issueCtx.formData.office && (
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Service Platform <span className="text-red-500">*</span>
           </label>
-          <select
-            value={issueCtx.formData.serviceName}
-            name="service"
-            onChange={issueCtx.handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+          <Select
+            options={issueCtx.serviceList.map((service) => ({
+              value: service.name,
+              label: service.name,
+            }))}
+            value={{
+              value: issueCtx.formData.serviceName || "",
+              label: issueCtx.formData.serviceName || "Select a service",
+            }}
+            onChange={(selectedOption) => {
+              issueCtx.handleChange({
+                target: {
+                  name: "service",
+                  value: selectedOption.value,
+                },
+              });
+            }}
+            placeholder="Type to search services..."
+            className="w-full"
+            classNames={{
+              control: (state) =>
+                `min-h-[42px] border border-gray-300 ${
+                  state.isFocused
+                    ? "!border-orange-300 !ring-2 !ring-orange-200"
+                    : ""
+                }`,
+              option: (state) =>
+                `${state.isSelected ? "!bg-orange-500" : ""} ${
+                  state.isFocused ? "!bg-orange-100" : ""
+                }`,
+              menu: () => "!mt-1",
+              dropdownIndicator: () => "text-gray-400",
+              indicatorSeparator: () => "!bg-gray-300",
+            }}
             required
-          >
-            <option value="">Select a service</option>
-            {issueCtx.serviceList.map((service) => (
-              <option key={service.id} value={service.name}>{service.name}</option>
-            ))}
-          </select>
+          />
         </div>
       )}
 
@@ -169,8 +225,17 @@ export default function ReportIssueForm() {
             </div>
             {issueCtx.formData.type.includes("Hardware") && (
               <p className="mt-2 text-sm text-red-500 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 Photo evidence is required for hardware issues
               </p>

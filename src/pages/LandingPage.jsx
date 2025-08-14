@@ -1,8 +1,8 @@
-import Header from "../components/Header";
 import { Outlet, useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/user/Sidebar";
 import ReportIssueContextProvider from "../store/issue-context";
 import { useEffect, useState } from "react";
+import Header from "../components/user/Header";
 
 export default function LandingPage() {
   const [isMobile, setIsMobile] = useState(false);

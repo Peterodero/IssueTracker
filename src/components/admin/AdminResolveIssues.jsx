@@ -7,7 +7,7 @@ import NotificationModal from "../issues/NotificationModal";
 import Modal from "../UI/Modal";
 
 export default function AdminResolvedIssues() {
-  const [loadingData, setLoadingData] = useState(false);
+  const [loadingData, setLoadingData] = useState(false); 
   const [openModal, setOpenModal] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
@@ -230,7 +230,7 @@ export default function AdminResolvedIssues() {
                         </div>
                       </td>
 
-                      {/* Issue Details */}
+                      {/* Issue */}
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
                           <span className="font-medium text-gray-900">

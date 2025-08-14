@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { IssueContext } from "../store/issue-context";
-import TopUpForm from "./airtimeTopUp/TopUpForm";
+import { IssueContext } from "../../store/issue-context";
+import TopUpForm from "../airtimeTopUp/TopUpForm";
 
 const UpdateTopUp = () => {
   const navigate = useNavigate();

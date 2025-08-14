@@ -4,23 +4,23 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import ReportIssuePage from "./components/issues/ReportIssue";
-import ViewIssues from "./components/ViewIssues";
-import UpdateTopUp from "./components/UpdateTopUp";
+import ReportIssuePage from "./components/user/ReportIssue";
+// import ViewIssues from "./components/ViewIssues";
+import UpdateTopUp from "./components/user/UpdateTopUp";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateOffices from "./components/admin/CreateOffices";
 import CreateServices from "./components/admin/CreateServices";
-import ResolvedIssues from "./components/issues/ResolvedIssues";
+import ResolvedIssues from "./components/user/ResolvedIssues";
 import AllIssues from "./components/issues/AllIssues";
 import ViewTopUp from "./components/airtimeTopUp/ViewTopUp";
-import ViewAttachment from "./components/admin/Attachment";
+import ViewAttachment from "./components/Attachment";
 import AdminLandingPage from "./components/admin/AdminLandingPage";
 import AdminUnresolvedIssues from "./components/admin/AdminUnResolvedIssues";
 import AnalyticsPage from "./components/admin/AnalyticsPage";
 import AdminResolvedIssues from "./components/admin/AdminResolveIssues";
-import UnresolvedIssues from "./components/issues/UnresolvedIssues";
+import UnresolvedIssues from "./components/user/UnresolvedIssues";
 import RegisterUser from "./components/admin/RegisterUser";
 import DisableUser from "./components/admin/DisableUser";
 
@@ -50,10 +50,10 @@ function App() {
               path: "reportIssue",
               element: <ReportIssuePage />,
             },
-            {
-              path: "viewIssues",
-              element: <ViewIssues />,
-            },
+            // {
+            //   path: "viewIssues",
+            //   element: <ViewIssues />,
+            // },
             {
               path: "resolveTopUp",
               element: <UpdateTopUp />,
@@ -74,7 +74,10 @@ function App() {
               path: "viewTopUps",
               element: <ViewTopUp />,
             },
-
+            {
+              path: "view-attachment/:issue_id",
+              element: <ViewAttachment />,
+            },
           ],
         },
       ],
@@ -94,7 +97,7 @@ function App() {
             },
             {
               path: "analytics",
-              element: <AnalyticsPage/>
+              element: <AnalyticsPage />,
             },
             {
               path: "allIssues",
@@ -110,7 +113,7 @@ function App() {
             },
             {
               path: "disable-user",
-              element: <DisableUser/>
+              element: <DisableUser />,
             },
             {
               path: "register-user",
@@ -129,16 +132,15 @@ function App() {
               path: "viewTopUps",
               element: <ViewTopUp />,
             },
-            {
-              path: "viewIssues",
-              element: <ViewIssues />,
-            },
-            
+            // {
+            //   path: "viewIssues",
+            //   element: <ViewIssues />,
+            // },
+
             {
               path: "view-attachment/:issue_id",
               element: <ViewAttachment />,
             },
-            
           ],
         },
       ],

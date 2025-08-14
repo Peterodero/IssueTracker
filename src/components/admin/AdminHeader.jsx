@@ -24,6 +24,8 @@ export default function AdminHeader({
     navigate("/login");
   }
 
+  console.log(sessionStorage.getItem("role"))
+
   return (
     <>
       {/* Header */}
