@@ -184,9 +184,9 @@ export default function UnresolvedIssues() {
 
                         {/* Issue Details */}
                         <td className="px-2 py-4">
-                          <div className="flex flex-col w-sm">
+                          <div className="flex flex-col">
                             <span className="font-medium text-gray-900">
-                              {issue.type || "No type specified"}
+                              <p>{issue.type || "No type specified"}</p>
                             </span>
                           </div>
                         </td>
