@@ -78,8 +78,8 @@ export default function ResolvedIssues() {
   };
 
   return (
-    <div className="min-h-screen w-fit bg-white p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white p-6">
+      <div className="mx-auto">
         <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Resolved Issues
         </h2>
@@ -89,28 +89,28 @@ export default function ResolvedIssues() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-orange-300">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     #
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Office
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Service
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Reported By
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Issue
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Details
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -132,7 +132,7 @@ export default function ResolvedIssues() {
                         className="hover:bg-gray-50 transition-colors"
                       >
                         {/* Index Number */}
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <span
                             className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
                               index % 2 === 0
@@ -145,7 +145,7 @@ export default function ResolvedIssues() {
                         </td>
 
                         {/* Office */}
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span className="font-medium text-gray-900">
                               {officeName}
@@ -159,7 +159,7 @@ export default function ResolvedIssues() {
                         </td>
 
                         {/* Service */}
-                        <td className="px-6 py-4">
+                        <td className="px-2 py-4">
                           <div className="flex flex-col">
                             <span className="text-gray-900">{serviceName}</span>
                             {serviceDesc && (
@@ -171,7 +171,7 @@ export default function ResolvedIssues() {
                         </td>
 
                         {/* Reporter */}
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span className="text-gray-900">{reporterName}</span>
                             {reporterPhone && (
@@ -183,25 +183,22 @@ export default function ResolvedIssues() {
                         </td>
 
                         {/* Issue Details */}
-                        <td className="px-6 py-4">
+                        <td className="px-2 py-4">
                           <div className="flex flex-col">
                             <span className="font-medium text-gray-900">
                               {issue.type || "No type specified"}
-                            </span>
-                            <span className="text-sm text-gray-600">
-                              {issue.description || "No description"}
                             </span>
                           </div>
                         </td>
 
                         {/* Status */}
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                             Resolved
                           </span>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <Link
                             to={`/landing/view-attachment/${issue.id}`}
                             className="text-orange-500 hover:text-orange-700 font-medium"
@@ -211,7 +208,7 @@ export default function ResolvedIssues() {
                         </td>
 
                         {/* Actions */}
-                        <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                        <td className="px-2 py-4 whitespace-nowrap space-x-2">
                           <button
                             onClick={() => setActiveCommentIssue(activeCommentIssue === issue.id ? null : issue.id)}
                             className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-400 transition-colors"
