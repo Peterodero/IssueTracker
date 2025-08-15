@@ -112,36 +112,6 @@ export default function UnresolvedIssues() {
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Actions
                   </th>
-                                    <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Reported By
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Issue
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Details
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Actions
-                  </th>
-                                                      <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Reported By
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Issue
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Details
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Actions
-                  </th>
                   
                 </tr>
               </thead>
@@ -214,7 +184,7 @@ export default function UnresolvedIssues() {
 
                         {/* Issue Details */}
                         <td className="px-2 py-4">
-                          <div className="flex flex-col w-3xl">
+                          <div className="flex flex-col w-sm">
                             <span className="font-medium text-gray-900">
                               {issue.type || "No type specified"}
                             </span>
