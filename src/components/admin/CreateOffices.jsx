@@ -32,7 +32,7 @@ const CreateOffices = () => {
         setMessage("Office creation successful!");
       }
       if (response.status === 400) {
-        setErrMessage(data.errors?.name?.[0]);
+        setErrMessage(data.errors?.non_field_errors?.[0]);
       }
 
       return data;
