@@ -112,6 +112,37 @@ export default function UnresolvedIssues() {
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Actions
                   </th>
+                                    <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Reported By
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Issue
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Details
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Actions
+                  </th>
+                                                      <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Reported By
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Issue
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Details
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Actions
+                  </th>
+                  
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -144,7 +175,7 @@ export default function UnresolvedIssues() {
                         </td>
 
                         {/* Office */}
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span className="font-medium text-gray-900">
                               {officeName}
@@ -158,7 +189,7 @@ export default function UnresolvedIssues() {
                         </td>
 
                         {/* Service */}
-                        <td className="px-6 py-4">
+                        <td className="px-2 py-4">
                           <div className="flex flex-col">
                             <span className="text-gray-900">{serviceName}</span>
                             {serviceDesc && (
@@ -170,7 +201,7 @@ export default function UnresolvedIssues() {
                         </td>
 
                         {/* Reporter */}
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span className="text-gray-900">{reporterName}</span>
                             {reporterPhone && (
@@ -182,8 +213,8 @@ export default function UnresolvedIssues() {
                         </td>
 
                         {/* Issue Details */}
-                        <td className="px-6 py-4">
-                          <div className="flex flex-col">
+                        <td className="px-2 py-4">
+                          <div className="flex flex-col w-3xl">
                             <span className="font-medium text-gray-900">
                               {issue.type || "No type specified"}
                             </span>
@@ -193,13 +224,13 @@ export default function UnresolvedIssues() {
                           </div>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                             Unresolved
                           </span>
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <Link
                             to={`/landing/view-attachment/${issue.id}`}
                             className="text-orange-500 hover:text-orange-700 font-medium"
@@ -209,7 +240,7 @@ export default function UnresolvedIssues() {
                         </td>
 
                         {/* Actions */}
-                        <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                        <td className="px-2 py-4 whitespace-nowrap space-x-2">
                           <button
                             onClick={() => setActiveCommentIssue(activeCommentIssue === issue.id ? null : issue.id)}
                             className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-400 transition-colors"
