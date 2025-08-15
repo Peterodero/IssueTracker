@@ -188,9 +188,6 @@ export default function UnresolvedIssues() {
                             <span className="font-medium text-gray-900">
                               {issue.type || "No type specified"}
                             </span>
-                            <span className="text-sm text-gray-600">
-                              {issue.description || "No description"}
-                            </span>
                           </div>
                         </td>
 
