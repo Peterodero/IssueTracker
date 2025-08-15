@@ -42,7 +42,7 @@ const UpdateTopUp = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 rounded-lg shadow md:ml-5 min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 md:w-5xl">
+    <div className="min-h-screen bg-white p-6">
       <div className="max-w-3xl mb-3 mx-auto bg-white rounded-xl shadow-md overflow-hidden p-5">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Update Airtime Top-Up

@@ -70,7 +70,7 @@ export default function UnresolvedIssues() {
 
   if (loadingData) {
     return (
-      <div className="flex items-center justify-center min-h-screen md:ml-150">
+      <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
         <LoadingIndicator />
       </div>
     );
@@ -79,7 +79,7 @@ export default function UnresolvedIssues() {
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
+        <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
           Unresolved Issues
         </h2>
 

@@ -72,11 +72,11 @@ const CreateOffices = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-4 md:p-6 md:w-4xl">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white p-4 md:p-6">
+      <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
           <div className="p-6 md:p-8">
-            <h2 className="text-2xl font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
+            <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
               Create New Office
             </h2>
 

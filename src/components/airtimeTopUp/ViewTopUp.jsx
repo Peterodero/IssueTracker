@@ -45,7 +45,7 @@ export default function ViewTopUp() {
         <SearchByDate handleSubmit={handleSubmitDate}/>
 
         {/* Top-Ups Table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden md:w-4xl">
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-orange-300">

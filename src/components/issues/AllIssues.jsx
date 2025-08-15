@@ -23,7 +23,7 @@ export default function AllIssues() {
 
   if (loadingData) {
     return (
-      <div className="flex items-center justify-center min-h-screen md:ml-150">
+      <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
         <LoadingIndicator />
       </div>
     );

@@ -93,7 +93,7 @@ export default function LandingPage() {
           />
         </div>
 
-        <div className="mt-8 ml-0 md:ml-65 p-4 md:p-0">
+        <div className="mt-8 ml-0 md:ml-65 p-4 md:p-0 w-screen mr-7">
           <ReportIssueContextProvider>
             <Outlet />
           </ReportIssueContextProvider>

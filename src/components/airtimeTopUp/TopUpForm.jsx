@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { IssueContext } from "../../store/issue-context";
 import { useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 export default function TopUpForm({ handleSubmit, errors }) {
   const { formData, officeList, serviceList, handleChange } = useContext(IssueContext);
@@ -9,54 +10,90 @@ export default function TopUpForm({ handleSubmit, errors }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-4 md:p-6">
       {/* Office Selection */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Office <span className="text-red-500">*</span>
-        </label>
-        <select
-          name="office"
-          value={formData.officeName}
-          onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 ${
-            errors.office ? "border-red-500" : "border-gray-300"
-          }`}
-        >
-          <option value="">Select Office</option>
-          {officeList.map((office) => (
-            <option key={office.id} value={office.name}>
-              {office.name}
-            </option>
-          ))}
-        </select>
-        {errors.office && (
-          <p className="text-red-500 text-xs mt-1">{errors.office}</p>
-        )}
-      </div>
+           <div className="mb-6">
+             <label className="block text-sm font-medium text-gray-700 mb-2">
+               Locate Office <span className="text-red-500">*</span>
+             </label>
+             <Select
+               options={officeList.map((office) => ({
+                 value: office.name,
+                 label: office.name,
+               }))}
+               value={{
+                 value: formData.officeName || "",
+                 label: formData.officeName || "Select an office",
+               }}
+               onChange={(selectedOption) => {
+                 handleChange({
+                   target: {
+                     name: "office",
+                     value: selectedOption.value,
+                   },
+                 });
+               }}
+               placeholder="Type to search offices..."
+               className="w-full"
+               classNames={{
+                 control: (state) =>
+                   `min-h-[42px] border border-gray-300 ${
+                     state.isFocused
+                       ? "!border-orange-300 !ring-2 !ring-orange-200"
+                       : ""
+                   }`,
+                 option: (state) =>
+                   `${state.isSelected ? "!bg-orange-500" : ""} ${
+                     state.isFocused ? "!bg-orange-100" : ""
+                   }`,
+                 menu: () => "!mt-1",
+                 dropdownIndicator: () => "text-gray-400",
+                 indicatorSeparator: () => "!bg-gray-300",
+               }}
+               required
+             />
+           </div>
 
       {/* Service Selection */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Service <span className="text-red-500">*</span>
-        </label>
-        <select
-          name="service"
-          value={formData.serviceName}
-          onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 ${
-            errors.service ? "border-red-500" : "border-gray-300"
-          }`}
-        >
-          <option value="">Select Service</option>
-          {serviceList.map((service) => (
-            <option key={service.id} value={service.name}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-        {errors.service && (
-          <p className="text-red-500 text-xs mt-1">{errors.service}</p>
-        )}
-      </div>
+      <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Service Platform <span className="text-red-500">*</span>
+          </label>
+          <Select
+            options={serviceList.map((service) => ({
+              value: service.name,
+              label: service.name,
+            }))}
+            value={{
+              value: formData.serviceName || "",
+              label: formData.serviceName || "Select a service",
+            }}
+            onChange={(selectedOption) => {
+              handleChange({
+                target: {
+                  name: "service",
+                  value: selectedOption.value,
+                },
+              });
+            }}
+            placeholder="Type to search services..."
+            className="w-full"
+            classNames={{
+              control: (state) =>
+                `min-h-[42px] border border-gray-300 ${
+                  state.isFocused
+                    ? "!border-orange-300 !ring-2 !ring-orange-200"
+                    : ""
+                }`,
+              option: (state) =>
+                `${state.isSelected ? "!bg-orange-500" : ""} ${
+                  state.isFocused ? "!bg-orange-100" : ""
+                }`,
+              menu: () => "!mt-1",
+              dropdownIndicator: () => "text-gray-400",
+              indicatorSeparator: () => "!bg-gray-300",
+            }}
+            required
+          />
+        </div>
 
       {/* SIM Number */}
       <div>
