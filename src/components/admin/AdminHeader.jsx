@@ -29,7 +29,7 @@ export default function AdminHeader({
   return (
     <>
       {/* Header */}
-      <header className="bg-white shadow-md p-4 flex items-center justify-between sticky top-0 z-50 border-b border-gray-200">
+      <header className="bg-white shadow-md p-4 flex items-center justify-between fixed top-0 right-0 left-0 z-50 border-b border-gray-200">
         <div className="flex items-center space-x-4">
           <button
             className="md:hidden bg-orange-500 text-white p-2 rounded-md hover:bg-orange-600 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300"
