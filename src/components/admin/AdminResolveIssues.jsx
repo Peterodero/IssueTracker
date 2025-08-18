@@ -1,16 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
-import { deleteIssue, unResolveIssue } from "../../util/http";
+import { deleteIssue, unResolveIssue, addComment } from "../../util/http";
 import { Link, useNavigate } from "react-router-dom";
 import NotificationModal from "../issues/NotificationModal";
 import Modal from "../UI/Modal";
 
 export default function AdminResolvedIssues() {
-  const [loadingData, setLoadingData] = useState(false); 
+  const [loadingData, setLoadingData] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
+  const [commentText, setCommentText] = useState("");
+  const [commentLoading, setCommentLoading] = useState(false);
+  const [activeCommentIssue, setActiveCommentIssue] = useState(null);
+  
 
   const navigate = useNavigate();
 
@@ -77,6 +81,23 @@ export default function AdminResolvedIssues() {
     }
     setOpenModal(true);
   }
+
+  const handleAddComment = async (issueId) => {
+    if (!commentText.trim()) return;
+
+    try {
+      setCommentLoading(true);
+      await addComment(issueId, commentText);
+      setCommentText("");
+      setActiveCommentIssue(null);
+      // Optionally refresh comments or show success message
+    } catch (err) {
+      setError(err.message || "Failed to add comment");
+      setOpenModal(true);
+    } finally {
+      setCommentLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white p-6">
@@ -148,10 +169,13 @@ export default function AdminResolvedIssues() {
                     Service
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    By
+                    Issue
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Issue
+                    Reported By
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Assigned To
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Status
@@ -159,7 +183,7 @@ export default function AdminResolvedIssues() {
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Details
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  <th className="px-6 py-3 text-xs font-bold text-black uppercase tracking-wider text-center">
                     Action
                   </th>
                 </tr>
@@ -173,110 +197,163 @@ export default function AdminResolvedIssues() {
                   const serviceDesc = issue.service?.description || "";
                   const reporterName = issue.reporter?.username || "Unknown";
                   const reporterPhone = issue.reporter?.phone_number || "";
+                  const assigned_to =
+                    issue.assigned_to?.username || "No user specified";
 
                   return (
-                    <tr
-                      key={issue.id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
-                      {/* Index Number */}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
-                            index % 2 === 0
-                              ? "bg-orange-100 text-orange-800"
-                              : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {index + 1}
-                        </span>
-                      </td>
-
-                      {/* Office */}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex flex-col">
-                          <span className="font-medium text-gray-900">
-                            {officeName}
-                          </span>
-                          {officeLocation && (
-                            <span className="text-xs text-gray-500">
-                              {officeLocation}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Service */}
-                      <td className="px-6 py-4">
-                        <div className="flex flex-col">
-                          <span className="text-gray-900">{serviceName}</span>
-                          {serviceDesc && (
-                            <span className="text-xs text-gray-500 truncate max-w-xs">
-                              {serviceDesc}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Reporter */}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex flex-col">
-                          <span className="text-gray-900">{reporterName}</span>
-                          {reporterPhone && (
-                            <span className="text-xs text-gray-500">
-                              {reporterPhone}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Issue */}
-                      <td className="px-6 py-4">
-                        <div className="flex flex-col">
-                          <span className="font-medium text-gray-900">
-                            {issue.type || "No type specified"}
-                          </span>
-                          <span className="text-sm text-gray-600">
-                            {issue.description || "No description"}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Status */}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Resolved
-                        </span>
-                      </td>
-
-                      {/* Details */}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <Link
-                          to={`/admin/view-attachment/${issue.id}`}
-                          className="text-orange-500 hover:text-orange-700 font-medium"
-                        >
-                          View Details
-                        </Link>
-                      </td>
-
-                      {/* Action */}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleDeleteIssue(issue)}
-                            className="px-3 py-1 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                    <>
+                      <tr
+                        key={issue.id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        {/* Index Number */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
+                              index % 2 === 0
+                                ? "bg-orange-100 text-orange-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
                           >
-                            Delete
-                          </button>
-                          <button
-                            onClick={() => handleUnResolveIssue(issue)}
-                            className="px-3 py-1 bg-orange-300 text-white rounded-md text-sm font-medium hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
+                            {index + 1}
+                          </span>
+                        </td>
+
+                        {/* Office */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex flex-col">
+                            <span className="font-medium text-gray-900">
+                              {officeName}
+                            </span>
+                            {officeLocation && (
+                              <span className="text-xs text-gray-500">
+                                {officeLocation}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Service */}
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col">
+                            <span className="text-gray-900">{serviceName}</span>
+                            {serviceDesc && (
+                              <span className="text-xs text-gray-500 truncate max-w-xs">
+                                {serviceDesc}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Issue */}
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col">
+                            <span className="font-medium text-gray-900">
+                              {issue.type || "No type specified"}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Reporter */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex flex-col">
+                            <span className="text-gray-900">
+                              {reporterName}
+                            </span>
+                            {reporterPhone && (
+                              <span className="text-xs text-gray-500">
+                                {reporterPhone}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        <td className="px-2 py-4">
+                          <div className="flex flex-col">
+                            <span className="font-small text-gray-500">
+                              {assigned_to}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Status */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Resolved
+                          </span>
+                        </td>
+
+                        {/* Details */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Link
+                            to={`/admin/view-attachment/${issue.id}`}
+                            className="text-orange-500 hover:text-orange-700 font-medium"
                           >
-                            Unresolve
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                            View Details
+                          </Link>
+                        </td>
+
+                        {/* Action */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => handleDeleteIssue(issue)}
+                              className="px-1 py-1 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              onClick={() =>
+                                setActiveCommentIssue(
+                                  activeCommentIssue === issue.id
+                                    ? null
+                                    : issue.id
+                                )
+                              }
+                              className="px-1 py-1 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-400 transition-colors"
+                            >
+                              {activeCommentIssue === issue.id
+                                ? "Cancel"
+                                : "Comment"}
+                            </button>
+                            <button
+                              onClick={() => handleUnResolveIssue(issue)}
+                              className="px-1 py-1 bg-orange-300 text-white rounded-md text-sm font-medium hover:bg-orange-400 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
+                            >
+                              Unresolve
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      {activeCommentIssue === issue.id && (
+                        <tr className="bg-gray-50">
+                          <td colSpan="8" className="px-6 py-4">
+                            <div className="flex items-start gap-4">
+                              <div className="flex-1">
+                                <textarea
+                                  value={commentText}
+                                  onChange={(e) =>
+                                    setCommentText(e.target.value)
+                                  }
+                                  placeholder="Add a comment..."
+                                  className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+                                  rows={3}
+                                  disabled={commentLoading}
+                                />
+                              </div>
+                              <button
+                                onClick={() => handleAddComment(issue.id)}
+                                disabled={!commentText.trim() || commentLoading}
+                                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-600 disabled:bg-orange-300 transition-colors"
+                              >
+                                <PaperAirplaneIcon className="h-5 w-5 mr-2" />
+                                {commentLoading ? "Posting..." : "Post Comment"}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   );
                 })}
               </tbody>

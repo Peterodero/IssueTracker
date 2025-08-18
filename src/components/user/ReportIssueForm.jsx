@@ -2,10 +2,18 @@ import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import { issueTypes } from "../../data/model";
 import Select from "react-select";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUsers } from "../../util/http";
 
 export default function ReportIssueForm() {
   const issueCtx = useContext(IssueContext);
   const [previewUrls, setPreviewUrls] = useState([]);
+
+  const { data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: fetchUsers,
+  });
+
 
   const handlePhotoChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -166,6 +174,58 @@ export default function ReportIssueForm() {
                 ))}
               </datalist>
             </div>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Assign To <span className="text-red-500">*</span>
+            </label>
+            <Select
+              options={users.map((user) => ({
+                value: user.id,
+                label: user.username,
+              }))}
+              value={
+                issueCtx.formData.assigned_to
+                  ? {
+                      value: issueCtx.formData.assigned_to,
+                      label:
+                        users.find(
+                          (u) => u.id === issueCtx.formData.assigned_to
+                        )?.username || "Unknown user",
+                    }
+                  : {
+                      value: "",
+                      label: "Select a user",
+                    }
+              }
+              onChange={(selectedOption) => {
+                issueCtx.handleChange({
+                  target: {
+                    name: "assigned_to",
+                    value: selectedOption.value,
+                  },
+                });
+              }}
+              placeholder="Type to search..."
+              className="w-full"
+              classNames={{
+                control: (state) =>
+                  `min-h-[42px] border border-gray-300 ${
+                    state.isFocused
+                      ? "!border-orange-300 !ring-2 !ring-orange-200"
+                      : ""
+                  }`,
+                option: (state) =>
+                  `${state.isSelected ? "!bg-orange-500" : ""} ${
+                    state.isFocused ? "!bg-orange-100" : ""
+                  }`,
+                menu: () => "!mt-1",
+                dropdownIndicator: () => "text-gray-400",
+                indicatorSeparator: () => "!bg-gray-300",
+              }}
+              required
+            />
           </div>
 
           <div className="mb-6">

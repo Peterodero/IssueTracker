@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
-import { unResolveIssue, addComment } from "../../util/http"; // Add addComment import
+import { unResolveIssue, addComment } from "../../util/http";
 import Modal from "../UI/Modal";
 import NotificationModal from "../issues/NotificationModal";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 export default function ResolvedIssues() {
   const [loadingData, setLoadingData] = useState(false);
@@ -14,7 +15,6 @@ export default function ResolvedIssues() {
   const [activeCommentIssue, setActiveCommentIssue] = useState(null);
   const [commentText, setCommentText] = useState("");
   const [commentLoading, setCommentLoading] = useState(false);
-  const navigate = useNavigate();
 
   const { fetchResolvedIssues, resolvedIssuesList } = useContext(IssueContext);
 
@@ -40,12 +40,6 @@ export default function ResolvedIssues() {
       </div>
     );
   }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setOpenModal(false);
-    navigate(1);
-  };
 
   async function handleUnResolveIssue(issue) {
     try {
@@ -99,10 +93,13 @@ export default function ResolvedIssues() {
                     Service
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Issue
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Reported By
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                    Issue
+                    Assigned To
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Status
@@ -117,6 +114,7 @@ export default function ResolvedIssues() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {resolvedIssuesList.map((issue, index) => {
+
                   const officeName = issue.office?.name || "No office assigned";
                   const officeLocation = issue.office?.location || "";
                   const serviceName =
@@ -124,6 +122,7 @@ export default function ResolvedIssues() {
                   const serviceDesc = issue.service?.description || "";
                   const reporterName = issue.reporter?.username || "Unknown";
                   const reporterPhone = issue.reporter?.phone_number || "";
+                  const assigned_to = issue.assigned_to?.username || "No user specified"
 
                   return (
                     <>
@@ -170,10 +169,21 @@ export default function ResolvedIssues() {
                           </div>
                         </td>
 
+                        {/* Issue Details */}
+                        <td className="px-2 py-4">
+                          <div className="flex flex-col">
+                            <span className="font-medium text-gray-900">
+                              {issue.type || "No type specified"}
+                            </span>
+                          </div>
+                        </td>
+
                         {/* Reporter */}
                         <td className="px-2 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
-                            <span className="text-gray-900">{reporterName}</span>
+                            <span className="text-gray-900">
+                              {reporterName}
+                            </span>
                             {reporterPhone && (
                               <span className="text-xs text-gray-500">
                                 {reporterPhone}
@@ -182,11 +192,10 @@ export default function ResolvedIssues() {
                           </div>
                         </td>
 
-                        {/* Issue Details */}
                         <td className="px-2 py-4">
                           <div className="flex flex-col">
-                            <span className="font-medium text-gray-900">
-                              {issue.type || "No type specified"}
+                            <span className="font-small text-gray-500">
+                              {assigned_to}
                             </span>
                           </div>
                         </td>
@@ -210,10 +219,18 @@ export default function ResolvedIssues() {
                         {/* Actions */}
                         <td className="px-2 py-4 whitespace-nowrap space-x-2">
                           <button
-                            onClick={() => setActiveCommentIssue(activeCommentIssue === issue.id ? null : issue.id)}
+                            onClick={() =>
+                              setActiveCommentIssue(
+                                activeCommentIssue === issue.id
+                                  ? null
+                                  : issue.id
+                              )
+                            }
                             className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-400 transition-colors"
                           >
-                            {activeCommentIssue === issue.id ? "Cancel" : "Comment"}
+                            {activeCommentIssue === issue.id
+                              ? "Cancel"
+                              : "Comment"}
                           </button>
                           <button
                             onClick={() => handleUnResolveIssue(issue)}
@@ -232,7 +249,9 @@ export default function ResolvedIssues() {
                               <div className="flex-1">
                                 <textarea
                                   value={commentText}
-                                  onChange={(e) => setCommentText(e.target.value)}
+                                  onChange={(e) =>
+                                    setCommentText(e.target.value)
+                                  }
                                   placeholder="Add a comment..."
                                   className="w-full border rounded-md p-2 focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
                                   rows={3}
@@ -244,6 +263,7 @@ export default function ResolvedIssues() {
                                 disabled={!commentText.trim() || commentLoading}
                                 className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-600 disabled:bg-orange-300 transition-colors"
                               >
+                                <PaperAirplaneIcon className="h-5 w-5 mr-2" />
                                 {commentLoading ? "Posting..." : "Post Comment"}
                               </button>
                             </div>
@@ -268,10 +288,12 @@ export default function ResolvedIssues() {
       {openModal && (
         <Modal>
           <NotificationModal
-            handleSubmit={handleSubmit}
             error={error}
             title={error ? "Error" : "Success"}
             mesg={message}
+            handleSubmit={() => {
+              setOpenModal(false);
+            }}
           />
         </Modal>
       )}

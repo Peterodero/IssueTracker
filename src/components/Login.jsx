@@ -16,6 +16,7 @@ export default function Login() {
       sessionStorage.setItem("accessToken", data.access);
       sessionStorage.setItem("refreshToken", data.refresh);
       sessionStorage.setItem("role", data.role);
+      sessionStorage.setItem("username", data.username);
 
       if (data.role === 'admin'){
         navigate("/admin")

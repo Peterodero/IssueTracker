@@ -19,6 +19,7 @@ export const IssueContext = createContext({
   formData: {
     office: "",
     service: "",
+    assigned_to: "",
     type: "",
     description: "",
     attachments: "",
@@ -55,6 +56,7 @@ export default function ReportIssueContextProvider({ children }) {
   const [formData, setFormData] = useState({
     office: "",
     service: "",
+    assigned_to: "",
     type: "",
     description: "",
     date: "",

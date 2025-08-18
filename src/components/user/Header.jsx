@@ -24,6 +24,8 @@ export default function Header({
     navigate("/login");
   }
 
+  const username = sessionStorage.getItem("username")
+
   return (
     <>
       {/* Header */}
@@ -46,7 +48,7 @@ export default function Header({
               />
             </svg>
           </button>
-          <h2 className="text-xl font-bold text-gray-800">Welcome</h2>
+          <h2 className="text-xl font-bold text-gray-800">Welcome {username}</h2>
         </div>
 
         <button
