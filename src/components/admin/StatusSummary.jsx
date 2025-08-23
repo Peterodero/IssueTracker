@@ -33,7 +33,7 @@ export default function StatusSummary({ data }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
             <Tag color={getStatusColor("RESOLVED")}>RESOLVED ISSUES</Tag>
             <span>
-              {data.resolved_issues} {data.resolved_issues && `(${Math.round((data.unresolved_issues / data.total_issues) * 100)}%)`}
+              {data.resolved_issues} {data.resolved_issues && `(${Math.round((data.resolved_issues / data.total_issues) * 100)}%)`}
             </span>
           </div>
           <Progress 

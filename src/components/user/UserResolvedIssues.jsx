@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { addComment, deleteIssue, resolveIssue } from "../../util/http";
+import { unResolveIssue, addComment } from "../../util/http";
 import { IssueContext } from "../../store/issue-context";
 import Issues from "../Issues";
 
@@ -12,23 +12,20 @@ export default function UserResolvedIssues() {
   const [activeCommentIssue, setActiveCommentIssue] = useState(null);
   const [searching, setSearching] = useState(false)
 
-  const {
-    fetchUnResolvedIssues,
-    unResolvedIssuesList,
-    fetchUnresolvedIssuesByDate,
-  } = useContext(IssueContext);
+  const { fetchResolvedIssues, resolvedIssuesList, fetchResolvedIssuesByDate } = useContext(IssueContext);
 
-  async function handleResolveIssue(issue) {
+  async function handleUnResolveIssue(issue) {
     try {
-      const response = await resolveIssue(issue.id);
-      setMessage("Issue has been marked as resolved successfully");
-      fetchUnResolvedIssues();
-      setOpenModal(true)
+      const response = await unResolveIssue(issue.id);
+      setMessage("Issue has been marked as unresolved successfully");
+      fetchResolvedIssues();
+       setOpenModal(true);
       return response;
     } catch (err) {
-      setError(err.message || "Failed to resolve issue");
-      setOpenModal(true);
+      setError(err.message || "Failed to unresolve issue");
+       setOpenModal(true);
     }
+   
   }
   const handleAddComment = async (issueId) => {
     if (!commentText.trim()) return;
@@ -59,45 +56,34 @@ export default function UserResolvedIssues() {
     setOpenModal(false);
   };
 
-  async function handleDeleteAdminUnresolved(issue) {
-    try {
-      const successMessage = await deleteIssue(issue.id);
-      setMessage(successMessage.message);
-      fetchUnResolvedIssues();
-    } catch (err) {
-      setError(err.message || "Failed to delete issue");
-    }
-    setOpenModal(true);
-  }
-
-  async function handleSubmitDate(e) {
-    e.preventDefault();
+   async function handleSubmitDate(e) {
+    e.preventDefault()
     setSearching(true)
-    await fetchUnresolvedIssuesByDate();
+    await fetchResolvedIssuesByDate();
     setSearching(false)
+
   }
 
   return (
     <>
       <Issues
-        handleIssue={handleResolveIssue}
+        handleIssue={handleUnResolveIssue}
         openModal={openModal}
         message={message}
         error={error}
-        issuesList={unResolvedIssuesList}
+        issuesList={resolvedIssuesList}
         handleAddComment={handleAddComment}
         commentLoading={commentLoading}
         activeCommentIssue={activeCommentIssue}
         handleCommentStatus={handleCommentStatus}
         handleChangeComment={handleChangeComment}
-        handleSubmitModal={handleSubmitModal}
-        handleDeleteIssue={handleDeleteAdminUnresolved}
+        handleSubmitModal ={handleSubmitModal}
+        fetchIssues={fetchResolvedIssues}
         handleSubmitDate={handleSubmitDate}
-        fetchIssues={fetchUnResolvedIssues}
         commentText={commentText}
         searching={searching}
-        issueTitle="unresolved Issues"
-        noIssueContent="No unresolved issues found"
+        issueTitle="Resolved Issues"
+        noIssueContent="No resolved issues found"
       />
     </>
   );

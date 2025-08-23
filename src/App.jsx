@@ -5,14 +5,12 @@ import {
 } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import ReportIssuePage from "./components/user/ReportIssue";
-// import ViewIssues from "./components/ViewIssues";
 import UpdateTopUp from "./components/user/UpdateTopUp";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateOffices from "./components/admin/CreateOffices";
 import CreateServices from "./components/admin/CreateServices";
-import ResolvedIssues from "./components/user/ResolvedIssues";
 import AllIssues from "./components/issues/AllIssues";
 import ViewTopUp from "./components/airtimeTopUp/ViewTopUp";
 import ViewAttachment from "./components/Attachment";
@@ -20,9 +18,11 @@ import AdminLandingPage from "./components/admin/AdminLandingPage";
 import AdminUnresolvedIssues from "./components/admin/AdminUnResolvedIssues";
 import AnalyticsPage from "./components/admin/AnalyticsPage";
 import AdminResolvedIssues from "./components/admin/AdminResolveIssues";
-import UnresolvedIssues from "./components/user/UnresolvedIssues";
 import RegisterUser from "./components/admin/RegisterUser";
 import DisableUser from "./components/admin/DisableUser";
+import UserResolvedIssues from "./components/user/UserResolvedIssues";
+import UserUnresolvedIssues from "./components/user/UserUnresolvedIssues";
+import CreateSaccos from "./components/admin/CreateSacco";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,10 +50,7 @@ function App() {
               path: "reportIssue",
               element: <ReportIssuePage />,
             },
-            // {
-            //   path: "viewIssues",
-            //   element: <ViewIssues />,
-            // },
+        
             {
               path: "resolveTopUp",
               element: <UpdateTopUp />,
@@ -64,11 +61,11 @@ function App() {
             },
             {
               path: "resolved",
-              element: <ResolvedIssues />,
+              element: <UserResolvedIssues />,
             },
             {
               path: "unresolved",
-              element: <UnresolvedIssues />,
+              element: <UserUnresolvedIssues />,
             },
             {
               path: "viewTopUps",
@@ -106,6 +103,10 @@ function App() {
             {
               path: "create-offices",
               element: <CreateOffices />,
+            },
+             {
+              path: "create-saccos",
+              element: <CreateSaccos />,
             },
             {
               path: "create-services",

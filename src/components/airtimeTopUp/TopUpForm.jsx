@@ -4,77 +4,94 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
 export default function TopUpForm({ handleSubmit, errors }) {
-  const { formData, officeList, serviceList, handleChange } = useContext(IssueContext);
+  const { formData, saccoList,officeList, serviceList, handleChange, loadingOffices } =
+    useContext(IssueContext);
   const navigate = useNavigate();
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-4 md:p-6">
       {/* Office Selection */}
-           <div className="mb-6">
-             <label className="block text-sm font-medium text-gray-700 mb-2">
-               Locate Office <span className="text-red-500">*</span>
-             </label>
-             <Select
-               options={officeList.map((office) => ({
-                 value: office.name,
-                 label: office.name,
-               }))}
-               value={{
-                 value: formData.officeName || "",
-                 label: formData.officeName || "Select an office",
-               }}
-               onChange={(selectedOption) => {
-                 handleChange({
-                   target: {
-                     name: "office",
-                     value: selectedOption.value,
-                   },
-                 });
-               }}
-               placeholder="Type to search offices..."
-               className="w-full"
-               classNames={{
-                 control: (state) =>
-                   `min-h-[42px] border border-gray-300 ${
-                     state.isFocused
-                       ? "!border-orange-300 !ring-2 !ring-orange-200"
-                       : ""
-                   }`,
-                 option: (state) =>
-                   `${state.isSelected ? "!bg-orange-500" : ""} ${
-                     state.isFocused ? "!bg-orange-100" : ""
-                   }`,
-                 menu: () => "!mt-1",
-                 dropdownIndicator: () => "text-gray-400",
-                 indicatorSeparator: () => "!bg-gray-300",
-               }}
-               required
-             />
-           </div>
 
-      {/* Service Selection */}
-      <div className="mb-6">
+       <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Select Sacco<span className="text-red-500">*</span>
+        </label>
+        <Select
+          options={saccoList.map((sacco) => ({
+            value: sacco.name,
+            label: sacco.name,
+          }))}
+          value={{
+            value: formData.saccoName || "",
+            label: formData.saccoName || "Select a sacco",
+          }}
+          onChange={(selectedOption) => {
+            handleChange({
+              target: {
+                name: "sacco",
+                value: selectedOption.value,
+              },
+            });
+          }}
+          placeholder="Type to search saccos..."
+          className="w-full"
+          classNames={{
+            control: (state) =>
+              `min-h-[42px] border border-gray-300 ${
+                state.isFocused
+                  ? "!border-orange-300 !ring-2 !ring-orange-200"
+                  : ""
+              }`,
+            option: (state) =>
+              `${state.isSelected ? "!bg-orange-500" : ""} ${
+                state.isFocused ? "!bg-orange-100" : ""
+              }`,
+            menu: () => "!mt-1",
+            dropdownIndicator: () => "text-gray-400",
+            indicatorSeparator: () => "!bg-gray-300",
+          }}
+          required
+        />
+      </div>
+
+        <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Service Platform <span className="text-red-500">*</span>
+            Select Office<span className="text-red-500">*</span>
           </label>
           <Select
-            options={serviceList.map((service) => ({
-              value: service.name,
-              label: service.name,
+            options={officeList.map((office) => ({
+              value: office.id, // Use office ID
+              label: office.name, // Use office name
             }))}
-            value={{
-              value: formData.serviceName || "",
-              label: formData.serviceName || "Select a service",
-            }}
+            value={
+             formData.office
+                ? {
+                    value: formData.office,
+                    label: formData.officeName || "Select an office",
+                  }
+                : {
+                    value: "",
+                    label: "Select an office",
+                  }
+            }
             onChange={(selectedOption) => {
+              const selectedOffice = officeList.find(
+                (office) => office.id === selectedOption.value
+              );
               handleChange({
                 target: {
-                  name: "service",
-                  value: selectedOption.value,
+                  name: "office",
+                  value: selectedOffice?.name || selectedOption.value,
                 },
               });
             }}
-            placeholder="Type to search services..."
+            placeholder={
+             loadingOffices
+                ? "Loading offices..."
+                : "Type to search office..."
+            }
+            isDisabled={loadingOffices}
+            isLoading={loadingOffices}
             className="w-full"
             classNames={{
               control: (state) =>
@@ -94,6 +111,110 @@ export default function TopUpForm({ handleSubmit, errors }) {
             required
           />
         </div>
+
+
+     {/* <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Select Office<span className="text-red-500">*</span>
+        </label>
+        <Select
+          options={Array.from(
+            new Map(saccoList.map((sacco) => [sacco.location, sacco])).values()
+          ).map((sacco) => ({
+            value: sacco.id, // Store the ID instead of location
+            label: sacco.location,
+          }))}
+          value={
+            formData.officeName
+              ? {
+                  value: formData.officeId || "", // Use ID here
+                  label: formData.officeName || "Select an office",
+                }
+              : {
+                  value: "",
+                  label: "Select an office",
+                }
+          }
+          onChange={(selectedOption) => {
+            const selectedSacco = saccoList.find(
+              (sacco) => sacco.id === selectedOption.value
+            );
+            handleChange({
+              target: {
+                name: "office",
+                value: selectedSacco.id, // Send ID to backend
+              },
+            });
+            handleChange({
+              target: {
+                name: "officeName",
+                value: selectedSacco.location, // Store location for display
+              },
+            });
+          }}
+          placeholder="Type to search office..."
+          className="w-full"
+          classNames={{
+            control: (state) =>
+              `min-h-[42px] border border-gray-300 ${
+                state.isFocused
+                  ? "!border-orange-300 !ring-2 !ring-orange-200"
+                  : ""
+              }`,
+            option: (state) =>
+              `${state.isSelected ? "!bg-orange-500" : ""} ${
+                state.isFocused ? "!bg-orange-100" : ""
+              }`,
+            menu: () => "!mt-1",
+            dropdownIndicator: () => "text-gray-400",
+            indicatorSeparator: () => "!bg-gray-300",
+          }}
+          required
+        />
+      </div> */}
+
+      {/* Service Selection */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Service Platform <span className="text-red-500">*</span>
+        </label>
+        <Select
+          options={serviceList.map((service) => ({
+            value: service.name,
+            label: service.name,
+          }))}
+          value={{
+            value: formData.serviceName || "",
+            label: formData.serviceName || "Select a service",
+          }}
+          onChange={(selectedOption) => {
+            handleChange({
+              target: {
+                name: "service",
+                value: selectedOption.value,
+              },
+            });
+          }}
+          placeholder="Type to search services..."
+          className="w-full"
+          classNames={{
+            control: (state) =>
+              `min-h-[42px] border border-gray-300 ${
+                state.isFocused
+                  ? "!border-orange-300 !ring-2 !ring-orange-200"
+                  : ""
+              }`,
+            option: (state) =>
+              `${state.isSelected ? "!bg-orange-500" : ""} ${
+                state.isFocused ? "!bg-orange-100" : ""
+              }`,
+            menu: () => "!mt-1",
+            dropdownIndicator: () => "text-gray-400",
+            indicatorSeparator: () => "!bg-gray-300",
+          }}
+          required
+        />
+      </div>
 
       {/* SIM Number */}
       <div>

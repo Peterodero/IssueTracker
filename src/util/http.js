@@ -1,5 +1,140 @@
 export const url = "https://issue-tracker-jywg.onrender.com/api";
 
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+export async function refreshAuthToken() {
+  const refreshToken = sessionStorage.getItem("refreshToken");
+  if (!refreshToken) {
+    throw new Error("No refresh token available");
+  }
+
+  // Check if refresh token is expired
+  if (isTokenExpired(refreshToken)) {
+    throw new Error("Refresh token expired");
+  }
+
+  try {
+    console.log("Trying refetch after ");
+    const response = await fetch(url + "/auth/token/refresh/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+
+    if (!response.ok) {
+      // Handle specific refresh token errors
+      if (response.status === 401) {
+        console.log("Handle specific refresh token errors");
+        throw new Error("REFRESH_TOKEN_EXPIRED");
+      }
+      throw new Error("Token refresh failed");
+    }
+
+    const data = await response.json();
+    console.log(data);
+    sessionStorage.setItem("accessToken", data.access);
+    sessionStorage.setItem("refreshToken", data.refresh);
+    return data.access;
+  } catch (error) {
+    // Clear tokens on refresh failure
+    clearSession();
+
+    if (error.message === "REFRESH_TOKEN_EXPIRED") {
+      console.log(" Clear tokens on refresh failure");
+      throw new Error("REFRESH_TOKEN_EXPIRED");
+    }
+    throw error;
+  }
+}
+
+// Helper function to check token expiry
+export function isTokenExpired(token) {
+  if (!token) {
+    console.log("Token");
+    return true;
+  }
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
+// Helper function to clear session
+export function clearSession() {
+  sessionStorage.removeItem("accessToken");
+  sessionStorage.removeItem("refreshToken");
+  sessionStorage.removeItem("role");
+  sessionStorage.removeItem("username");
+}
+
+// Enhanced authFetch with complete expiry handling
+export async function authFetch(input, options = {}) {
+  let accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  // Check if refresh token is expired upfront
+  if (refreshToken && isTokenExpired(refreshToken)) {
+    clearSession();
+    window.location.href = "/login?error=session_expired";
+    throw new Error("REFRESH_TOKEN_EXPIRED");
+  }
+
+  const headers = { ...options.headers };
+
+  // const headers = {
+  //   'Content-Type': 'application/json',
+  //   ...options.headers,
+  // };
+
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+
+  let response = await fetch(input, { ...options, headers });
+
+  // Handle token expiration (401)
+  if (response.status === 401 && accessToken && refreshToken) {
+    if (!isRefreshing) {
+      isRefreshing = true;
+      try {
+        const newAccessToken = await refreshAuthToken();
+        isRefreshing = false;
+
+        refreshSubscribers.forEach((callback) => callback(newAccessToken));
+        refreshSubscribers = [];
+
+        headers["Authorization"] = `Bearer ${newAccessToken}`;
+        response = await fetch(input, { ...options, headers });
+      } catch (error) {
+        isRefreshing = false;
+        refreshSubscribers = [];
+
+        if (error.message === "REFRESH_TOKEN_EXPIRED") {
+          clearSession();
+          window.location.href = "/login?error=session_expired";
+        }
+        throw error;
+      }
+    } else {
+      return new Promise((resolve, reject) => {
+        refreshSubscribers.push((newToken) => {
+          headers["Authorization"] = `Bearer ${newToken}`;
+          fetch(input, { ...options, headers })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+    }
+  }
+
+  return response;
+}
+
 export async function authenticateUser(data) {
   const response = await fetch(url + "/auth/login/", {
     method: "POST",
@@ -17,11 +152,10 @@ export async function authenticateUser(data) {
   return resData;
 }
 
-export async function getOffices() {
-  const response = await fetch(url + "/offices/list/", {
+export async function getSaccos() {
+  const response = await authFetch(url + "/saccos/list/", {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       "Content-Type": "application/json",
     },
   });
@@ -35,14 +169,40 @@ export async function getOffices() {
   return resData;
 }
 
+export async function getAllOffices() {
+  const response = await authFetch(url + "/offices/list/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) throw new Error("Failed to fetch offices");
+  const offices = await response.json();
+  console.log(offices);
+
+  return offices;
+}
+
+export async function getSaccoOffices(saccoId) {
+  const response = await authFetch(url + `/offices/list/?sacco_id=${saccoId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    // body: JSON.stringify({
+    //   saccoId: saccoId
+    // })
+  });
+  if (!response.ok) throw new Error("Failed to fetch offices");
+  const offices = await response.json();
+
+  return offices;
+}
+
 export async function getServices() {
   try {
-    const response = await fetch(url + "/services/list/", {
+    const response = await authFetch(url + "/services/list/", {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {
@@ -58,27 +218,22 @@ export async function getServices() {
 }
 
 export async function reportIssue(formData) {
-  const accessToken = sessionStorage.getItem("accessToken");
-  const response = await fetch(url + "/issues/create/", {
+  console.log(formData);
+  const response = await authFetch(url + "/issues/create/", {
     method: "POST",
-    headers: {
-      // "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
     body: formData,
   });
   const resData = await response.json();
-  console.log(resData)
+  console.log(resData);
 
   return resData;
 }
 
 export async function listAllIssues() {
   try {
-    const response = await fetch(url + "/issues/list/", {
+    const response = await authFetch(url + "/issues/list/", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
     });
@@ -95,12 +250,10 @@ export async function listAllIssues() {
 }
 
 export async function getIssueDetails(issueId) {
-  console.log(issueId);
   try {
-    const response = await fetch(url + "/issues/list/", {
+    const response = await authFetch(url + "/issues/list/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(issueId),
@@ -119,11 +272,10 @@ export async function getIssueDetails(issueId) {
 
 // api/issues.js
 export async function resolveIssue(issueId) {
-  const response = await fetch(url + "/issues/update/", {
+  const response = await authFetch(url + "/issues/update/", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
     },
     body: JSON.stringify({ id: issueId }),
   });
@@ -139,11 +291,10 @@ export async function resolveIssue(issueId) {
 }
 
 export async function deleteIssue(issueId) {
-  const response = await fetch(url + "/issues/delete/", {
+  const response = await authFetch(url + "/issues/delete/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
     },
     body: JSON.stringify({ id: issueId }),
   });
@@ -154,17 +305,15 @@ export async function deleteIssue(issueId) {
   }
 
   const resData = await response.json();
-  console.log(resData);
 
   return resData;
 }
 
 export async function unResolveIssue(issueId) {
-  const response = await fetch(url + "/issues/update/", {
+  const response = await authFetch(url + "/issues/update/", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
     },
     body: JSON.stringify({ id: issueId, status: "unsolved" }),
   });
@@ -181,10 +330,9 @@ export async function unResolveIssue(issueId) {
 
 export async function listResolvedIssues() {
   try {
-    const response = await fetch(url + "/issues/list/", {
+    const response = await authFetch(url + "/issues/list/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ status: "solved" }),
@@ -201,18 +349,19 @@ export async function listResolvedIssues() {
   }
 }
 
-export async function listResolvedIssuesByDate(date) {
+export async function listResolvedIssuesByDate(searchIssues) {
+  console.log(searchIssues);
   try {
-    const response = await fetch(url + "/issues/list/", {
+    const response = await authFetch(url + "/issues/list/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         status: "solved",
-        start_date: date.startDate,
-        end_date: date.endDate,
+        start_date: searchIssues.startDate,
+        end_date: searchIssues.endDate,
+        office_id: searchIssues.sacco,
       }),
     });
 
@@ -229,10 +378,9 @@ export async function listResolvedIssuesByDate(date) {
 
 export async function listUnResolvedIssues() {
   try {
-    const response = await fetch(url + "/issues/list/", {
+    const response = await authFetch(url + "/issues/list/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ status: "unsolved" }),
@@ -249,18 +397,18 @@ export async function listUnResolvedIssues() {
   }
 }
 
-export async function listUnResolvedIssuesByDate(date) {
+export async function listUnResolvedIssuesByDate(searchIssues) {
   try {
-    const response = await fetch(url + "/issues/list/", {
+    const response = await authFetch(url + "/issues/list/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         status: "unsolved",
-        start_date: date.startDate,
-        end_date: date.endDate,
+        start_date: searchIssues.startDate,
+        end_date: searchIssues.endDate,
+        office_id: searchIssues.sacco,
       }),
     });
 
@@ -276,10 +424,9 @@ export async function listUnResolvedIssuesByDate(date) {
 }
 
 export async function addComment(issueId, text) {
-  const response = await fetch(url + "/issues/comments/create/", {
+  const response = await authFetch(url + "/issues/comments/create/", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -287,7 +434,6 @@ export async function addComment(issueId, text) {
       text: text,
     }),
   });
-  console.log(response);
   if (!response.ok) {
     throw new Error("Failed to add comment");
   }
@@ -295,14 +441,14 @@ export async function addComment(issueId, text) {
 }
 
 export async function updateTopUp(formData) {
-  const accessToken = sessionStorage.getItem("accessToken");
-  const response = await fetch(url + "/data-bundles/create/", {
+  console.log(formData)
+  const response = await authFetch(url + "/data-bundles/create/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
+      sacco: formData.sacco,
       office: formData.office,
       sim_number: formData.sim_number,
       amount: Number(formData.amount),
@@ -317,10 +463,9 @@ export async function updateTopUp(formData) {
 
 export async function getAllTopUps() {
   try {
-    const response = await fetch(url + "/data-bundles/list/", {
+    const response = await authFetch(url + "/data-bundles/list/", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
     });
@@ -330,6 +475,7 @@ export async function getAllTopUps() {
     }
 
     const topUps = await response.json();
+    console.log(topUps)
     return topUps;
   } catch (error) {
     console.error("Error fetching ", error);
@@ -337,15 +483,18 @@ export async function getAllTopUps() {
 }
 export async function getAllTopUpsByDate(date) {
   try {
-    const response = await fetch(
+    const response = await authFetch(
       url +
         `/data-bundles/list/?start_date=${date.startDate}&end_date=${date.endDate}`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
           "Content-Type": "application/json",
         },
+        // headers: {
+        //   Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        //   "Content-Type": "application/json",
+        // },
       }
     );
 
@@ -362,12 +511,15 @@ export async function getAllTopUpsByDate(date) {
 
 export async function getAnalytics() {
   try {
-    const response = await fetch(url + "/issues/analytics/", {
+    const response = await authFetch(url + "/issues/analytics/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-        "Content-Type": "application/json",
-      },
+      "Content-Type": "application/json",
+    },
+      // headers: {
+      //   Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      //   "Content-Type": "application/json",
+      // },
     });
 
     if (!response.ok) {
@@ -383,12 +535,15 @@ export async function getAnalytics() {
 
 export async function fetchUsers() {
   try {
-    const response = await fetch(url + "/users/", {
+    const response = await authFetch(url + "/users/", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-        "Content-Type": "application/json",
-      },
+      "Content-Type": "application/json",
+    },
+      // headers: {
+      //   Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+      //   "Content-Type": "application/json",
+      // },
     });
 
     if (!response.ok) {
@@ -403,13 +558,15 @@ export async function fetchUsers() {
 }
 
 export async function toggleUserStatus(data) {
-  const accessToken = sessionStorage.getItem("accessToken");
-  const response = await fetch(url + "/users/update-status/", {
+  const response = await authFetch(url + "/users/update-status/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
     },
+    // headers: {
+    //   "Content-Type": "application/json",
+    //   Authorization: `Bearer ${accessToken}`,
+    // },
     body: JSON.stringify(data),
   });
   const resData = await response.json();
@@ -417,18 +574,15 @@ export async function toggleUserStatus(data) {
   return resData;
 }
 
-export async function createOffices(formData) {
+export async function CreateSaccos(formData) {
   try {
-    const response = await fetch(url + "/offices/create/", {
+    const response = await authFetch(url + "/saccos/create/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-        "Content-Type": "application/json",
-      },
+      "Content-Type": "application/json",
+    },
       body: JSON.stringify(formData),
     });
-
-    console.log(response.status);
 
     const data = await response.json();
     // console.log(data.errors.name[0])
@@ -440,7 +594,29 @@ export async function createOffices(formData) {
     return data;
   } catch (error) {
     console.log(error.message);
-  } finally {
-    // setIsSubmitting(false);
+  }
+}
+
+export async function createOffices(officeName) {
+  console.log(officeName);
+  try {
+    const response = await authFetch(url + "/offices/create/", {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json",
+    },
+      body: JSON.stringify({ name: officeName.name }),
+    });
+
+    // const data = await response.json();
+    // console.log(data.errors.name[0])
+
+    // if (!response.ok) {
+    //   return;
+    // }
+
+    return response;
+  } catch (error) {
+    console.log(error.message);
   }
 }

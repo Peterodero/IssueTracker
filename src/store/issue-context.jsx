@@ -1,9 +1,11 @@
 import { createContext, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  getAllOffices,
   getAllTopUps,
   getAllTopUpsByDate,
-  getOffices,
+  getSaccoOffices,
+  getSaccos,
   getServices,
   listAllIssues,
   listResolvedIssues,
@@ -17,6 +19,7 @@ import {
 // eslint-disable-next-line react-refresh/only-export-components
 export const IssueContext = createContext({
   formData: {
+    sacco: "",
     office: "",
     service: "",
     assigned_to: "",
@@ -26,26 +29,31 @@ export const IssueContext = createContext({
   },
   issueDate: {
     startDate: "",
-    endDate: ""
+    endDate: "",
+    sacco: "",
   },
   handleModal: () => {},
   submited: "",
   handleChange: () => {},
-  handleIssueDateChange: ()=>{},
+  handleIssueDateChange: () => {},
   handleClearForm: () => {},
   handleSubmitIssueForm: () => {},
   handleSubmitTopUpForm: () => {},
+  fetchSaccos: () => {},
+  fetchAllOffices: () => {},
   fetchOffices: () => {},
   fetchServices: () => {},
   fetchIssues: () => {},
   fetchResolvedIssues: () => {},
-  fetchTopUpByDate: ()=>{},
+  fetchTopUpByDate: () => {},
   resolvedIssuesList: () => {},
   fetchUnResolvedIssues: () => {},
-  fetchResolvedIssuesByDate: ()=>{},
-  fetchUnresolvedIssuesByDate: ()=>{},
+  fetchResolvedIssuesByDate: () => {},
+  fetchUnresolvedIssuesByDate: () => {},
   fetchTopUps: () => {},
   unResolvedIssuesList: [],
+  saccoList: [],
+  allOfficeList: [],
   officeList: [],
   serviceList: [],
   issuesList: [],
@@ -54,6 +62,7 @@ export const IssueContext = createContext({
 
 export default function ReportIssueContextProvider({ children }) {
   const [formData, setFormData] = useState({
+    sacco: "",
     office: "",
     service: "",
     assigned_to: "",
@@ -66,8 +75,10 @@ export default function ReportIssueContextProvider({ children }) {
   });
 
   const [submited, setSubmited] = useState(false);
-
+  const [allOfficeList, setAllOfficeList] = useState([]);
   const [officeList, setOfficeList] = useState([]);
+  const [loadingOffices, setLoadingOffices] = useState(false);
+  const [saccoList, setSaccoList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
   const [issuesList, setIssuesList] = useState([]);
   const [resolvedIssuesList, setResolvedIssuesList] = useState([]);
@@ -76,58 +87,86 @@ export default function ReportIssueContextProvider({ children }) {
 
   const [issueDate, setIssueDate] = useState({
     startDate: "",
-    endDate: ""
-  })
+    endDate: "",
+    sacco: "",
+  });
 
   const navigate = useNavigate();
 
-  const fetchOffices = useCallback(async () => {
-    const offices = await getOffices();
-    setOfficeList(offices);
-    // console.log(offices);
+  const fetchSaccos = useCallback(async () => {
+    const saccos = await getSaccos();
+    setSaccoList(saccos);
   }, []);
+
+  const fetchAllOffices = useCallback(async () => {
+    const allOffices = await getAllOffices();
+    setAllOfficeList(allOffices);
+  }, []);
+
+  const fetchOffices = async (saccoId) => {
+    //for offices
+    if (!saccoId) {
+      setOfficeList([]);
+      return;
+    }
+
+    setLoadingOffices(true);
+    try {
+      const offices = await getSaccoOffices(saccoId);
+      setOfficeList(offices);
+    } catch (error) {
+      console.error("Error fetching offices:", error);
+      setOfficeList([]);
+    } finally {
+      setLoadingOffices(false);
+    }
+  };
 
   const fetchServices = useCallback(async () => {
     const services = await getServices();
     setServiceList(services);
-    // console.log(services);
   }, []);
 
   const fetchIssues = useCallback(async () => {
     const issues = await listAllIssues();
-    // console.log(issues.data);
     setIssuesList(issues.data);
   }, []);
 
   const fetchResolvedIssues = useCallback(async () => {
     const resolvedIssues = await listResolvedIssues();
-    // console.log(resolvedIssues);
     setResolvedIssuesList(resolvedIssues.data);
   }, []);
 
-  function handleIssueDateChange(event){
-    setIssueDate((prevState)=> {
-      return {
-        ...prevState,
-        [event.target.name] : event.target.value
-      }
-    })
+  function handleIssueDateChange(event) {
+    const { name, value } = event.target;
 
+    if (name === "sacco") {
+      const selectedSacco = saccoList.find((sacco) => sacco.name === value);
+      setIssueDate((prevState) => {
+        return {
+          ...prevState,
+          sacco: selectedSacco?.id || "",
+          saccoName: value,
+        };
+      });
+    } else {
+      setIssueDate((prevState) => ({ ...prevState, [name]: value }));
+    }
   }
 
-    const fetchResolvedIssuesByDate = useCallback(async () => {
+  const fetchResolvedIssuesByDate = useCallback(async () => {
     const resolvedIssues = await listResolvedIssuesByDate(issueDate);
     setResolvedIssuesList(resolvedIssues.data);
   }, [issueDate]);
 
-    const fetchUnresolvedIssuesByDate = useCallback(async () => {
+  const fetchUnresolvedIssuesByDate = useCallback(async () => {
     const resolvedIssues = await listUnResolvedIssuesByDate(issueDate);
-    console.log(resolvedIssues);
     setUnResolvedIssuesList(resolvedIssues.data);
   }, [issueDate]);
 
   const fetchUnResolvedIssues = useCallback(async () => {
     const unResolvedIssues = await listUnResolvedIssues();
+    console.log(unResolvedIssues);
     setUnResolvedIssuesList(unResolvedIssues.data);
   }, []);
 
@@ -136,43 +175,102 @@ export default function ReportIssueContextProvider({ children }) {
     setTopUpList(allTopUps);
   }, []);
 
-   const fetchTopUpByDate = useCallback(async () => {
+  const fetchTopUpByDate = useCallback(async () => {
     const filteredTopUps = await getAllTopUpsByDate(issueDate);
     setTopUpList(filteredTopUps);
   }, [issueDate]);
 
   function handleChange(event) {
     const { name, value } = event.target;
-
-    if (name === "office") {
-      const selectedOffice = officeList.find((office) => office.name === value);
-
-      // console.log(selectedOffice.id);
-
+    if (name === "sacco") {
+      const selectedSacco = saccoList.find((sacco) => sacco.name === value);
       setFormData((prevState) => {
         return {
           ...prevState,
-          office: selectedOffice?.id || "",
-          officeName: value,
+          sacco: selectedSacco?.id || "",
+          saccoName: value,
+          office: "", // Reset office when sacco changes
+          officeName: "", // Reset office name when sacco changes
         };
       });
+
+      // Fetch offices for the selected sacco
+      if (selectedSacco?.id) {
+        console.log(selectedSacco?.id)
+        fetchOffices(selectedSacco.id);
+      } else {
+        setOfficeList([]);
+      }
     } else if (name === "service") {
       const selectedService = serviceList.find(
         (service) => service.name === value
       );
-
       setFormData((prev) => ({
         ...prev,
         service: selectedService?.id || "",
         serviceName: value,
+      }));
+    } else if (name === "office") {
+      // Find office in the officeList (not saccoList!)
+      const selectedOffice = officeList.find(
+        (office) => office.name === value // or office.id === value, depending on your structure
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        office: selectedOffice?.id || "",
+        officeName: value,
       }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   }
 
+  // function handleChange(event) {
+  //   const { name, value } = event.target;
+
+  //   if (name === "sacco") {
+  //     const selectedSacco = saccoList.find((sacco) => sacco.name === value);
+  //     setFormData((prevState) => {
+  //       return {
+  //         ...prevState,
+  //         sacco: selectedSacco?.id || "",
+  //         saccoName: value,
+  //       };
+  //     });
+  //   } else if (name === "service") {
+  //     const selectedService = serviceList.find(
+  //       (service) => service.name === value
+  //     );
+  //     console.log("service", selectedService);
+
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       service: selectedService?.id || "",
+  //       serviceName: value,
+  //     }));
+  //   } else if (name === "office") {
+  //     const selectedOffice = saccoList.find(
+  //       (location) => location.location === value
+  //     );
+
+  //     console.log("office", selectedOffice);
+
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       office: selectedOffice?.id || "",
+  //       officeName: value,
+  //     }));
+  //   } else {
+  //     setFormData((prev) => ({ ...prev, [name]: value }));
+  //   }
+
+  //   console.log(formData);
+  // }
+
   function handleClearForm() {
     setFormData({
+      sacco: "",
       office: "",
       service: "",
       type: "",
@@ -187,6 +285,7 @@ export default function ReportIssueContextProvider({ children }) {
   function handleModal() {
     setSubmited(false);
     setFormData({
+      sacco: "",
       office: "",
       service: "",
       type: "",
@@ -205,46 +304,48 @@ export default function ReportIssueContextProvider({ children }) {
   };
 
   async function handleSubmitIssueForm(event) {
-  event.preventDefault();
-  
-  try {
-    const formPayload = new FormData();
+    event.preventDefault();
 
-    // Append all regular form fields
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key !== 'attachments' && value !== undefined && value !== null) {
-        formPayload.append(key, value);
-      }
-    });
+    try {
+      const formPayload = new FormData();
 
-    // Process and append files with truncated names
-    if (Array.isArray(formData.attachments)) {
-      formData.attachments.forEach(file => {
-        // Truncate filename if too long (keeping extension)
-        let processedFile = file;
-        if (file.name.length > 100) {
-          const ext = file.name.split('.').pop();
-          const nameWithoutExt = file.name.slice(0, -(ext.length + 1));
-          const truncatedName = nameWithoutExt.slice(0, 95 - ext.length) + '.' + ext;
-          processedFile = new File([file], truncatedName, { type: file.type });
+      // Append all regular form fields
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key !== "attachments" && value !== undefined && value !== null) {
+          formPayload.append(key, value);
         }
-        formPayload.append('attachments', processedFile);
       });
-    }
 
-    const response = await reportIssue(formPayload);
-    setSubmited(true);
-    return response;
-  } catch (error) {
-    console.error('Submission failed:', error);
-    setSubmited(false);
-    throw error;
+      // Process and append files with truncated names
+      if (Array.isArray(formData.attachments)) {
+        formData.attachments.forEach((file) => {
+          // Truncate filename if too long (keeping extension)
+          let processedFile = file;
+          if (file.name.length > 100) {
+            const ext = file.name.split(".").pop();
+            const nameWithoutExt = file.name.slice(0, -(ext.length + 1));
+            const truncatedName =
+              nameWithoutExt.slice(0, 95 - ext.length) + "." + ext;
+            processedFile = new File([file], truncatedName, {
+              type: file.type,
+            });
+          }
+          formPayload.append("attachments", processedFile);
+        });
+      }
+
+      const response = await reportIssue(formPayload);
+      setSubmited(true);
+      return response;
+    } catch (error) {
+      console.error("Submission failed:", error);
+      setSubmited(false);
+      throw error;
+    }
   }
-}
 
   async function handleSubmitTopUpForm(event) {
     event.preventDefault();
-    console.log(formData);
     await updateTopUp(formData);
   }
 
@@ -258,19 +359,24 @@ export default function ReportIssueContextProvider({ children }) {
     handleSubmitTopUpForm: handleSubmitTopUpForm,
     handleModal: handleModal,
     submited: submited,
+    fetchSaccos: fetchSaccos,
+    fetchAllOffices: fetchAllOffices,
     fetchOffices: fetchOffices,
     fetchServices: fetchServices,
     fetchIssues: fetchIssues,
     fetchResolvedIssues: fetchResolvedIssues,
     fetchUnResolvedIssues: fetchUnResolvedIssues,
     fetchResolvedIssuesByDate: fetchResolvedIssuesByDate,
-    fetchUnresolvedIssuesByDate:fetchUnresolvedIssuesByDate,
+    fetchUnresolvedIssuesByDate: fetchUnresolvedIssuesByDate,
     fetchTopUps: fetchTopUps,
     fetchTopUpByDate: fetchTopUpByDate,
     topUpList: topUpList,
     resolvedIssuesList: resolvedIssuesList,
     unResolvedIssuesList: unResolvedIssuesList,
-    officeList: officeList,
+    saccoList: saccoList,
+    allOfficeList: allOfficeList,
+    officeList: officeList, //to be added
+    loadingOffices: loadingOffices,
     serviceList: serviceList,
     issuesList: issuesList,
     updateAttachments: updateAttachments,

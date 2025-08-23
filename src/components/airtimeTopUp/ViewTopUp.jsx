@@ -2,10 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import SearchByDate from "../SearchByDate";
+import { getAnalytics } from "../../util/http";
 
 export default function ViewTopUp() {
   const [loadingData, setLoadingData] = useState(false);
-  const { fetchTopUps,fetchTopUpByDate, topUpList } = useContext(IssueContext);
+  const [searching, setSearching] = useState(false)
+  const { fetchTopUps, fetchTopUpByDate, topUpList } = useContext(IssueContext);
 
   useEffect(() => {
     const loadData = async () => {
@@ -22,6 +24,18 @@ export default function ViewTopUp() {
     loadData();
   }, [fetchTopUps]);
 
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await getAnalytics();
+          console.log(response.data);
+        } catch (error) {
+          console.error("Error fetching analytics:", error);
+        } 
+      };
+      fetchData();
+    }, []);
+
   if (loadingData) {
     return (
       <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
@@ -30,9 +44,11 @@ export default function ViewTopUp() {
     );
   }
 
-  async function handleSubmitDate(e){
-    e.preventDefault()
-    await fetchTopUpByDate()
+  async function handleSubmitDate(e) {
+    e.preventDefault();
+    setSearching(true)
+    await fetchTopUpByDate();
+    setSearching(false)
   }
 
   return (
@@ -42,7 +58,7 @@ export default function ViewTopUp() {
           Top-Up Records
         </h2>
 
-        <SearchByDate handleSubmit={handleSubmitDate}/>
+        <SearchByDate handleSubmit={handleSubmitDate} searching={searching}/>
 
         {/* Top-Ups Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -52,6 +68,9 @@ export default function ViewTopUp() {
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     #
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Sacco
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Office
@@ -72,8 +91,8 @@ export default function ViewTopUp() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {topUpList.map((list, index) => {
-                  const officeName = list.office?.name || "No office assigned";
-                  const officeLocation = list.office?.location || "";
+                  const saccoName = list.sacco?.name || "No office assigned";
+                  const officeName = list.office?.name || "";
                   const amount = list.amount ? list.amount : "-";
                   const reporterName = list.created_by?.username || "Unknown";
                   const reporterPhone = list.created_by?.phone_number || "";
@@ -81,7 +100,10 @@ export default function ViewTopUp() {
                   const date = list.purchase_date || "-";
 
                   return (
-                    <tr key={list.id} className="hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={list.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
                       {/* Index Number */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
@@ -98,12 +120,17 @@ export default function ViewTopUp() {
                       {/* Office */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col">
-                          <span className="font-medium text-gray-900">{officeName}</span>
-                          {officeLocation && (
-                            <span className="text-xs text-gray-500">
-                              {officeLocation}
-                            </span>
-                          )}
+                          <span className="font-medium text-gray-900">
+                            {saccoName}
+                          </span>
+                        </div>
+                      </td>
+
+                      <td className="px-2 py-4">
+                        <div className="flex flex-col">
+                          <span className="text-xs text-gray-500">
+                            {officeName}
+                          </span>
                         </div>
                       </td>
 

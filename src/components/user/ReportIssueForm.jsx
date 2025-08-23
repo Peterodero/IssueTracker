@@ -14,7 +14,6 @@ export default function ReportIssueForm() {
     queryFn: fetchUsers,
   });
 
-
   const handlePhotoChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
@@ -69,26 +68,26 @@ export default function ReportIssueForm() {
     <form className="p-6" onSubmit={issueCtx.handleSubmitIssueForm}>
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Locate Office <span className="text-red-500">*</span>
+          Select Sacco<span className="text-red-500">*</span>
         </label>
         <Select
-          options={issueCtx.officeList.map((office) => ({
-            value: office.name,
-            label: office.name,
+          options={issueCtx.saccoList.map((sacco) => ({
+            value: sacco.name,
+            label: sacco.name,
           }))}
           value={{
-            value: issueCtx.formData.officeName || "",
-            label: issueCtx.formData.officeName || "Select an office",
+            value: issueCtx.formData.saccoName || "",
+            label: issueCtx.formData.saccoName || "Select a sacco",
           }}
           onChange={(selectedOption) => {
             issueCtx.handleChange({
               target: {
-                name: "office",
+                name: "sacco",
                 value: selectedOption.value,
               },
             });
           }}
-          placeholder="Type to search offices..."
+          placeholder="Type to search saccos..."
           className="w-full"
           classNames={{
             control: (state) =>
@@ -108,7 +107,60 @@ export default function ReportIssueForm() {
           required
         />
       </div>
-      {issueCtx.formData.office && (
+      {issueCtx.formData.sacco && (
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Select Office<span className="text-red-500">*</span>
+          </label>
+          <Select
+            options={issueCtx.officeList.map((office) => ({
+              value: office.id, // Use office ID
+              label: office.name, // Use office name
+            }))}
+            value={
+              issueCtx.formData.office
+                ? {
+                    value: issueCtx.formData.office,
+                    label: issueCtx.formData.officeName || "Select an office",
+                  }
+                : {
+                    value: "",
+                    label: "Select an office",
+                  }
+            }
+            onChange={(selectedOption) => {
+              const selectedOffice = issueCtx.officeList.find(
+                (office) => office.id === selectedOption.value
+              );
+              issueCtx.handleChange({
+                target: {
+                  name: "office",
+                  value: selectedOffice?.name || selectedOption.value,
+                },
+              });
+            }}
+            placeholder="Type to search office..."
+            className="w-full"
+            classNames={{
+              control: (state) =>
+                `min-h-[42px] border border-gray-300 ${
+                  state.isFocused
+                    ? "!border-orange-300 !ring-2 !ring-orange-200"
+                    : ""
+                }`,
+              option: (state) =>
+                `${state.isSelected ? "!bg-orange-500" : ""} ${
+                  state.isFocused ? "!bg-orange-100" : ""
+                }`,
+              menu: () => "!mt-1",
+              dropdownIndicator: () => "text-gray-400",
+              indicatorSeparator: () => "!bg-gray-300",
+            }}
+            required
+          />
+        </div>
+      )}
+      {issueCtx.formData.sacco && (
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Service Platform <span className="text-red-500">*</span>

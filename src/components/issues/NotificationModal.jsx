@@ -1,5 +1,6 @@
 
 export default function NotificationModal({error, title, handleSubmit, mesg}) {
+  console.log(mesg)
 
   return (
     <div>

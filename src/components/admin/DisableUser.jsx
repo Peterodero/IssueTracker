@@ -37,6 +37,8 @@ export default function DisableUser() {
       user.phone_number.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  console.log(filteredUsers)
+
   const handleStatusToggle = (user) => {
     setSelectedUser(user);
     setShowConfirmation(true);

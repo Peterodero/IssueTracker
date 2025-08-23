@@ -6,13 +6,13 @@ import TopUpForm from "../airtimeTopUp/TopUpForm";
 const UpdateTopUp = () => {
   const navigate = useNavigate();
 
-  const { formData, fetchOffices, fetchServices, handleSubmitTopUpForm } = useContext(IssueContext);
+  const { formData, fetchSaccos, fetchServices, handleSubmitTopUpForm } = useContext(IssueContext);
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    fetchOffices();
-  }, [fetchOffices]);
+    fetchSaccos();
+  }, [fetchSaccos]);
 
   useEffect(() => {
     fetchServices(formData.office);

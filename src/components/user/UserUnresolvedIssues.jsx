@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import { addComment, deleteIssue, resolveIssue } from "../../util/http";
-import { IssueContext } from "../../store/issue-context";
+import {  addComment, resolveIssue } from "../../util/http";
 import Issues from "../Issues";
+import { IssueContext } from "../../store/issue-context";
 
-export default function UserResolvedIssues() {
+export default function UserUnresolvedIssues() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -12,23 +12,20 @@ export default function UserResolvedIssues() {
   const [activeCommentIssue, setActiveCommentIssue] = useState(null);
   const [searching, setSearching] = useState(false)
 
-  const {
-    fetchUnResolvedIssues,
-    unResolvedIssuesList,
-    fetchUnresolvedIssuesByDate,
-  } = useContext(IssueContext);
+  const { fetchUnResolvedIssues, unResolvedIssuesList,  fetchUnresolvedIssuesByDate } = useContext(IssueContext);
 
   async function handleResolveIssue(issue) {
     try {
       const response = await resolveIssue(issue.id);
       setMessage("Issue has been marked as resolved successfully");
       fetchUnResolvedIssues();
-      setOpenModal(true)
+       setOpenModal(true);
       return response;
     } catch (err) {
       setError(err.message || "Failed to resolve issue");
       setOpenModal(true);
     }
+    
   }
   const handleAddComment = async (issueId) => {
     if (!commentText.trim()) return;
@@ -59,17 +56,6 @@ export default function UserResolvedIssues() {
     setOpenModal(false);
   };
 
-  async function handleDeleteAdminUnresolved(issue) {
-    try {
-      const successMessage = await deleteIssue(issue.id);
-      setMessage(successMessage.message);
-      fetchUnResolvedIssues();
-    } catch (err) {
-      setError(err.message || "Failed to delete issue");
-    }
-    setOpenModal(true);
-  }
-
   async function handleSubmitDate(e) {
     e.preventDefault();
     setSearching(true)
@@ -90,13 +76,12 @@ export default function UserResolvedIssues() {
         activeCommentIssue={activeCommentIssue}
         handleCommentStatus={handleCommentStatus}
         handleChangeComment={handleChangeComment}
-        handleSubmitModal={handleSubmitModal}
-        handleDeleteIssue={handleDeleteAdminUnresolved}
-        handleSubmitDate={handleSubmitDate}
+        handleSubmitModal ={handleSubmitModal}
         fetchIssues={fetchUnResolvedIssues}
+        handleSubmitDate={handleSubmitDate}
         commentText={commentText}
         searching={searching}
-        issueTitle="unresolved Issues"
+        issueTitle="Unresolved Issues"
         noIssueContent="No unresolved issues found"
       />
     </>

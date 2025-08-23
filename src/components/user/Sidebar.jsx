@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({
   isMobile,
@@ -13,6 +13,7 @@ export default function Sidebar({
 
   function handleLogout() {
     sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
     navigate("/login");
   }
 
@@ -141,7 +142,7 @@ export default function Sidebar({
       </nav>
       <div className="p-4 border-t border-gray-200 mt-auto">
         <button
-          className="flex items-center justify-center w-full px-3 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-300"
+          className="flex items-center justify-center w-full px-3 py-2 rounded-md bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-300"
           onClick={handleLogout}
         >
           <svg

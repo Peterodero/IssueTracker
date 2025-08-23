@@ -6,12 +6,12 @@ import DistributionCharts from "./DistributionCharts";
 import ResolutionMetrics from "./ResolutionMetrics";
 import ActivityFeed from "./ActivityFeed";
 import OfficeHeatmap from "./OfficeHeatmap";
-import {getAnalytics, url} from "../../util/http"
+import {authFetch, getAnalytics, url} from "../../util/http"
 
 export default function AnalyticsPage() {
   const [analyticsData, setAnalyticsData] = useState({
     latest_issues: [],
-    office_analytics:  [],
+    sacco_analytics:  [],
     service_analytics: [],
     summary:  {}
   });
@@ -32,12 +32,12 @@ export default function AnalyticsPage() {
   }, []);
 
     async function handleDeleteOffice(id){
-        const response = await fetch(url + "/offices/delete/", {
+        const response = await authFetch(url + "/offices/delete/", {
           method: "POST", 
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
-          },
+          // headers: {
+          //   "Content-Type": "application/json",
+          //   "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
+          // },
           body: JSON.stringify({id:id})
         });
       
@@ -108,7 +108,7 @@ export default function AnalyticsPage() {
           </Col>
           <Col xs={24} lg={12}>
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 h-full">
-              <OfficeHeatmap offices={analyticsData.office_analytics} handleDeleteOffice={handleDeleteOffice}/>
+              <OfficeHeatmap saccos={analyticsData.sacco_analytics} handleDeleteOffice={handleDeleteOffice}/>
             </div>
           </Col>
         </Row>

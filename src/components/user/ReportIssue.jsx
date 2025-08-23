@@ -4,17 +4,17 @@ import Modal from "../UI/Modal";
 import ReportIssueForm from "./ReportIssueForm";
 
 export default function ReportIssuePage() {
-  const { formData, submited, handleModal, fetchOffices, fetchServices } = useContext(IssueContext);
+  const { formData, submited, handleModal, fetchSaccos, fetchServices } = useContext(IssueContext);
 
   useEffect(()=>{
-    fetchOffices()
-  }, [fetchOffices])
+    fetchSaccos()
+  }, [fetchSaccos])
 
   useEffect(() => {
-  if (formData.office) {
+  if (formData.sacco) {
     fetchServices();
   }
-}, [formData.office,fetchServices]);
+}, [formData.sacco,fetchServices]);
 
   return (
     <>
@@ -26,12 +26,12 @@ export default function ReportIssuePage() {
               <div className="flex items-center">
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                    formData.office ? "bg-blue-300" : "bg-white"
+                    formData.sacco ? "bg-blue-300" : "bg-white"
                   }`}
                 >
                   <span
                     className={`text-xs font-bold ${
-                      formData.office ? "text-blue-800" : "text-gray-400"
+                      formData.sacco ? "text-blue-800" : "text-gray-400"
                     }`}
                   >
                     1
@@ -39,7 +39,7 @@ export default function ReportIssuePage() {
                 </div>
                 <span
                   className={`ml-1 text-sm ${
-                    formData.office ? "font-medium" : "text-blue-200"
+                    formData.sacco ? "font-medium" : "text-blue-200"
                   }`}
                 >
                   Location

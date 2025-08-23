@@ -13,6 +13,7 @@ export default function AdminSidebar({
 
   function handleLogout() {
     sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
     navigate("/login");
   }
 
@@ -127,6 +128,16 @@ export default function AdminSidebar({
               {showManageSubmenu && (
                 <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
                   <button
+                    onClick={() => navigateToPath("/admin/create-saccos")}
+                    className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
+                      location.pathname === "/admin/create-saccos"
+                        ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    }`}
+                  >
+                    <div className="flex items-center">Create Sacco</div>
+                  </button>
+                   <button
                     onClick={() => navigateToPath("/admin/create-offices")}
                     className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
                       location.pathname === "/admin/create-offices"
@@ -174,7 +185,7 @@ export default function AdminSidebar({
       </nav>
       <div className="p-4 border-t border-gray-200 mt-auto">
         <button
-          className="flex items-center justify-center w-full px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-300"
+          className="flex items-center justify-center w-full px-4 py-2 rounded-md bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-300"
           onClick={handleLogout}
         >
          <svg
