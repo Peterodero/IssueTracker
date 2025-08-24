@@ -33,8 +33,9 @@ export default function DisableUser() {
   // Filter users based on search term
   const filteredUsers = users?.filter(
     (user) =>
-      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.phone_number.toLowerCase().includes(searchTerm.toLowerCase())
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) 
+    // ||
+    //   user.phone_number.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   console.log(filteredUsers)
@@ -106,9 +107,9 @@ export default function DisableUser() {
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Username
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  {/* <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Phone Number
-                  </th>
+                  </th> */}
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Role
                   </th>
@@ -130,11 +131,11 @@ export default function DisableUser() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    {/* <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
                         {user.phone_number}
                       </div>
-                    </td>
+                    </td> */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
                         {user.is_admin ? "Admin" : "Support Staff"}

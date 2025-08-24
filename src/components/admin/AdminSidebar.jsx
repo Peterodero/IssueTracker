@@ -137,7 +137,7 @@ export default function AdminSidebar({
                   >
                     <div className="flex items-center">Create Sacco</div>
                   </button>
-                   <button
+                  <button
                     onClick={() => navigateToPath("/admin/create-offices")}
                     className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
                       location.pathname === "/admin/create-offices"
@@ -188,7 +188,7 @@ export default function AdminSidebar({
           className="flex items-center justify-center w-full px-4 py-2 rounded-md bg-orange-600 hover:bg-orange-700 text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-300"
           onClick={handleLogout}
         >
-         <svg
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 mr-1"
             viewBox="0 0 20 20"

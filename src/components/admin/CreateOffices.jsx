@@ -2,64 +2,37 @@ import { useState, useEffect } from "react";
 import { createOffices } from "../../util/http";
 import { getAllOffices } from "../../util/http";
 
-
 // const url = "https://issue-tracker-jywg.onrender.com/api";
 
 const CreateOffices = () => {
   const [formData, setFormData] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-    const [offices, setOffices] = useState([]);
+  const [offices, setOffices] = useState([]);
   const [errMessage, setErrMessage] = useState("");
 
-    
-         useEffect(() => {
-        const loadData = async () => {
-          try {
-            const allOffices = await getAllOffices(); 
-                  console.log(allOffices)
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const allOffices = await getAllOffices();
+        console.log(allOffices);
 
-            setOffices(allOffices)
-    
-          } catch (error) {
-            console.error("Error loading issues:", error);
-          } 
-        };
-    
-        loadData();
-      }, []);
+        setOffices(allOffices);
+      } catch (error) {
+        console.error("Error loading issues:", error);
+      }
+    };
 
-      console.log(offices)
+    loadData();
+  }, []);
+
+  console.log(offices);
 
   const handleChange = (e) => {
     const { value } = e.target;
     setFormData(value);
     console.log(formData);
   };
-  // async function createOffices(formData) {
-  //   try {
-  //     const response = await fetch(url + "/offices/create/", {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
-
-  //     const data = await response.json();
-  //     if (response.status >= 200 && response.status < 300) {
-  //       setMessage("Office creation successful!");
-  //     }
-  //     if (response.status === 400) {
-  //       setErrMessage(data.errors?.non_field_errors?.[0]);
-  //     }
-
-  //     return data;
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,12 +42,12 @@ const CreateOffices = () => {
 
     try {
       const response = await createOffices({ name: formData });
-      console.log(response.status)
+      console.log(response.status);
       if (response.status >= 200 && response.status < 300) {
         setMessage("Office creation successful!");
       }
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       if (response.status === 400) {
         setErrMessage(data.errors?.name?.[0]);
       }
@@ -84,7 +57,9 @@ const CreateOffices = () => {
       console.error("Submission error:", error);
     } finally {
       setIsSubmitting(false);
-      console.log(errMessage)
+      setMessage("");
+
+      console.log(errMessage);
     }
   };
   let content;

@@ -32,12 +32,11 @@ export default function AnalyticsPage() {
   }, []);
 
     async function handleDeleteOffice(id){
-        const response = await authFetch(url + "/offices/delete/", {
+        const response = await authFetch(url + "/saccos/delete/", {
           method: "POST", 
-          // headers: {
-          //   "Content-Type": "application/json",
-          //   "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
-          // },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({id:id})
         });
       

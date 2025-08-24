@@ -34,7 +34,6 @@ export async function refreshAuthToken() {
     }
 
     const data = await response.json();
-    console.log(data);
     sessionStorage.setItem("accessToken", data.access);
     sessionStorage.setItem("refreshToken", data.refresh);
     return data.access;
@@ -43,7 +42,6 @@ export async function refreshAuthToken() {
     clearSession();
 
     if (error.message === "REFRESH_TOKEN_EXPIRED") {
-      console.log(" Clear tokens on refresh failure");
       throw new Error("REFRESH_TOKEN_EXPIRED");
     }
     throw error;
@@ -53,7 +51,6 @@ export async function refreshAuthToken() {
 // Helper function to check token expiry
 export function isTokenExpired(token) {
   if (!token) {
-    console.log("Token");
     return true;
   }
   try {
@@ -178,7 +175,6 @@ export async function getAllOffices() {
   });
   if (!response.ok) throw new Error("Failed to fetch offices");
   const offices = await response.json();
-  console.log(offices);
 
   return offices;
 }
@@ -224,7 +220,6 @@ export async function reportIssue(formData) {
     body: formData,
   });
   const resData = await response.json();
-  console.log(resData);
 
   return resData;
 }
@@ -350,7 +345,6 @@ export async function listResolvedIssues() {
 }
 
 export async function listResolvedIssuesByDate(searchIssues) {
-  console.log(searchIssues);
   try {
     const response = await authFetch(url + "/issues/list/", {
       method: "POST",
@@ -598,7 +592,6 @@ export async function CreateSaccos(formData) {
 }
 
 export async function createOffices(officeName) {
-  console.log(officeName);
   try {
     const response = await authFetch(url + "/offices/create/", {
       method: "POST",
@@ -607,13 +600,6 @@ export async function createOffices(officeName) {
     },
       body: JSON.stringify({ name: officeName.name }),
     });
-
-    // const data = await response.json();
-    // console.log(data.errors.name[0])
-
-    // if (!response.ok) {
-    //   return;
-    // }
 
     return response;
   } catch (error) {

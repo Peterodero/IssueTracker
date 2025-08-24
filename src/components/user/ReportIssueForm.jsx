@@ -2,17 +2,30 @@ import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import { issueTypes } from "../../data/model";
 import Select from "react-select";
-import { useQuery } from "@tanstack/react-query";
 import { fetchUsers } from "../../util/http";
 
 export default function ReportIssueForm() {
   const issueCtx = useContext(IssueContext);
   const [previewUrls, setPreviewUrls] = useState([]);
+  const [users, setUsers] = useState([])
 
-  const { data: users } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
-  });
+  // const { data: users } = useQuery({
+  //   queryKey: ["users"],
+  //   queryFn: fetchUsers,
+  // });
+
+    useEffect(() => {
+      const loadData = async () => {
+        try {
+          const allUsers = await fetchUsers();
+          setUsers(allUsers);
+        } catch (error) {
+          console.error("Error loading users:", error);
+        }
+      };
+  
+      loadData();
+    }, []);
 
   const handlePhotoChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) return;

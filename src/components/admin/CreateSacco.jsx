@@ -10,12 +10,11 @@ const CreateSaccos = () => {
     name: "",
     office: "", // This will store the office ID for submission
   });
-  const [offices, setOffices] = useState([]); 
+  const [offices, setOffices] = useState([]);
   const [selectedOffice, setSelectedOffice] = useState(null); // For React Select value
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errMessage, setErrMessage] = useState("");
-
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,7 +33,7 @@ const CreateSaccos = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log(formData)
+    console.log(formData);
   };
 
   const handleOfficeChange = (selectedOption) => {
@@ -42,7 +41,7 @@ const CreateSaccos = () => {
       setSelectedOffice(selectedOption);
       // Store the office ID in formData for submission
       setFormData((prev) => ({ ...prev, office: selectedOption.value }));
-      console.log(formData)
+      console.log(formData);
     } else {
       setSelectedOffice(null);
       setFormData((prev) => ({ ...prev, office: "" }));
@@ -53,6 +52,9 @@ const CreateSaccos = () => {
     try {
       const response = await authFetch(url + "/saccos/create/", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           name: formData.name,
           office: formData.office, // This should be the office ID
@@ -242,15 +244,11 @@ const CreateSaccos = () => {
 
 export default CreateSaccos;
 
-
-
-
 // import  { useContext, useEffect, useState } from "react";
 // import Select from "react-select";
 // import { IssueContext } from "../../store/issue-context";
 // import { useQuery } from "@tanstack/react-query";
 // import { getAllOffices } from "../../util/http";
-
 
 // // import { createOffices } from "../../util/http";
 
@@ -271,12 +269,12 @@ export default CreateSaccos;
 //      useEffect(() => {
 //     const loadData = async () => {
 //       try {
-//         const allOffices = await getAllOffices(); 
+//         const allOffices = await getAllOffices();
 //         setOffices(allOffices)
 
 //       } catch (error) {
 //         console.error("Error loading issues:", error);
-//       } 
+//       }
 //     };
 
 //     loadData();

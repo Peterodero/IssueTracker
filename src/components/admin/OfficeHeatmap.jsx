@@ -16,7 +16,7 @@ export default function OfficeHeatmap({ saccos,handleDeleteOffice }) {
       title={
         <span>
           <HeatMapOutlined style={{ marginRight: 8 }} />
-          Office Activity Heatmap
+          Sacco Activity Heatmap
         </span>
       }
     

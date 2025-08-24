@@ -48,7 +48,7 @@ export default function SearchByDate({handleSubmit, searching}) {
             className="w-full px-4 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
           />
         </div>
-        <div className="w-full md:w-auto">
+        {/* <div className="w-full md:w-auto">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Select Sacco<span className="text-red-500">*</span>
         </label>
@@ -88,7 +88,7 @@ export default function SearchByDate({handleSubmit, searching}) {
           }}
           required
         />
-      </div>
+      </div> */}
         <button
           type="submit"
           className="w-full md:w-auto mt-6 md:mt-6 px-6 py-2 bg-orange-400 text-white font-medium rounded-md hover:bg-orange-500 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"

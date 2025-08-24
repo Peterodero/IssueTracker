@@ -91,8 +91,8 @@ export default function ViewTopUp() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {topUpList.map((list, index) => {
-                  const saccoName = list.sacco?.name || "No office assigned";
-                  const officeName = list.office?.name || "";
+                  const saccoName = list.sacco?.name || "No sacoo assigned";
+                  const officeName = list.office?.name || "No office assigned";
                   const amount = list.amount ? list.amount : "-";
                   const reporterName = list.created_by?.username || "Unknown";
                   const reporterPhone = list.created_by?.phone_number || "";

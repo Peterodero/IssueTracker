@@ -70,7 +70,6 @@ export default function IssuesTable({
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {issuesList.map((issue, index) => {
-                console.log(issue);
                 const saccoName = issue.sacco?.name || "No office assigned";
                 const officeName = issue.office?.name || "";
                 const serviceName =

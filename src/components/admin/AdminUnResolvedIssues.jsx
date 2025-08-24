@@ -96,7 +96,7 @@ export default function UserResolvedIssues() {
         fetchIssues={fetchUnResolvedIssues}
         commentText={commentText}
         searching={searching}
-        issueTitle="unresolved Issues"
+        issueTitle="Unresolved Issues"
         noIssueContent="No unresolved issues found"
       />
     </>
