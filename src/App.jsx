@@ -22,6 +22,7 @@ import UserResolvedIssues from "./components/user/UserResolvedIssues";
 import UserUnresolvedIssues from "./components/user/UserUnresolvedIssues";
 import Saccos from "./components/admin/Saccos";
 import Offices from "./components/admin/Offices";
+import Services from "./components/admin/Services";
 
 function App() {
   const router = createBrowserRouter([
@@ -108,8 +109,8 @@ function App() {
               element: <Saccos/>,
             },
             {
-              path: "create-services",
-              element: <CreateServices />,
+              path: "services",
+              element: <Services />,
             },
             {
               path: "disable-user",

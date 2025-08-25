@@ -148,14 +148,14 @@ export default function AdminSidebar({
                     <div className="flex items-center">Offices</div>
                   </button>
                   <button
-                    onClick={() => navigateToPath("/admin/create-services")}
+                    onClick={() => navigateToPath("/admin/services")}
                     className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
-                      location.pathname === "/admin/create-services"
+                      location.pathname === "/admin/services"
                         ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
                         : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                     }`}
                   >
-                    <div className="flex items-center">Create Service</div>
+                    <div className="flex items-center">Services</div>
                   </button>
                   <button
                     onClick={() => navigateToPath("/admin/disable-user")}
