@@ -9,7 +9,6 @@ import UpdateTopUp from "./components/user/UpdateTopUp";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CreateOffices from "./components/admin/CreateOffices";
 import CreateServices from "./components/admin/CreateServices";
 import AllIssues from "./components/issues/AllIssues";
 import ViewTopUp from "./components/airtimeTopUp/ViewTopUp";
@@ -18,7 +17,6 @@ import AdminLandingPage from "./components/admin/AdminLandingPage";
 import AdminUnresolvedIssues from "./components/admin/AdminUnResolvedIssues";
 import AnalyticsPage from "./components/admin/AnalyticsPage";
 import AdminResolvedIssues from "./components/admin/AdminResolveIssues";
-import RegisterUser from "./components/admin/RegisterUser";
 import DisableUser from "./components/admin/DisableUser";
 import UserResolvedIssues from "./components/user/UserResolvedIssues";
 import UserUnresolvedIssues from "./components/user/UserUnresolvedIssues";
@@ -116,10 +114,6 @@ function App() {
             {
               path: "disable-user",
               element: <DisableUser />,
-            },
-            {
-              path: "register-user",
-              element: <RegisterUser />,
             },
 
             {

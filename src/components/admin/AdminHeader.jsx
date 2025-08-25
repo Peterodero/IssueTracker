@@ -221,16 +221,6 @@ export default function AdminHeader({
                         <div className="flex items-center">Create Service</div>
                       </button>
                       <button
-                        onClick={() => navigateToPath("/admin/register-user")}
-                        className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
-                          location.pathname === "/admin/register-user"
-                            ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
-                            : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
-                        }`}
-                      >
-                        <div className="flex items-center">Register User</div>
-                      </button>
-                      <button
                         onClick={() => navigateToPath("/admin/disable-user")}
                         className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
                           location.pathname === "/admin/disable-user"

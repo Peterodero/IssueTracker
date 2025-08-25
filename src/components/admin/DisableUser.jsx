@@ -3,15 +3,97 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import ErrorBlock from "../UI/ErrorBlock";
 import Modal from "../UI/Modal";
-import { fetchUsers, toggleUserStatus } from "../../util/http";
+import { fetchUsers, toggleUserStatus, url } from "../../util/http";
+import RegisterUser from "./RegisterUser";
 
 export default function DisableUser() {
   const queryClient = useQueryClient();
   const [selectedUser, setSelectedUser] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
-  //Fetch users data
+  const [formData, setFormData] = useState({
+    username: "",
+    phone_number: "",
+    password: "",
+  });
+  const [message, setMessage] = useState("");
+  const [errMessage, setErrMessage] = useState({
+    username: "",
+    phone_number: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  async function registerUser(formData) {
+    try {
+      const response = await fetch(url + "/register/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.status >= 200 && response.status < 300) {
+        setMessage("User registered successfully!");
+      }
+      if (response.status === 400) {
+        setErrMessage(() => {
+          const newErrors = {
+            username: "",
+            phone_number: "",
+          };
+
+          // Safely update only the fields that exist in the response
+          if (data?.username) newErrors.username = data.username[0];
+          if (data?.phone_number) newErrors.phone_number = data.phone_number[0];
+
+          return newErrors;
+        });
+      }
+
+      return data;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await registerUser(formData);
+    } catch (error) {
+      setErrMessage("Failed to create office. Please try again.");
+      console.error("Submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleReset = async() => {
+    await fetchUsers()
+    setIsAdding(false)
+    setFormData({
+      username: "",
+      phone_number: "",
+      password: "",
+    });
+    setMessage("");
+    setErrMessage({
+      username: "",
+      phone_number: "",
+    });
+  };
+
   const {
     data: users,
     isLoading,
@@ -36,6 +118,10 @@ export default function DisableUser() {
       user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.phone_number.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleRegisterUser = () => {
+    setIsAdding(true);
+  };
 
   const handleStatusToggle = (user) => {
     setSelectedUser(user);
@@ -67,9 +153,18 @@ export default function DisableUser() {
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl text-center font-bold text-black mb-6 border-b-2 border-orange-300 pb-2">
-          User Management
-        </h2>
+        <div className="flex justify-between items-center border-b-2 border-orange-300 mb-6">
+          <div></div>
+          <h2 className="text-2xl text-center font-bold text-black  pb-2">
+            User Management
+          </h2>
+          <button
+            className="text-center border-2 border-orange-300 rounded mb-5 bg-white p-3 hover:bg-orange-300 hover:text-white"
+            onClick={handleRegisterUser}
+          >
+            Register User
+          </button>
+        </div>
 
         {/* Search and filter section */}
         <div className="mb-6">
@@ -187,7 +282,7 @@ export default function DisableUser() {
                 ? `Are you sure you want to disable ${selectedUser.username}?`
                 : `Are you sure you want to enable ${selectedUser.username}?`}
             </p>
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-between space-x-3">
               <button
                 type="button"
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-300"
@@ -208,6 +303,20 @@ export default function DisableUser() {
               </button>
             </div>
           </div>
+        </Modal>
+      )}
+
+      {isAdding && (
+        <Modal>
+          <RegisterUser
+            isSubmitting={isSubmitting}
+            errMessage={errMessage}
+            message={message}
+            formData={formData}
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            handleReset={handleReset}
+          />
         </Modal>
       )}
     </div>
