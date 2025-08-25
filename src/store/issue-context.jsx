@@ -196,7 +196,6 @@ export default function ReportIssueContextProvider({ children }) {
 
       // Fetch offices for the selected sacco
       if (selectedSacco?.id) {
-        console.log(selectedSacco?.id)
         fetchOffices(selectedSacco.id);
       } else {
         setOfficeList([]);

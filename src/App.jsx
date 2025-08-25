@@ -22,7 +22,8 @@ import RegisterUser from "./components/admin/RegisterUser";
 import DisableUser from "./components/admin/DisableUser";
 import UserResolvedIssues from "./components/user/UserResolvedIssues";
 import UserUnresolvedIssues from "./components/user/UserUnresolvedIssues";
-import CreateSaccos from "./components/admin/CreateSacco";
+import Saccos from "./components/admin/Saccos";
+import Offices from "./components/admin/Offices";
 
 function App() {
   const router = createBrowserRouter([
@@ -101,12 +102,12 @@ function App() {
               element: <AllIssues />,
             },
             {
-              path: "create-offices",
-              element: <CreateOffices />,
+              path: "offices",
+              element: <Offices />,
             },
              {
-              path: "create-saccos",
-              element: <CreateSaccos />,
+              path: "saccos",
+              element: <Saccos/>,
             },
             {
               path: "create-services",
@@ -133,10 +134,6 @@ function App() {
               path: "viewTopUps",
               element: <ViewTopUp />,
             },
-            // {
-            //   path: "viewIssues",
-            //   element: <ViewIssues />,
-            // },
 
             {
               path: "view-attachment/:issue_id",

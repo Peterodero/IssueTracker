@@ -15,7 +15,7 @@ export default function AllIssues() {
   const [activeCommentIssue, setActiveCommentIssue] = useState(null);
   const [searching, setSearching] = useState(false)
 
-  const { fetchIssues, issuesList, fetchResolvedIssuesByDate, fetchResolvedIssues } = useContext(IssueContext);
+  const { fetchIssues, issuesList, fetchResolvedIssuesByDate } = useContext(IssueContext);
 
     const handleAddComment = async (issueId) => {
       if (!commentText.trim()) return;
@@ -50,7 +50,7 @@ export default function AllIssues() {
       try {
         const successMessage = await deleteIssue(issue.id);
         setMessage(successMessage.message);
-        fetchResolvedIssues();
+        fetchIssues();
       } catch (err) {
         setError(err.message || "Failed to delete issue");
       }

@@ -171,9 +171,9 @@ export default function ViewAttachment() {
                             <p className="font-medium text-gray-900">
                               {comment.author?.username || "Anonymous"}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            {/* <p className="text-xs text-gray-500">
                               {comment.author?.phone_number || "Anonymous"}
-                            </p>
+                            </p> */}
                           </div>
                           <p className="text-xs text-gray-500">
                             {formatDate(comment.created_at)}

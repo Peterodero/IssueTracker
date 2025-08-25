@@ -17,7 +17,7 @@ export default function Modal({ children, onClose }) {
 
   return createPortal(
     <dialog
-      className="modal fixed md:top-[10vh] top-[18vh] left-9 right-9 sm:left-[calc(50%-15rem)] sm:w-[30rem] m-0 p-6 md:p-8 md:max-h-[80vh] max-h-[60vh] bg-[#e2e5eb] border-0 rounded-lg z-[100] shadow-xl flex flex-col justify-between overflow-y-auto animate-[slide-down-fade-in_300ms_ease-out_forwards]"
+      className="modal fixed md:top-[10vh] top-[18vh] left-9 right-9 sm:left-[calc(50%-15rem)] sm:w-[30rem] m-0 p-3 md:p-5 md:max-h-[80vh] max-h-[60vh] bg-[#e2e5eb] border-0 rounded-lg z-[100] shadow-xl flex flex-col justify-between overflow-y-auto animate-[slide-down-fade-in_300ms_ease-out_forwards]"
       ref={dialog}
       onClose={onClose}
     >

@@ -112,67 +112,6 @@ export default function TopUpForm({ handleSubmit, errors }) {
           />
         </div>
 
-
-     {/* <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Select Office<span className="text-red-500">*</span>
-        </label>
-        <Select
-          options={Array.from(
-            new Map(saccoList.map((sacco) => [sacco.location, sacco])).values()
-          ).map((sacco) => ({
-            value: sacco.id, // Store the ID instead of location
-            label: sacco.location,
-          }))}
-          value={
-            formData.officeName
-              ? {
-                  value: formData.officeId || "", // Use ID here
-                  label: formData.officeName || "Select an office",
-                }
-              : {
-                  value: "",
-                  label: "Select an office",
-                }
-          }
-          onChange={(selectedOption) => {
-            const selectedSacco = saccoList.find(
-              (sacco) => sacco.id === selectedOption.value
-            );
-            handleChange({
-              target: {
-                name: "office",
-                value: selectedSacco.id, // Send ID to backend
-              },
-            });
-            handleChange({
-              target: {
-                name: "officeName",
-                value: selectedSacco.location, // Store location for display
-              },
-            });
-          }}
-          placeholder="Type to search office..."
-          className="w-full"
-          classNames={{
-            control: (state) =>
-              `min-h-[42px] border border-gray-300 ${
-                state.isFocused
-                  ? "!border-orange-300 !ring-2 !ring-orange-200"
-                  : ""
-              }`,
-            option: (state) =>
-              `${state.isSelected ? "!bg-orange-500" : ""} ${
-                state.isFocused ? "!bg-orange-100" : ""
-              }`,
-            menu: () => "!mt-1",
-            dropdownIndicator: () => "text-gray-400",
-            indicatorSeparator: () => "!bg-gray-300",
-          }}
-          required
-        />
-      </div> */}
-
       {/* Service Selection */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">

@@ -128,24 +128,24 @@ export default function AdminSidebar({
               {showManageSubmenu && (
                 <div className="ml-4 space-y-1 mt-1 border-l-2 border-orange-200 pl-2">
                   <button
-                    onClick={() => navigateToPath("/admin/create-saccos")}
+                    onClick={() => navigateToPath("/admin/saccos")}
                     className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
-                      location.pathname === "/admin/create-saccos"
+                      location.pathname === "/admin/saccos"
                         ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
                         : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                     }`}
                   >
-                    <div className="flex items-center">Create Sacco</div>
+                    <div className="flex items-center">Saccos</div>
                   </button>
                   <button
-                    onClick={() => navigateToPath("/admin/create-offices")}
+                    onClick={() => navigateToPath("/admin/offices")}
                     className={`block w-full text-left px-4 py-1 rounded-md transition-colors duration-200 ${
-                      location.pathname === "/admin/create-offices"
+                      location.pathname === "/admin/offices"
                         ? "bg-orange-100 text-orange-600 font-medium border-l-4 border-orange-500"
                         : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                     }`}
                   >
-                    <div className="flex items-center">Create Office</div>
+                    <div className="flex items-center">Offices</div>
                   </button>
                   <button
                     onClick={() => navigateToPath("/admin/create-services")}

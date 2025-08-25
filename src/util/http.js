@@ -435,7 +435,6 @@ export async function addComment(issueId, text) {
 }
 
 export async function updateTopUp(formData) {
-  console.log(formData)
   const response = await authFetch(url + "/data-bundles/create/", {
     method: "POST",
     headers: {
@@ -568,7 +567,7 @@ export async function toggleUserStatus(data) {
   return resData;
 }
 
-export async function CreateSaccos(formData) {
+export async function createSaccos(formData) {
   try {
     const response = await authFetch(url + "/saccos/create/", {
       method: "POST",

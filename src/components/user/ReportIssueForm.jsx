@@ -9,11 +9,6 @@ export default function ReportIssueForm() {
   const [previewUrls, setPreviewUrls] = useState([]);
   const [users, setUsers] = useState([])
 
-  // const { data: users } = useQuery({
-  //   queryKey: ["users"],
-  //   queryFn: fetchUsers,
-  // });
-
     useEffect(() => {
       const loadData = async () => {
         try {
@@ -27,6 +22,8 @@ export default function ReportIssueForm() {
       loadData();
     }, []);
 
+    // console.log(issueCtx.saccoList)
+
   const handlePhotoChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
@@ -38,7 +35,7 @@ export default function ReportIssueForm() {
       "text/markdown",
       "text/csv",
     ];
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 5 * 1024 * 1024; 
 
     const files = Array.from(e.target.files).filter(
       (file) => validTypes.includes(file.type) && file.size <= maxSize
@@ -76,6 +73,8 @@ export default function ReportIssueForm() {
       previewUrls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [previewUrls]);
+
+  console.log(issueCtx.saccoList)
 
   return (
     <form className="p-6" onSubmit={issueCtx.handleSubmitIssueForm}>
@@ -127,8 +126,8 @@ export default function ReportIssueForm() {
           </label>
           <Select
             options={issueCtx.officeList.map((office) => ({
-              value: office.id, // Use office ID
-              label: office.name, // Use office name
+              value: office.id, 
+              label: office.name,
             }))}
             value={
               issueCtx.formData.office
