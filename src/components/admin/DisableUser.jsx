@@ -155,11 +155,11 @@ export default function DisableUser() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center border-b-2 border-orange-300 mb-6">
           <div></div>
-          <h2 className="text-2xl text-center font-bold text-black  pb-2">
-            User Management
+          <h2 className="text-2xl text-center font-bold text-black mb-4">
+            Users
           </h2>
           <button
-            className="text-center border-2 border-orange-300 rounded mb-5 bg-white p-3 hover:bg-orange-300 hover:text-white"
+            className="text-center border-2 border-orange-300 rounded mb-4 bg-white p-3 hover:bg-orange-300 hover:text-white"
             onClick={handleRegisterUser}
           >
             Register User
