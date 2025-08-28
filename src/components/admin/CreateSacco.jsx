@@ -7,9 +7,6 @@ function CreateSaccos({
   handleCancel,
   formData,
   handleChange,
-  offices,
-  selectedOffice,
-  handleOfficeChange,
 }) {
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-3">
@@ -40,38 +37,7 @@ function CreateSaccos({
             />
           </div>
 
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Office<span className="text-red-500">*</span>
-            </label>
-            <Select
-              options={offices.map((office) => ({
-                value: office.id, // Store the ID as value
-                label: office.name, // Display the name as label
-              }))}
-              value={selectedOffice}
-              onChange={handleOfficeChange}
-              placeholder="Select an office..."
-              className="w-full"
-              classNames={{
-                control: (state) =>
-                  `min-h-[42px] border border-gray-300 ${
-                    state.isFocused
-                      ? "!border-orange-300 !ring-2 !ring-orange-200"
-                      : ""
-                  }`,
-                option: (state) =>
-                  `${state.isSelected ? "!bg-orange-500" : ""} ${
-                    state.isFocused ? "!bg-orange-100" : ""
-                  }`,
-                menu: () => "!mt-1",
-                dropdownIndicator: () => "text-gray-400",
-                indicatorSeparator: () => "!bg-gray-300",
-              }}
-              isClearable
-              required
-            />
-          </div>
+          
           <div className="flex justify-between space-x-3">
             <button
               type="button"

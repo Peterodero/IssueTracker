@@ -91,6 +91,7 @@ export default function Saccos() {
   };
 
   async function createSaccos(formData) {
+    console.log(formData)
     try {
       const response = await authFetch(url + "/saccos/create/", {
         method: "POST",
@@ -98,8 +99,7 @@ export default function Saccos() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formData.name,
-          office: formData.office, // This should be the office ID
+          name: formData
         }),
       });
 
@@ -110,7 +110,7 @@ export default function Saccos() {
         setSelectedOffice(null);
       }
       if (response.status === 400) {
-        setErrMessage(data.errors?.non_field_errors?.[0] || "Validation error");
+        setErrMessage(data.errors?.name?.[0] || "Validation error");
       }
 
       return data;
@@ -213,8 +213,6 @@ export default function Saccos() {
   if (loading) {
     return <LoadingIndicator />;
   }
-
-  console.log(saccoList)
 
   return (
     <div className="min-h-screen bg-white py-6 px-30">

@@ -585,13 +585,14 @@ export async function toggleUserStatus(data) {
 }
 
 export async function createSaccos(formData) {
+  console.log(formData)
   try {
     const response = await authFetch(url + "/saccos/create/", {
       method: "POST",
       headers: {
       "Content-Type": "application/json",
     },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({name: formData}),
     });
 
     const data = await response.json();
