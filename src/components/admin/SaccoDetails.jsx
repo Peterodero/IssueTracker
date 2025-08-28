@@ -10,6 +10,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { authFetch, url } from "../../util/http";
 
 export default function SaccoDetails() {
   const saccoId = useParams();
@@ -19,6 +20,10 @@ export default function SaccoDetails() {
   const [offices, setOffices] = useState(sacco.offices || []);
   const [isDeleting, setIsDeleting] = useState(false);
   const [officeToDelete, setOfficeToDelete] = useState(null);
+   const [message, setMessage] = useState("");
+    const [errMessage, setErrMessage] = useState("");
+
+    console.log(sacco)
 
   const handleDeleteOffice = async (officeId) => {
     if (
@@ -31,20 +36,27 @@ export default function SaccoDetails() {
     }
 
     setIsDeleting(true);
-    try {
-      // Here you would make an API call to delete the office
-      // For now, we'll just simulate it
-      console.log("Deleting office with ID:", officeId);
-
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Remove the office from the local state
-      setOffices((prev) => prev.filter((office) => office.id !== officeId));
-      setOfficeToDelete(null);
-
-      // Show success message (you could use a toast notification here)
-      alert("Office deleted successfully!");
+     try {
+      
+         const response = await authFetch(url + "/offices/delete/", {
+           method: "POST",
+           headers: {
+             "Content-Type": "application/json",
+           },
+           body: JSON.stringify({
+             office: officeId
+           }),
+         });
+   
+         const data = await response.json();
+         if (response.status >= 200 && response.status < 300) {
+           setMessage("Office deletion successful!");
+         }
+         if (response.status === 400) {
+           setErrMessage(data.errors?.name?.[0] || "Validation error");
+         }
+   
+         return data;
     } catch (error) {
       console.error("Failed to delete office:", error);
       alert("Failed to delete office. Please try again.");
@@ -63,6 +75,23 @@ export default function SaccoDetails() {
 
   if (!sacco) {
     return <ErrorBlock message="Sacco not found" />;
+  }
+
+   let content;
+
+  if (errMessage) {
+    content = (
+      <div className="mb-4 p-4 rounded-md bg-red-50 text-red-800 border border-red-200">
+        {errMessage}
+      </div>
+    );
+  }
+  if (message) {
+    content = (
+      <div className="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-200">
+        {message}
+      </div>
+    );
   }
 
   return (
@@ -85,7 +114,7 @@ export default function SaccoDetails() {
               clipRule="evenodd"
             />
           </svg>
-          Back to Saccos
+          Back
         </button>
         <h2 className="text-2xl font-bold text-gray-900">Sacco Details</h2>
         <div className="w-24"></div>
@@ -101,7 +130,7 @@ export default function SaccoDetails() {
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">{sacco.name}</h1>
-              <p className="text-orange-100 mt-1">Sacco Management System</p>
+              <p className="text-orange-100 mt-1">Sacco Management</p>
             </div>
           </div>
         </div>
@@ -130,6 +159,7 @@ export default function SaccoDetails() {
                 <MapPinIcon className="h-5 w-5 text-orange-600" />
                 Offices ({offices.length})
               </h3>
+              {content}
               <div className="space-y-4">
                 {offices.length > 0 ? (
                   offices.map((office) => (
@@ -233,7 +263,7 @@ function OfficeCard({
           </div>
         </div>
 
-        {!isConfirmingDelete ? (
+        {/* {!isConfirmingDelete ? (
           <button
             onClick={() => showDeleteConfirmation(office.id)}
             disabled={isDeleting}
@@ -250,7 +280,7 @@ function OfficeCard({
           >
             <XMarkIcon className="h-5 w-5" />
           </button>
-        )}
+        )} */}
       </div>
 
       {/* Delete confirmation overlay - only shown when isConfirmingDelete is true */}
