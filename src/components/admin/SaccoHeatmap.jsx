@@ -1,7 +1,7 @@
 import { Card, Row, Col, Tooltip } from 'antd';
 import { HeatMapOutlined } from '@ant-design/icons';
 
-export default function OfficeHeatmap({ saccos,handleDeleteOffice }) {
+export default function SaccoHeatmap({ saccos,handleDeleteSacco }) {
 
   const getIntensityColor = (intensity) => {
     if (intensity > 80) return '#f5222d';
@@ -23,11 +23,11 @@ export default function OfficeHeatmap({ saccos,handleDeleteOffice }) {
     >
       <Row gutter={[16, 16]}>
         {saccos.map((sacco, index) => (
-          <Col key={index} xs={12} sm={6} md={6} lg={8}>
+          <Col key={index} xs={12} sm={6} md={8} lg={12}>
             <Tooltip title={`${sacco.sacco_name}: ${sacco.total_issues} issues`}>
               <div style={{ 
                 backgroundColor: getIntensityColor(sacco.intensity),
-                padding: '12px 5px',
+                padding: '10px 5px',
                 borderRadius: 4,
                 display: 'flex',
                 flexDirection: 'column',
@@ -44,7 +44,7 @@ export default function OfficeHeatmap({ saccos,handleDeleteOffice }) {
               }}>
                 <span className='text-sm text-black'>{sacco.sacco_name}</span><br></br>
                 <span className='text-sm text-gray-500'>{`${sacco.total_issues} issues`}</span>
-                <button className=' items-center text-red-500 mt-2' onClick={()=>handleDeleteOffice(sacco.sacco_id)}>Delete</button>
+                <button className=' items-center text-red-500 mt-2' onClick={()=>handleDeleteSacco(sacco.sacco_id)}>Delete</button>
               </div>
             </Tooltip>
           </Col>

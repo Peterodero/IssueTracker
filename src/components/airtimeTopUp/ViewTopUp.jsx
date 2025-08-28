@@ -2,12 +2,18 @@ import { useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
 import LoadingIndicator from "../UI/LoadingIndicator";
 import SearchByDate from "../SearchByDate";
-import { getAnalytics } from "../../util/http";
+import { authFetch, url } from "../../util/http";
+import DeleteConfirmation from "../DeleteConfirmation";
 
 export default function ViewTopUp() {
   const [loadingData, setLoadingData] = useState(false);
-  const [searching, setSearching] = useState(false)
+  const [searching, setSearching] = useState(false);
   const { fetchTopUps, fetchTopUpByDate, topUpList } = useContext(IssueContext);
+  const [message, setMessage] = useState("")
+  const [errMessage, setErrMessage] = useState("")
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [topUpToDelete, setTopUpToDelete] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -24,18 +30,6 @@ export default function ViewTopUp() {
     loadData();
   }, [fetchTopUps]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await getAnalytics();
-          console.log(response.data);
-        } catch (error) {
-          console.error("Error fetching analytics:", error);
-        } 
-      };
-      fetchData();
-    }, []);
-
   if (loadingData) {
     return (
       <div className="flex items-center justify-center h-screen w-screen fixed top-30 left-0">
@@ -46,10 +40,62 @@ export default function ViewTopUp() {
 
   async function handleSubmitDate(e) {
     e.preventDefault();
-    setSearching(true)
+    setSearching(true);
     await fetchTopUpByDate();
-    setSearching(false)
+    setSearching(false);
   }
+
+  async function handleDeleteTopUp(id) {
+    const response = await authFetch(url + "/data-bundles/delete/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      setErrMessage("Failed to delete the record")
+      throw new Error(error.message || "Failed to delete top-up");
+    }
+
+    const resData = await response.json();
+
+    setMessage(resData?.message)
+    setLoadingData(true);
+    setIsDeleting(false)
+    await fetchTopUps();
+    setLoadingData(false);
+    return resData;
+  }
+
+  function openDeleteModal(id) {
+    setTopUpToDelete(id);
+    setIsDeleting(true);
+  }
+  function closeDeleteModal() {
+    setIsDeleting(false);
+    setTopUpToDelete("");
+  }
+
+    let content;
+
+  if (errMessage) {
+    content = (
+      <div className="mb-4 p-2 rounded-md bg-red-50 text-red-800 border border-red-200">
+        {errMessage}
+      </div>
+    );
+  }
+  if (message) {
+    content = (
+      <div className="mb-4 p-2 rounded-md bg-green-100 text-green-800 border border-green-200">
+        {message}
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen bg-white p-6">
@@ -58,7 +104,7 @@ export default function ViewTopUp() {
           Top-Up Records
         </h2>
 
-        <SearchByDate handleSubmit={handleSubmitDate} searching={searching}/>
+        <SearchByDate handleSubmit={handleSubmitDate} searching={searching} />
 
         {/* Top-Ups Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -86,6 +132,9 @@ export default function ViewTopUp() {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
                     Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -162,6 +211,14 @@ export default function ViewTopUp() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-gray-900">{date}</span>
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() => openDeleteModal(list.id)}
+                          className="px-4 py-1 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
@@ -169,6 +226,15 @@ export default function ViewTopUp() {
             </table>
           </div>
         </div>
+
+        {isDeleting && (
+          <DeleteConfirmation
+            handleDelete={() => handleDeleteTopUp(topUpToDelete)}
+            text="Are you sure you want to delete the record?"
+            content={content}
+            closeDeleteModal={closeDeleteModal}
+          />
+        )}
 
         {topUpList.length === 0 && !loadingData && (
           <div className="text-center py-12">

@@ -219,9 +219,8 @@ export async function reportIssue(formData) {
     method: "POST",
     body: formData,
   });
-  const resData = await response.json();
 
-  return resData;
+  return response;
 }
 
 export async function listAllIssues() {
@@ -241,6 +240,33 @@ export async function listAllIssues() {
     return issues;
   } catch (error) {
     console.error("Error fetching services:", error);
+  }
+}
+
+
+export async function listAllIssuesByDate(searchIssues) {
+  console.log(searchIssues)
+  try {
+    const response = await authFetch(url + "/issues/list/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        start_date: searchIssues.startDate,
+        end_date: searchIssues.endDate,
+        sacco: searchIssues.sacco,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch all issues");
+    }
+
+    const allIssues = await response.json();
+    return allIssues;
+  } catch (error) {
+    console.error("Error fetching all issues:", error);
   }
 }
 
@@ -355,7 +381,7 @@ export async function listResolvedIssuesByDate(searchIssues) {
         status: "solved",
         start_date: searchIssues.startDate,
         end_date: searchIssues.endDate,
-        office_id: searchIssues.sacco,
+        sacco: searchIssues.sacco,
       }),
     });
 
@@ -392,6 +418,7 @@ export async function listUnResolvedIssues() {
 }
 
 export async function listUnResolvedIssuesByDate(searchIssues) {
+  console.log(searchIssues)
   try {
     const response = await authFetch(url + "/issues/list/", {
       method: "POST",
@@ -402,7 +429,7 @@ export async function listUnResolvedIssuesByDate(searchIssues) {
         status: "unsolved",
         start_date: searchIssues.startDate,
         end_date: searchIssues.endDate,
-        office_id: searchIssues.sacco,
+        sacco: searchIssues.sacco,
       }),
     });
 
@@ -449,9 +476,9 @@ export async function updateTopUp(formData) {
       notes: "Monthly data bundle for office internet",
     }),
   });
-  const resData = await response.json();
+  // const resData = await response.json();
 
-  return resData;
+  return response;
 }
 
 export async function getAllTopUps() {
@@ -475,19 +502,17 @@ export async function getAllTopUps() {
   }
 }
 export async function getAllTopUpsByDate(date) {
+  console.log(date)
   try {
     const response = await authFetch(
       url +
-        `/data-bundles/list/?start_date=${date.startDate}&end_date=${date.endDate}`,
+        `/data-bundles/list/?start_date=${date.startDate}&end_date=${date.endDate}&sacco_id=${date.sacco}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        // headers: {
-        //   Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-        //   "Content-Type": "application/json",
-        // },
+        
       }
     );
 
@@ -496,6 +521,7 @@ export async function getAllTopUpsByDate(date) {
     }
 
     const topUps = await response.json();
+    console.log(topUps)
     return topUps;
   } catch (error) {
     console.error("Error fetching ", error);
@@ -509,10 +535,7 @@ export async function getAnalytics() {
       headers: {
       "Content-Type": "application/json",
     },
-      // headers: {
-      //   Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-      //   "Content-Type": "application/json",
-      // },
+   
     });
 
     if (!response.ok) {
@@ -533,10 +556,7 @@ export async function fetchUsers() {
       headers: {
       "Content-Type": "application/json",
     },
-      // headers: {
-      //   Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-      //   "Content-Type": "application/json",
-      // },
+   
     });
 
     if (!response.ok) {
@@ -556,10 +576,7 @@ export async function toggleUserStatus(data) {
     headers: {
       "Content-Type": "application/json",
     },
-    // headers: {
-    //   "Content-Type": "application/json",
-    //   Authorization: `Bearer ${accessToken}`,
-    // },
+  
     body: JSON.stringify(data),
   });
   const resData = await response.json();
@@ -590,14 +607,15 @@ export async function createSaccos(formData) {
   }
 }
 
-export async function createOffices(officeName) {
+export async function createOffices(office) {
+  console.log(office)
   try {
     const response = await authFetch(url + "/offices/create/", {
       method: "POST",
       headers: {
       "Content-Type": "application/json",
     },
-      body: JSON.stringify({ name: officeName.name }),
+      body: JSON.stringify({ name: office.name, sacco: office.saccoId }),
     });
 
     return response;

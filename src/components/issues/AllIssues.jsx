@@ -15,7 +15,7 @@ export default function AllIssues() {
   const [activeCommentIssue, setActiveCommentIssue] = useState(null);
   const [searching, setSearching] = useState(false)
 
-  const { fetchIssues, issuesList, fetchResolvedIssuesByDate } = useContext(IssueContext);
+  const { fetchIssues, issuesList, fetchIssuesByDate } = useContext(IssueContext);
 
     const handleAddComment = async (issueId) => {
       if (!commentText.trim()) return;
@@ -60,7 +60,7 @@ export default function AllIssues() {
     async function handleSubmitDate(e) {
       e.preventDefault();
       setSearching(true)
-      await fetchResolvedIssuesByDate();
+      await fetchIssuesByDate();
       setSearching(false)
     }
 

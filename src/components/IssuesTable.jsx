@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import SearchByDate from "./SearchByDate";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { Fragment } from "react";
-
+import { Fragment, useState } from "react";
+import Modal from "./UI/Modal";
+import DeleteConfirmation from "./DeleteConfirmation";
 
 export default function IssuesTable({
   handleIssue,
@@ -18,10 +19,40 @@ export default function IssuesTable({
   handleCommentStatus,
   handleDeleteIssue,
   handleSubmitDate,
-  searching
+  searching,
+  // error,
+  // mesg,
 }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [issueToDelete, setIssueToDelete] = useState({});
 
-  const role = sessionStorage.getItem("role")
+  function openDeleteModal(issue) {
+    setIssueToDelete(issue);
+    setIsDeleting(true);
+  }
+  function closeDeleteModal() {
+    setIsDeleting(false);
+    setIssueToDelete({});
+  }
+
+  // let content;
+
+  // if (error) {
+  //   content = (
+  //     <div className="mb-4 p-2 rounded-md bg-red-50 text-red-800 border border-red-200">
+  //       {error}
+  //     </div>
+  //   );
+  // }
+  // if (mesg) {
+  //   content = (
+  //     <div className="mb-4 p-2 rounded-md bg-green-100 text-green-800 border border-green-200">
+  //       {mesg}
+  //     </div>
+  //   );
+  // }
+
+  const role = sessionStorage.getItem("role");
 
   return (
     <div className="mx-auto">
@@ -29,7 +60,7 @@ export default function IssuesTable({
         {issueTitle}
       </h2>
 
-        <SearchByDate handleSubmit={handleSubmitDate} searching={searching}/>
+      <SearchByDate handleSubmit={handleSubmitDate} searching={searching} />
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="overflow-x-auto">
@@ -70,41 +101,36 @@ export default function IssuesTable({
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {issuesList.map((issue, index) => {
-                const saccoName = issue.sacco?.name || "No office assigned";
-                const officeName = issue.office?.name || "";
+                console.log(issue)
+                const saccoName = issue.sacco?.name || "No sacco assigned";
+                const officeName = issue.office?.name || "No sacco assigned";
                 const serviceName =
                   issue.service?.name || "No service specified";
-                {
-                  /* const serviceDesc = issue.service?.description || ""; */
-                }
                 const reporterName = issue.reporter?.username || "Unknown";
-                const reporterPhone = issue.reporter?.phone_number || "";
+                const reporterPhone = issue.reporter?.phone_number || "No number specified";
                 const assigned_to =
                   issue.assigned_to?.username || "No user specified";
 
-                const status = issue.status
+                const status = issue.status;
 
-                let statusContent, statusStyle, issueStatusStyle, statusAction;              
+                let statusContent, statusStyle, issueStatusStyle, statusAction;
 
-                if (status === "unsolved"){
-                  statusContent = "Unresolved"
-                  statusAction = "Resolve"
-                  statusStyle = "bg-orange-100 text-orange-800"
-                  issueStatusStyle = "bg-green-100 text-green-800"
-                }  
-                if(status === "solved"){
-                  statusContent = "Resolved"
-                  statusAction = "Unresolve"
-                  statusStyle = "bg-green-100 text-green-800"
-                  issueStatusStyle = "bg-orange-100 text-orange-800"
+                if (status === "unsolved") {
+                  statusContent = "Unresolved";
+                  statusAction = "Resolve";
+                  statusStyle = "bg-orange-100 text-orange-800";
+                  issueStatusStyle = "bg-green-100 text-green-800";
+                }
+                if (status === "solved") {
+                  statusContent = "Resolved";
+                  statusAction = "Unresolve";
+                  statusStyle = "bg-green-100 text-green-800";
+                  issueStatusStyle = "bg-orange-100 text-orange-800";
                 }
 
                 return (
                   <Fragment key={issue.id}>
-                    <tr
-
-                      className="hover:bg-gray-50 transition-colors"
-                    >
+                    <tr className="hover:bg-gray-50 transition-colors">
                       {/* Index Number */}
                       <td className="px-2 py-4 whitespace-nowrap">
                         <span
@@ -173,14 +199,20 @@ export default function IssuesTable({
 
                       {/* Status */}
                       <td className="px-2 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusStyle}`}>
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusStyle}`}
+                        >
                           {statusContent}
                         </span>
                       </td>
 
                       <td className="px-2 py-4 whitespace-nowrap">
                         <Link
-                          to={role === 'admin' ? `/admin/view-attachment/${issue.id}` : `/landing/view-attachment/${issue.id}`}
+                          to={
+                            role === "admin"
+                              ? `/admin/view-attachment/${issue.id}`
+                              : `/landing/view-attachment/${issue.id}`
+                          }
                           className="text-orange-500 hover:text-orange-700 font-medium"
                         >
                           View Details
@@ -191,14 +223,14 @@ export default function IssuesTable({
                       <td className="px-2 py-4 whitespace-nowrap space-x-2">
                         {role === "admin" && (
                           <button
-                            onClick={() => handleDeleteIssue(issue)}
+                            onClick={() => openDeleteModal(issue)}
                             className="px-1 py-1 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                           >
                             Delete
                           </button>
                         )}
                         <button
-                          onClick={()=> handleCommentStatus(issue.id)}
+                          onClick={() => handleCommentStatus(issue.id)}
                           className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-400 transition-colors"
                         >
                           {activeCommentIssue === issue.id
@@ -216,7 +248,7 @@ export default function IssuesTable({
 
                     {/* Comment Input Row */}
                     {activeCommentIssue === issue.id && (
-                      <tr className="" >
+                      <tr className="">
                         <td colSpan="8" className="px-6 py-4">
                           <div className="flex items-center gap-6">
                             <div className="flex-1">
@@ -248,6 +280,18 @@ export default function IssuesTable({
           </table>
         </div>
       </div>
+
+      {isDeleting && (
+        <DeleteConfirmation
+          handleDelete={() => {
+             handleDeleteIssue(issueToDelete)
+             setIsDeleting(false)
+             }}
+          text="Are you sure you want to delete the issue?"
+          // content={content}
+          closeDeleteModal={closeDeleteModal}
+        />
+      )}
 
       {issuesList.length === 0 && !loadingData && (
         <div className="text-center py-12">

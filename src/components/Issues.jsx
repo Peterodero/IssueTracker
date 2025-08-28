@@ -8,7 +8,6 @@ import IssuesTable from "./IssuesTable";
 
 export default function Issues({
   handleIssue,
-  openModal,
   message,
   searching,
   error,
@@ -25,7 +24,7 @@ export default function Issues({
   handleCommentStatus,
   handleDeleteIssue,
   handleSubmitModal,
-  handleSubmitDate
+  handleSubmitDate,
 }) {
   const [loadingData, setLoadingData] = useState(false);
 
@@ -33,7 +32,7 @@ export default function Issues({
     const loadData = async () => {
       setLoadingData(true);
       try {
-        await fetchIssues(); 
+        await fetchIssues();
       } catch (error) {
         console.error("Error loading issues:", error);
       } finally {
@@ -70,8 +69,13 @@ export default function Issues({
         handleDeleteIssue={handleDeleteIssue}
         handleSubmitDate={handleSubmitDate}
         searching={searching}
+        error={error}
+        title={error ? "Error" : "Success"}
+        mesg={message}
+        handleSubmit={handleSubmitModal}
       />
-      {openModal && (
+
+      {/* {openModal && (
         <Modal>
           <NotificationModal
             error={error}
@@ -80,7 +84,7 @@ export default function Issues({
             handleSubmit={handleSubmitModal}
           />
         </Modal>
-      )}
+      )} */}
     </div>
   );
 }

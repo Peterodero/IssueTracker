@@ -71,7 +71,7 @@ export default function UserResolvedIssues() {
     e.preventDefault();
     setSearching(true)
     await fetchResolvedIssuesByDate();
-    setSearching(false)
+    setSearching(false) 
   }
 
   return (

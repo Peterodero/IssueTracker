@@ -1,5 +1,4 @@
 import { createContext, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   getAllOffices,
   getAllTopUps,
@@ -8,6 +7,7 @@ import {
   getSaccos,
   getServices,
   listAllIssues,
+  listAllIssuesByDate,
   listResolvedIssues,
   listResolvedIssuesByDate,
   listUnResolvedIssues,
@@ -48,9 +48,11 @@ export const IssueContext = createContext({
   fetchTopUpByDate: () => {},
   resolvedIssuesList: () => {},
   fetchUnResolvedIssues: () => {},
+  fetchIssuesByDate: () => {},
   fetchResolvedIssuesByDate: () => {},
   fetchUnresolvedIssuesByDate: () => {},
   fetchTopUps: () => {},
+  isSubmitingIssue: false,
   unResolvedIssuesList: [],
   saccoList: [],
   allOfficeList: [],
@@ -58,6 +60,8 @@ export const IssueContext = createContext({
   serviceList: [],
   issuesList: [],
   topUpList: [],
+  errMessage: "",
+  message: "",
 });
 
 export default function ReportIssueContextProvider({ children }) {
@@ -84,14 +88,15 @@ export default function ReportIssueContextProvider({ children }) {
   const [resolvedIssuesList, setResolvedIssuesList] = useState([]);
   const [unResolvedIssuesList, setUnResolvedIssuesList] = useState([]);
   const [topUpList, setTopUpList] = useState([]);
+  const [isSubmitingIssue, setIsSubmittingIssue] = useState(false);
+  const [errMessage, setErrMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const [issueDate, setIssueDate] = useState({
     startDate: "",
     endDate: "",
     sacco: "",
   });
-
-  const navigate = useNavigate();
 
   const fetchSaccos = useCallback(async () => {
     const saccos = await getSaccos();
@@ -104,7 +109,6 @@ export default function ReportIssueContextProvider({ children }) {
   }, []);
 
   const fetchOffices = async (saccoId) => {
-    //for offices
     if (!saccoId) {
       setOfficeList([]);
       return;
@@ -149,10 +153,17 @@ export default function ReportIssueContextProvider({ children }) {
           saccoName: value,
         };
       });
+      console.log(issueDate);
     } else {
       setIssueDate((prevState) => ({ ...prevState, [name]: value }));
     }
+    console.log(issueDate);
   }
+
+  const fetchIssuesByDate = useCallback(async () => {
+    const issues = await listAllIssuesByDate(issueDate);
+    setIssuesList(issues.data);
+  }, [issueDate]);
 
   const fetchResolvedIssuesByDate = useCallback(async () => {
     const resolvedIssues = await listResolvedIssuesByDate(issueDate);
@@ -223,49 +234,8 @@ export default function ReportIssueContextProvider({ children }) {
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
+    console.log(formData);
   }
-
-  // function handleChange(event) {
-  //   const { name, value } = event.target;
-
-  //   if (name === "sacco") {
-  //     const selectedSacco = saccoList.find((sacco) => sacco.name === value);
-  //     setFormData((prevState) => {
-  //       return {
-  //         ...prevState,
-  //         sacco: selectedSacco?.id || "",
-  //         saccoName: value,
-  //       };
-  //     });
-  //   } else if (name === "service") {
-  //     const selectedService = serviceList.find(
-  //       (service) => service.name === value
-  //     );
-  //     console.log("service", selectedService);
-
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       service: selectedService?.id || "",
-  //       serviceName: value,
-  //     }));
-  //   } else if (name === "office") {
-  //     const selectedOffice = saccoList.find(
-  //       (location) => location.location === value
-  //     );
-
-  //     console.log("office", selectedOffice);
-
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       office: selectedOffice?.id || "",
-  //       officeName: value,
-  //     }));
-  //   } else {
-  //     setFormData((prev) => ({ ...prev, [name]: value }));
-  //   }
-
-  //   console.log(formData);
-  // }
 
   function handleClearForm() {
     setFormData({
@@ -283,16 +253,22 @@ export default function ReportIssueContextProvider({ children }) {
 
   function handleModal() {
     setSubmited(false);
+    setMessage("");
+    setErrMessage("");
     setFormData({
       sacco: "",
       office: "",
       service: "",
+      assigned_to: "",
       type: "",
       description: "",
-      status: "unsolved",
+      date: "",
+      sim_number: "",
+      amount: "",
       attachments: "",
+      status: "unsolved",
     });
-    navigate("/landing");
+    // navigate("/landing");
   }
 
   const updateAttachments = (files) => {
@@ -304,7 +280,7 @@ export default function ReportIssueContextProvider({ children }) {
 
   async function handleSubmitIssueForm(event) {
     event.preventDefault();
-
+    setIsSubmittingIssue(true);
     try {
       const formPayload = new FormData();
 
@@ -334,18 +310,52 @@ export default function ReportIssueContextProvider({ children }) {
       }
 
       const response = await reportIssue(formPayload);
+      if (response.status >= 200 && response.status < 300) {
+        setMessage("Issue submitted successfully!");
+      }
+      if (response.status === 400) {
+        setErrMessage("Failed to submit issue.Try Again!!");
+      }
+      if (response.status === 500) {
+        setErrMessage("Failed to submit issue.Internal server error!!");
+      }
+      const resData = await response.json();
       setSubmited(true);
-      return response;
+      return resData;
     } catch (error) {
       console.error("Submission failed:", error);
       setSubmited(false);
       throw error;
+    } finally {
+      setIsSubmittingIssue(false);
     }
   }
 
   async function handleSubmitTopUpForm(event) {
     event.preventDefault();
-    await updateTopUp(formData);
+    setIsSubmittingIssue(true);
+    try {
+      const response = await updateTopUp(formData);
+
+      if (response.status >= 200 && response.status < 300) {
+        setMessage("Top-up updated successfully!");
+      }
+      if (response.status === 400) {
+        setErrMessage("Failed to update top up.Try Again!!");
+      }
+      if (response.status === 500) {
+        setErrMessage("Failed to update top up.Internal server error!!");
+      }
+      const resData = await response.json();
+      setSubmited(true);
+      return resData;
+    } catch (error) {
+      console.error("Submission failed:", error);
+      setSubmited(false);
+      throw error;
+    } finally {
+      setIsSubmittingIssue(false);
+    }
   }
 
   const ctxValue = {
@@ -357,6 +367,7 @@ export default function ReportIssueContextProvider({ children }) {
     handleSubmitIssueForm: handleSubmitIssueForm,
     handleSubmitTopUpForm: handleSubmitTopUpForm,
     handleModal: handleModal,
+    isSubmitingIssue: isSubmitingIssue,
     submited: submited,
     fetchSaccos: fetchSaccos,
     fetchAllOffices: fetchAllOffices,
@@ -365,6 +376,7 @@ export default function ReportIssueContextProvider({ children }) {
     fetchIssues: fetchIssues,
     fetchResolvedIssues: fetchResolvedIssues,
     fetchUnResolvedIssues: fetchUnResolvedIssues,
+    fetchIssuesByDate: fetchIssuesByDate,
     fetchResolvedIssuesByDate: fetchResolvedIssuesByDate,
     fetchUnresolvedIssuesByDate: fetchUnresolvedIssuesByDate,
     fetchTopUps: fetchTopUps,
@@ -378,6 +390,8 @@ export default function ReportIssueContextProvider({ children }) {
     loadingOffices: loadingOffices,
     serviceList: serviceList,
     issuesList: issuesList,
+    errMessage: errMessage,
+    message: message,
     updateAttachments: updateAttachments,
   };
 

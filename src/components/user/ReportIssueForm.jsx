@@ -22,8 +22,6 @@ export default function ReportIssueForm() {
       loadData();
     }, []);
 
-    // console.log(issueCtx.saccoList)
-
   const handlePhotoChange = (e) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
@@ -74,7 +72,6 @@ export default function ReportIssueForm() {
     };
   }, [previewUrls]);
 
-  console.log(issueCtx.saccoList)
 
   return (
     <form className="p-6" onSubmit={issueCtx.handleSubmitIssueForm}>
@@ -378,7 +375,7 @@ export default function ReportIssueForm() {
               type="submit"
               className="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 transition-colors"
             >
-              Submit Issue
+             {issueCtx.isSubmitingIssue ? "Submitting..." : "Submit Issue"}
             </button>
           </div>
         </>

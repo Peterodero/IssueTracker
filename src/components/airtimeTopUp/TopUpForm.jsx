@@ -161,7 +161,7 @@ export default function TopUpForm({ handleSubmit, errors }) {
           SIM Number <span className="text-red-500">*</span>
         </label>
         <input
-          type="text"
+          type="number"
           name="sim_number"
           value={formData.sim_number}
           onChange={handleChange}

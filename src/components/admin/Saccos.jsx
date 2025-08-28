@@ -1,9 +1,11 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { IssueContext } from "../../store/issue-context";
-import { authFetch, getAllOffices } from "../../util/http";
+import { authFetch, createOffices, getAllOffices } from "../../util/http";
 import Modal from "../UI/Modal";
 import CreateSaccos from "./CreateSacco";
 import LoadingIndicator from "../UI/LoadingIndicator";
+import { Link } from "react-router-dom";
+import CreateOffices from "./CreateOffices";
 
 const url = "https://issue-tracker-jywg.onrender.com/api";
 
@@ -13,15 +15,15 @@ export default function Saccos() {
   const [loading, setLoading] = useState(false);
   const [isAddingSacco, setIsAddingSacco] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    office: "",
-  });
+  const [saccoFormData, setSaccoFormData] = useState("");
+  const [officeFormData, setOfficeFormData] = useState("");
   const [offices, setOffices] = useState([]);
   const [selectedOffice, setSelectedOffice] = useState(null); // For React Select value
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errMessage, setErrMessage] = useState("");
+  const [isAddingOffice, setIsAddingOffice] = useState(false);
+  const [saccoId, setSaccoId]  = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -75,22 +77,17 @@ export default function Saccos() {
     return resData;
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log(formData);
+  const handleChangeSacco = (e) => {
+    const { value } = e.target;
+    setSaccoFormData(value);
+    console.log(saccoFormData);
   };
 
-  const handleOfficeChange = (selectedOption) => {
-    if (selectedOption) {
-      setSelectedOffice(selectedOption);
-      // Store the office ID in formData for submission
-      setFormData((prev) => ({ ...prev, office: selectedOption.value }));
-      console.log(formData);
-    } else {
-      setSelectedOffice(null);
-      setFormData((prev) => ({ ...prev, office: "" }));
-    }
+
+  const handleChangeOffice = (e) => {
+    const { value } = e.target;
+    setOfficeFormData(value);
+    console.log(officeFormData);
   };
 
   async function createSaccos(formData) {
@@ -109,7 +106,7 @@ export default function Saccos() {
       const data = await response.json();
       if (response.status >= 200 && response.status < 300) {
         setMessage("Sacco creation successful!");
-        setFormData({ name: "", office: "" });
+        setSaccoFormData("");
         setSelectedOffice(null);
       }
       if (response.status === 400) {
@@ -123,37 +120,56 @@ export default function Saccos() {
     }
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmitSacco = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrMessage("");
     setMessage("");
 
-    if (!formData.office) {
-      setErrMessage("Please select an office");
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
-      await createSaccos(formData);
+      await createSaccos(saccoFormData);
     } catch (error) {
-      setErrMessage("Failed to create office. Please try again.");
+      setErrMessage("Failed to add sacco. Please try again.");
       console.error("Submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleCancel = async () => {
+  const handleSubmitOffice = async (e) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+      setErrMessage("");
+      setMessage("");
+  
+      console.log(officeFormData);
+  
+      try {
+        const response = await createOffices({ name: officeFormData, saccoId: saccoId });
+        console.log(response.status);
+        if (response.status >= 200 && response.status < 300) {
+          setMessage("Office creation successful!");
+        }
+        const data = await response.json();
+        console.log(data);
+        if (response.status === 400) {
+          setErrMessage(data.errors?.non_field_errors?.[0]);
+        }
+        // setMessage("Office creation successful!");
+      } catch (error) {
+        setErrMessage("Failed to add an office. Please try again.");
+        console.error("Submission error:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+  
 
-    await fetchSaccos()
+  const handleCancelSacco = async () => {
+    await fetchSaccos();
     setMessage("");
     setErrMessage("");
-    setFormData({
-      name: "",
-      office: "",
-    });
+    setSaccoFormData("");
     setIsAddingSacco(false);
     setIsSubmitting(false);
   };
@@ -179,21 +195,36 @@ export default function Saccos() {
     setIsAddingSacco(true);
   }
 
+  const handleCancelOffice = async() => {
+    await fetchSaccos();
+    setMessage("");
+    setErrMessage("");
+    setOfficeFormData("");
+    setIsAddingOffice(false);
+  };
+
+  const handleAddSaccoOffice = (id) => {
+    setSaccoId(id)
+    setIsAddingOffice(true);
+  };
+
   const role = sessionStorage.getItem("role");
 
   if (loading) {
     return <LoadingIndicator />;
   }
 
+  console.log(saccoList)
+
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white py-6 px-30">
       <div className="flex justify-between items-center border-b-2 border-orange-300 mb-6  ">
         <div></div>
         <h2 className="text-2xl text-center font-bold text-black mb-2">
           All Saccos
         </h2>
         <button
-          className="text-center border-2 border-orange-300 rounded mb-4 bg-white p-3 hover:bg-orange-300 hover:text-white"
+          className="text-center hover:border border hover:border-orange-300 border-orange-300 rounded mb-4 hover:bg-white p-3 bg-orange-300 hover:text-black"
           onClick={handleAddSacco}
         >
           Add Sacco
@@ -212,12 +243,12 @@ export default function Saccos() {
                   Sacco
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                  Office
+                  No. of Offices
                 </th>
-                {/* <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
-                  Details
-                </th> */}
                 <th className="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">
+                  Details
+                </th>
+                <th className="px-4 py-3 text-center text-xs font-bold text-black uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -225,7 +256,7 @@ export default function Saccos() {
             <tbody className="bg-white divide-y divide-gray-200">
               {saccoList.map((sacco, index) => {
                 const saccoName = sacco?.name || "No sacco";
-                const officeName = sacco.office?.name || "No office";
+                const officeName = sacco.offices?.length || "0";
 
                 return (
                   <Fragment key={sacco.id}>
@@ -260,24 +291,35 @@ export default function Saccos() {
                         </div>
                       </td>
 
-                      {/* <td className="px-2 py-4 whitespace-nowrap">
+                      <td className="px-2 py-4 whitespace-nowrap">
                         <Link
-                          to={role === 'admin' ? `/admin/view-attachment/${issue.id}` : `/landing/view-attachment/${issue.id}`}
+                          to={
+                            role === "admin" && `/admin/sacco-details/${sacco.id}`
+                          }
+                          state={{ sacco }} 
                           className="text-orange-500 hover:text-orange-700 font-medium"
                         >
                           View Details
                         </Link>
-                      </td> */}
+                      </td>
 
                       {/* Actions */}
-                      <td className="px-2 py-4 whitespace-nowrap space-x-2">
+                      <td className="px-2 py-4 whitespace-nowrap space-x-2 justify-center">
                         {role === "admin" && (
-                          <button
-                            onClick={() => handleDeleteSacco(sacco.id)}
-                            className="px-1 py-1 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                          >
-                            Delete
-                          </button>
+                          <div className="flex gap-3 justify-center">
+                            <button
+                              onClick={() => handleAddSaccoOffice(sacco.id)}
+                              className="px-4 py-1 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            >
+                              Add Office
+                            </button>
+                            <button
+                              onClick={() => handleDeleteSacco(sacco.id)}
+                              className="px-4 py-1 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         )}
                       </td>
                     </tr>
@@ -294,13 +336,26 @@ export default function Saccos() {
           <CreateSaccos
             content={content}
             isSubmitting={isSubmitting}
-            handleSubmit={handleSubmit}
-            handleCancel={handleCancel}
-            formData={formData}
-            handleChange={handleChange}
+            handleSubmit={handleSubmitSacco}
+            handleCancel={handleCancelSacco}
+            formData={saccoFormData}
+            handleChange={handleChangeSacco}
             offices={offices}
             selectedOffice={selectedOffice}
-            handleOfficeChange={handleOfficeChange}
+            // handleOfficeChange={handleOfficeChange}
+          />
+        </Modal>
+      )}
+
+      {isAddingOffice && (
+        <Modal>
+          <CreateOffices
+            content={content}
+            isSubmitting={isSubmitting}
+            handleSubmit={handleSubmitOffice}
+            handleCancel={handleCancelOffice}
+            formData={officeFormData}
+            handleChange={handleChangeOffice}
           />
         </Modal>
       )}

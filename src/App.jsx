@@ -21,8 +21,8 @@ import DisableUser from "./components/admin/DisableUser";
 import UserResolvedIssues from "./components/user/UserResolvedIssues";
 import UserUnresolvedIssues from "./components/user/UserUnresolvedIssues";
 import Saccos from "./components/admin/Saccos";
-import Offices from "./components/admin/Offices";
 import Services from "./components/admin/Services";
+import SaccoDetails from "./components/admin/SaccoDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -100,10 +100,6 @@ function App() {
               path: "allIssues",
               element: <AllIssues />,
             },
-            {
-              path: "offices",
-              element: <Offices />,
-            },
              {
               path: "saccos",
               element: <Saccos/>,
@@ -134,6 +130,10 @@ function App() {
               path: "view-attachment/:issue_id",
               element: <ViewAttachment />,
             },
+            {
+              path: "sacco-details/:sacco_id",
+              element: <SaccoDetails/>
+            }
           ],
         },
       ],

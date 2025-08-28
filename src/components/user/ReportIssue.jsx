@@ -4,17 +4,37 @@ import Modal from "../UI/Modal";
 import ReportIssueForm from "./ReportIssueForm";
 
 export default function ReportIssuePage() {
-  const { formData, submited, handleModal, fetchSaccos, fetchServices } = useContext(IssueContext);
-
-  useEffect(()=>{
-    fetchSaccos()
-  }, [fetchSaccos])
+  const {
+    formData,
+    submited,
+    handleModal,
+    fetchSaccos,
+    fetchServices,
+    errMessage,
+    message,
+  } = useContext(IssueContext);
 
   useEffect(() => {
-  if (formData.sacco) {
-    fetchServices();
+    fetchSaccos();
+  }, [fetchSaccos]);
+
+  useEffect(() => {
+    if (formData.sacco) {
+      fetchServices();
+    }
+  }, [formData.sacco, fetchServices]);
+
+  let content;
+  let cssClass;
+
+  if (errMessage) {
+    content = errMessage;
+    cssClass = "bg-red-50 text-red-800 border border-red-200";
   }
-}, [formData.sacco,fetchServices]);
+  if (message) {
+    content = message;
+    cssClass = "bg-green-100 text-green-800 border border-green-200";
+  }
 
   return (
     <>
@@ -82,12 +102,17 @@ export default function ReportIssuePage() {
       {submited && (
         <div className="flex items-center justify-center">
           <Modal>
-            <p className="text-lg">Issues submitted successfully!</p>
-            <div className="flex items-center justify-between mt-3">
-              <p>Click OK to proceed</p>
-              <button className="button" onClick={handleModal}>
-                Okay
-              </button>
+            <div className={`mb-3 p-4 rounded-md ${cssClass}`}>
+              <div className="mb-4 ">{content}</div>
+              <div className="flex justify-between m-1">
+                <div></div>
+                <button
+                  className="bg-orange-300 text-gray-500 align-super justify-end py-1 px-3 rounded"
+                  onClick={handleModal}
+                >
+                  Okay
+                </button>
+              </div>
             </div>
           </Modal>
         </div>
