@@ -57,7 +57,7 @@ export default function AdminSidebar({
                     : "text-gray-700 hover:bg-orange-50 hover:text-orange-500"
                 }`}
               >
-                <div className="flex items-center">View Top-Up</div>
+                <div className="flex items-center">Top-Ups</div>
               </button>
             </div>
           </li>
@@ -72,7 +72,7 @@ export default function AdminSidebar({
                     : "text-gray-700"
                 }`}
               >
-                <span>View Issues</span>
+                <span>Issues</span>
                 <span className="text-sm">{showIssueSubmenu ? "▼" : "►"}</span>
               </button>
               {showIssueSubmenu && (

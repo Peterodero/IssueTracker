@@ -114,7 +114,7 @@ export default function Header({
                         : "text-gray-700"
                     }`}
                   >
-                    <span>View Issues</span>
+                    <span>Issues</span>
                     <span className="text-sm">
                       {showIssueSubmenu ? "▼" : "►"}
                     </span>

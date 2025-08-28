@@ -40,8 +40,8 @@ export default function ReportIssuePage() {
     <>
       <div className="p-6 rounded shadow bg-gray-50 py-8 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-md">
-          <div className="flex flex-col bg-orange-300 md:p-6 p-3 rounded-lg text-black">
-            <h2 className="text-2xl font-bold">Report New Issue</h2>
+          <div className="flex flex-col bg-gradient-to-r from-orange-500 to-yellow-400  md:p-6 p-3 rounded-lg text-white">
+            <h2 className="text-2xl font-extrabold">Report New Issue</h2>
             <div className="flex mt-4 md:space-x-6 space-x-4">
               <div className="flex items-center">
                 <div

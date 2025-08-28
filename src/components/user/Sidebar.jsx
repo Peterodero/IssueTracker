@@ -57,7 +57,7 @@ export default function Sidebar({
                     : "text-gray-700"
                 }`}
               >
-                <span>View Issues</span>
+                <span>Issues</span>
                 <span className="text-sm">{showIssueSubmenu ? "▼" : "►"}</span>
               </button>
               {showIssueSubmenu && (
