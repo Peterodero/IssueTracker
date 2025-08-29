@@ -201,12 +201,12 @@ export default function SaccoDetails() {
                   color="yellow"
                 />
                 <StatCard title="Status" value="Active" color="green" />
-                <StatCard
+                {/* <StatCard
                   title="Members"
                   value="125"
                   color="black"
                   subtitle="Approx."
-                />
+                /> */}
               </div>
             </div>
 
