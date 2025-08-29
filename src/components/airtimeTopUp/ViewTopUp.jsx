@@ -67,6 +67,8 @@ export default function ViewTopUp() {
     setIsDeleting(false)
     await fetchTopUps();
     setLoadingData(false);
+    setMessage("")
+    setErrMessage("")
     return resData;
   }
 

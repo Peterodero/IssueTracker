@@ -215,14 +215,14 @@ export default function Saccos() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-6 px-30">
+    <div className="min-h-screen bg-white py-6 md:px-3 px-1">
       <div className="flex justify-between items-center border-b-2 border-orange-300 mb-6  ">
         <div></div>
         <h2 className="text-2xl text-center font-bold text-black mb-2">
           All Saccos
         </h2>
         <button
-          className="text-center hover:border border hover:border-orange-300 border-orange-300 rounded mb-4 hover:bg-white p-3 bg-orange-300 hover:text-black"
+          className="text-center hover:border border hover:border-orange-300 border-orange-300 rounded mb-4 hover:bg-white p-2 bg-orange-300 hover:text-black"
           onClick={handleAddSacco}
         >
           Add Sacco

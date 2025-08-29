@@ -151,7 +151,7 @@ export default function Services() {
           All Services
         </h2>
         <button
-          className="text-center border-2 border-orange-300 rounded mb-4 bg-white p-3 hover:bg-orange-300 hover:text-white"
+          className="text-center border-2 border-orange-300 rounded mb-4 bg-white p-2 hover:bg-orange-300 hover:text-white"
           onClick={handleAddService}
         >
           Add Service
